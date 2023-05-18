@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.runzone.databinding.ActivitySignInBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+
 
 class SignInActivity : AppCompatActivity() {
 
@@ -14,6 +16,7 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -26,6 +29,16 @@ class SignInActivity : AppCompatActivity() {
         }
 
         binding.button.setOnClickListener {
+            if (true) {
+                val database = FirebaseDatabase.getInstance()
+                val users: MutableMap<String, Any> = HashMap()
+                users["firstName"] = "Mo"
+                users["lastName"] = "Abo"
+                users["age"] = 25
+
+                val usersRef = database.getReference("users")
+                usersRef.push().setValue(users)
+            }
             val email = binding.emailEt.text.toString()
             val pass = binding.passET.text.toString()
 
