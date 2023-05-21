@@ -14,4 +14,5 @@
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="profile_fragment" translatable="false">profile_fragment</string>
     <string name="settings_fragment" translatable="false">settings_fragment</string>
+    <string name="log_out">Log out</string>
 </resources>

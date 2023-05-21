@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,7 +36,17 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false)
+        //return inflater.inflate(R.layout.fragment_settings, container, false)
+        val view = inflater.inflate(R.layout.fragment_settings, container, false)
+        val buttonLogOut = view.findViewById<Button>(R.id.buttonLogOut)
+
+        buttonLogOut.setOnClickListener {
+            // Handle button click here
+            // For example, you can log out the user
+            // Add your code here to perform the desired action
+            Toast.makeText(requireContext(), "hiiiiii !", Toast.LENGTH_SHORT).show()
+        }
+        return view
     }
 
     companion object {
