@@ -1,5 +1,6 @@
 package com.example.runzone
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -42,9 +44,11 @@ class SettingsFragment : Fragment() {
 
         buttonLogOut.setOnClickListener {
             // Handle button click here
-            // For example, you can log out the user
-            // Add your code here to perform the desired action
-            Toast.makeText(requireContext(), "hiiiiii !", Toast.LENGTH_SHORT).show()
+            FirebaseAuth.getInstance().signOut()
+            val logoutSuccessMessage = getString(R.string.logged_out_message)
+            Toast.makeText(requireContext(), logoutSuccessMessage, Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), SignInActivity::class.java)
+            startActivity(intent)
         }
         return view
     }

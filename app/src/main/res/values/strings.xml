@@ -15,4 +15,5 @@
     <string name="profile_fragment" translatable="false">profile_fragment</string>
     <string name="settings_fragment" translatable="false">settings_fragment</string>
     <string name="log_out">Log out</string>
+    <string name="logged_out_message">Logged out successfully</string>
 </resources>
