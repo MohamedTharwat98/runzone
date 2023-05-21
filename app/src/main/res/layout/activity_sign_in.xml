@@ -91,7 +91,7 @@
         android:layout_height="32dp"
         android:background="@color/yellow"
         android:gravity="center"
-        android:text="Login"
+        android:text="@string/login"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/emailLayout"
