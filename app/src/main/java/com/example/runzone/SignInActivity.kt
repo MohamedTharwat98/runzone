@@ -29,16 +29,6 @@ class SignInActivity : AppCompatActivity() {
         }
 
         binding.button.setOnClickListener {
-            if (true) {
-                val database = FirebaseDatabase.getInstance()
-                val users: MutableMap<String, Any> = HashMap()
-                users["firstName"] = "Mo"
-                users["lastName"] = "Abo"
-                users["age"] = 25
-
-                val usersRef = database.getReference("users")
-                usersRef.push().setValue(users)
-            }
             val email = binding.emailEt.text.toString()
             val pass = binding.passET.text.toString()
 
