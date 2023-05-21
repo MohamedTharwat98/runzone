@@ -7,4 +7,11 @@
     <string name="type_email">Type your Email</string>
     <string name="type_pass">Type your Password</string>
     <string name="retype_pass">Retype your Password</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="settings">Settings</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="profile_fragment" translatable="false">profile_fragment</string>
+    <string name="settings_fragment" translatable="false">settings_fragment</string>
 </resources>
