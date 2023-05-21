@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Run Zone</string>
     <string name="login">Login</string>
+    <string name="sign_up">Sign up</string>
+    <string name="already_registered">Already Registered , Sign In !</string>
+    <string name="not_registered">Not Registered Yet , Sign Up !</string>
+    <string name="type_email">Type your Email</string>
+    <string name="type_pass">Type your Password</string>
+    <string name="retype_pass">Retype your Password</string>
 </resources>
