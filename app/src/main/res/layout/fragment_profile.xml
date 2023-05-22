@@ -6,12 +6,12 @@
     tools:context=".ProfileFragment"
     android:background="@color/white">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/profile_fragment"
-        android:layout_gravity="center"
-        android:textSize="26sp"/>
+        android:id="@+id/textViewEmail"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="Email"
+        android:textSize="16sp" />
 
 </FrameLayout>
