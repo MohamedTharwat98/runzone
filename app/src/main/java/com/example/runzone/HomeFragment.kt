@@ -60,7 +60,14 @@ class HomeFragment : Fragment() {
 
     private fun posToList() {
         for (i in 1..3) {
-            addToList("Title $i", "Details $i", R.mipmap.ic_launcher_round)
+            if (i == 1) {
+                addToList("Batman ", "Dark knight begins ", R.drawable.batmanlogo)
+            } else if (i == 2) {
+                addToList("Spiderman ", "Peter parker begins ", R.drawable.spidermanlogo)
+            } else {
+                addToList("Superman ", "Superman begins ", R.drawable.supermanlogo)
+            }
+
         }
     }
 
