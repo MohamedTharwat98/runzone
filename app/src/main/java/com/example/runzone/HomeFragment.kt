@@ -1,12 +1,18 @@
 package com.example.runzone
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import android.Manifest
+import android.os.Build
+import androidx.annotation.RequiresApi
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,8 +33,13 @@ class HomeFragment : Fragment() {
     private var detailsList = mutableListOf<String>()
     private var imagesList = mutableListOf<Int>()
 
+    private val MY_PERMISSIONS_REQUEST = 1
+
+
+
     private lateinit var recyclerView: RecyclerView
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -36,7 +47,46 @@ class HomeFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
 
+        val permissionsToRequest = mutableListOf<String>()
+
+        // Record data
+        if (ContextCompat.checkSelfPermission(
+                this.requireContext(),
+                Manifest.permission.ACTIVITY_RECOGNITION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permission is not granted
+            permissionsToRequest.add(Manifest.permission.ACTIVITY_RECOGNITION)
+        }
+
+        // Read data
+        if (ContextCompat.checkSelfPermission(
+                this.requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permission is not granted
+            permissionsToRequest.add(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+
+        if (ContextCompat.checkSelfPermission(
+                this.requireContext(),
+                Manifest.permission.BODY_SENSORS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permission is not granted
+            permissionsToRequest.add(Manifest.permission.BODY_SENSORS)
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                this.requireActivity(),
+                permissionsToRequest.toTypedArray(),
+                MY_PERMISSIONS_REQUEST
+            )
+        }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
