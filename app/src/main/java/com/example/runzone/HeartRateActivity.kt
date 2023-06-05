@@ -53,8 +53,13 @@ class HeartRateActivity : AppCompatActivity() {
         val account = GoogleSignIn.getLastSignedInAccount(this)
         val client = Fitness.getHistoryClient(this, account!!)
 
-        val startTime = 0L
+        val calendar = Calendar.getInstance()
+        calendar.time = Date()
+        calendar.add(Calendar.DAY_OF_WEEK, -1) // Set the start time to 24 hours ago
+
+        val startTime = calendar.timeInMillis
         val endTime = System.currentTimeMillis()
+
         val readRequest = DataReadRequest.Builder()
             .read(DataType.TYPE_HEART_RATE_BPM)
             .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
@@ -68,6 +73,7 @@ class HeartRateActivity : AppCompatActivity() {
                 Log.e(TAG, "Error reading data from Google Fit", e)
             }
     }
+
 
     private fun handleDataReadSuccess(response: DataReadResponse?) {
         response?.let {
