@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "448598379610",
-    "project_id": "run-zone-c076b",
-    "storage_bucket": "run-zone-c076b.appspot.com"
+    "project_number": "237553956708",
+    "project_id": "run-zone-63ce0",
+    "storage_bucket": "run-zone-63ce0.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:448598379610:android:f1d2c116f6b402704f5c63",
+        "mobilesdk_app_id": "1:237553956708:android:6c7cea96bee077cbd3ec71",
         "android_client_info": {
           "package_name": "com.example.runzone"
         }
       },
       "oauth_client": [
         {
-          "client_id": "448598379610-i48rlg9fkumsof3s1rmm6ot3n1537cjv.apps.googleusercontent.com",
+          "client_id": "237553956708-vqjqsfnl6bk4av5o8qtpe9bcmqa7ghat.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.runzone",
+            "certificate_hash": "5e23d7e1deaee54c851fd6a8a7c7f7c29cc45213"
+          }
+        },
+        {
+          "client_id": "237553956708-j0ppp68d9e0tn27f7jlauu8ed0f8cpnq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBUR_0RaOBxO2Db0PXEuYAajNXxLtWdqaA"
+          "current_key": "AIzaSyDalnDpw76chBoifQrKkrOOWdIYsKnS_vg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "448598379610-i48rlg9fkumsof3s1rmm6ot3n1537cjv.apps.googleusercontent.com",
+              "client_id": "237553956708-j0ppp68d9e0tn27f7jlauu8ed0f8cpnq.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

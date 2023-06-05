@@ -47,7 +47,7 @@ class SettingsFragment : Fragment() {
             FirebaseAuth.getInstance().signOut()
             val logoutSuccessMessage = getString(R.string.logged_out_message)
             Toast.makeText(requireContext(), logoutSuccessMessage, Toast.LENGTH_SHORT).show()
-            val intent = Intent(requireContext(), SignInActivity::class.java)
+            val intent = Intent(requireContext(), SignUpSignInActivity::class.java)
             startActivity(intent)
         }
         return view

@@ -1,17 +1,21 @@
 package com.example.runzone
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 
 class RecyclerAdapter(
     private var titles: List<String>,
     private var details: List<String>,
-    private var images: List<Int>
+    private var images: List<Int>,
+    private val context: Context
 ) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -21,12 +25,8 @@ class RecyclerAdapter(
 
         init {
             itemView.setOnClickListener { v: View ->
-                val position: Int = adapterPosition
-                Toast.makeText(
-                    itemView.context,
-                    "You clicked on item # ${position + 1}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                val intent = Intent(context, HeartRateActivity::class.java)
+                context.startActivity(intent)
             }
         }
 

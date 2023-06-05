@@ -97,7 +97,7 @@ class HomeFragment : Fragment() {
         posToList()
         recyclerView = view.findViewById(R.id.recylerView_Home)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = RecyclerAdapter(titlesList, detailsList, imagesList)
+        recyclerView.adapter = RecyclerAdapter(titlesList, detailsList, imagesList,this.requireContext())
 
         return view
     }
@@ -112,11 +112,11 @@ class HomeFragment : Fragment() {
         for (i in 1..3) {
             if (i == 1) {
                 addToList("Batman ", "Dark knight begins ", R.drawable.batmanlogo)
-            } else if (i == 2) {
+            }/* else if (i == 2) {
                 addToList("Spiderman ", "Peter parker begins ", R.drawable.spidermanlogo)
             } else {
                 addToList("Superman ", "Superman begins ", R.drawable.supermanlogo)
-            }
+            }*/
 
         }
     }
