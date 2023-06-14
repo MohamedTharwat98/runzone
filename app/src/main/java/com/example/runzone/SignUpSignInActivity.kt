@@ -2,8 +2,10 @@ package com.example.runzone
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.runzone.SharedData.SharedData
 import com.example.runzone.databinding.ActivitySignUpSignInBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -60,10 +62,12 @@ class SignUpSignInActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+
             try {
                 // Google sign-in was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)
                     firebaseAuthWithGoogle(account)
+
             } catch (e: ApiException) {
                 // Google sign-in failed, handle the error
                 Toast.makeText(this, "Google sign-in failed: ${e.statusCode}", Toast.LENGTH_SHORT)
@@ -85,6 +89,8 @@ class SignUpSignInActivity : AppCompatActivity() {
                         "Signed in as ${currentUser?.displayName}",
                         Toast.LENGTH_SHORT
                     ).show()
+
+
 
                     // Proceed to the main activity or dashboard
                     startActivity(Intent(this, MainActivity::class.java))

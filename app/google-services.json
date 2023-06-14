@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "237553956708",
-    "project_id": "run-zone-63ce0",
-    "storage_bucket": "run-zone-63ce0.appspot.com"
+    "project_number": "610720390537",
+    "project_id": "plucky-balm-389709",
+    "storage_bucket": "plucky-balm-389709.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:237553956708:android:6c7cea96bee077cbd3ec71",
+        "mobilesdk_app_id": "1:610720390537:android:fb8926014e49b93afb5558",
         "android_client_info": {
           "package_name": "com.example.runzone"
         }
       },
       "oauth_client": [
         {
-          "client_id": "237553956708-vqjqsfnl6bk4av5o8qtpe9bcmqa7ghat.apps.googleusercontent.com",
+          "client_id": "610720390537-ivl7ltmd634jkgcrhrq8r91su1h917gb.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.runzone",
-            "certificate_hash": "5e23d7e1deaee54c851fd6a8a7c7f7c29cc45213"
+            "certificate_hash": "3627dc261bf053040f13bb63a9439ae660291a3e"
           }
         },
         {
-          "client_id": "237553956708-j0ppp68d9e0tn27f7jlauu8ed0f8cpnq.apps.googleusercontent.com",
+          "client_id": "610720390537-o8djia5nbabgbnf643hdl9vsia9aaa6f.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDalnDpw76chBoifQrKkrOOWdIYsKnS_vg"
+          "current_key": "AIzaSyAwd5X4TZ-3V0_z45CRTV4b9-pvqr2JK-o"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "237553956708-j0ppp68d9e0tn27f7jlauu8ed0f8cpnq.apps.googleusercontent.com",
+              "client_id": "610720390537-o8djia5nbabgbnf643hdl9vsia9aaa6f.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
