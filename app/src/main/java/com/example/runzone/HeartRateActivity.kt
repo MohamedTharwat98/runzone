@@ -2,19 +2,16 @@ package com.example.runzone
 import android.Manifest
 import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.runzone.SharedData.SharedData
 import com.example.runzone.SharedData.SharedData.token
 import com.example.runzone.model.HeartRateDataResponse
-import com.google.android.gms.fitness.data.DataType
-import com.google.android.gms.fitness.request.DataReadRequest
-import com.google.gson.Gson
-import com.google.gson.annotations.SerializedName
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -24,8 +21,13 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Query
-import java.util.concurrent.TimeUnit
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.TimeZone
 
 
 class HeartRateActivity : AppCompatActivity() {
@@ -91,12 +93,14 @@ class HeartRateActivity : AppCompatActivity() {
         Log.d(TAG, "Request URL: $requestUrl")
 
         heartRateDataCall.enqueue(object : Callback<HeartRateDataResponse> {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onResponse(
                 call: Call<HeartRateDataResponse>,
                 response: Response<HeartRateDataResponse>
             ) {
                 if (response.isSuccessful) {
                     val heartRateData = response.body()
+                    getLastHeartBeat(heartRateData)
                     // Process heart rate data here
                 } else {
                     Toast.makeText(
@@ -116,6 +120,37 @@ class HeartRateActivity : AppCompatActivity() {
             }
         })
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getLastHeartBeat(heartRateData: HeartRateDataResponse?) {
+        /*heartRateData?.insertedDataPoint?.forEach() {
+            Log.d("Bucket", "Inserted Data points: ${Gson().toJson(it)}")
+            Toast.makeText(this@HeartRateActivity, "Inserted Data points: : ${Gson().toJson(it)}", Toast.LENGTH_SHORT).show()
+
+        }*/
+        val lastHeartBeat = heartRateData?.insertedDataPoint?.last()
+        val lastHeartBeatValue = lastHeartBeat?.values?.last()
+        val lastHeartBeatRate = lastHeartBeatValue?.heartRate
+        val lastHeartBeatTime = lastHeartBeat?.modifiedTimeMillis
+        val lastHeartBeatTimeConverted = convertMillisecondsToDate(lastHeartBeatTime!!)
+
+        Log.d(TAG, "Last heart beat: $lastHeartBeatRate")
+        Toast.makeText(this@HeartRateActivity, "Last heart beat: $lastHeartBeatRate", Toast.LENGTH_SHORT).show()
+        Log.d(TAG, "Last heart beat time: $lastHeartBeatTimeConverted")
+        Toast.makeText(this@HeartRateActivity, "Last heart beat time: $lastHeartBeatTimeConverted", Toast.LENGTH_SHORT).show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun convertMillisecondsToDate(milliseconds: String): String {
+        val millis = milliseconds.toLong()
+        val instant = Instant.ofEpochMilli(millis)
+        val dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        return dateTime.format(formatter)
+    }
+
+
+
 }
 
 interface GoogleFitApi {
