@@ -1,5 +1,0 @@
-package com.example.runzone.SharedData
-
-object SharedData {
-    var token  = "ya29.a0AWY7CknItUVdrK-0i0lAXEJEtN7q9o-irQdVL4iKsobN-5LoYz1j7cQkmZ8bOTuIvqnDNH9ylJ8aGJ4GLB9fzWbwT2kUryxQc2HhlKN1i2T8Hu--ZOJpCRPiJGoH6j_OzKojP6MhwSd2rZGM5VC7LewdAvRQaCgYKAToSARESFQG1tDrponXof3JUBVLBjVINglpSQg0163"
-}
