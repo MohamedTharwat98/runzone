@@ -71,6 +71,7 @@ class HeartRateActivity : AppCompatActivity() {
             .addDataType(DataType.TYPE_LOCATION_SAMPLE, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.AGGREGATE_SPEED_SUMMARY, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_SPEED, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
             .build()
     }
 
@@ -229,6 +230,7 @@ class HeartRateActivity : AppCompatActivity() {
         readDate(DataType.TYPE_HEART_RATE_BPM, Field.FIELD_BPM)
         readDate(DataType.TYPE_STEP_COUNT_DELTA, Field.FIELD_STEPS)
         readDate(DataType.TYPE_SPEED, Field.FIELD_SPEED)
+        readDate(DataType.TYPE_DISTANCE_DELTA, Field.FIELD_DISTANCE)
     }
 
 
@@ -279,6 +281,10 @@ class HeartRateActivity : AppCompatActivity() {
                     val speedText = findViewById<TextView>(R.id.speedTextView)
                     speedText.text = "Speed: No data"
                     return@addOnSuccessListener
+                } else if (lastDataSet.isEmpty && field == Field.FIELD_DISTANCE) {
+                    val distanceText = findViewById<TextView>(R.id.distanceTextView)
+                    distanceText.text = "Distance: No data"
+                    return@addOnSuccessListener
                 }
                 val lastDataPoint = lastDataSet.dataPoints.last()
                 var lastValue = ""
@@ -298,6 +304,11 @@ class HeartRateActivity : AppCompatActivity() {
                     //DataType{com.google.speed.summary[average(f), max(f), min(f)]}
                     val speedText = findViewById<TextView>(R.id.speedTextView)
                     speedText.text = "Speed: ${lastValue}"
+                } else if (field == Field.FIELD_DISTANCE) {
+                    lastValue =
+                        lastDataPoint.getValue(lastDataPoint.dataType.fields[0]).toString()
+                    val distanceText = findViewById<TextView>(R.id.distanceTextView)
+                    distanceText.text = "Distance: ${lastValue}"
                 }
 
                 val lastStartTime = lastDataPoint.getStartTimeString()
