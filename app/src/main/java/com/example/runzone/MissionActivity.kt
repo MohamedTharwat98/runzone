@@ -23,19 +23,18 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.fitness.Fitness
-import com.google.android.gms.fitness.FitnessActivities
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSource
 import com.google.android.gms.fitness.data.DataType
 import com.google.android.gms.fitness.data.Field
-import com.google.android.gms.fitness.data.Session
 import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.android.gms.fitness.request.DataSourcesRequest
 import com.google.android.gms.fitness.request.OnDataPointListener
@@ -60,18 +59,17 @@ enum class FitActionRequestCode {
 }
 
 /**
- * This sample demonstrates how to use the Recording API of the Google Fit platform to subscribe
- * to data sources, query against existing subscriptions, and remove subscriptions. It also
- * demonstrates how to authenticate a user with Google Play Services.
+ * This sample demonstrates the Recording API of the Google Fit platform. It allows users to start
+ * and stop a subscription to a given data type, as well as read the current daily step total.
  *
- * Because the subscription is for data type TYPE_CALORIES_EXPENDED, on Android 10 the Android
- * ACTIVITY_RECOGNITION permission is required. This sample shows how to check for and request the
- * permission when necessary.
  */
 class HeartRateActivity : AppCompatActivity() {
     private val fitnessOptions: FitnessOptions by lazy {
         FitnessOptions.builder()
-            .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_LOCATION_SAMPLE, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.AGGREGATE_SPEED_SUMMARY, FitnessOptions.ACCESS_READ)
             .build()
     }
 
@@ -80,12 +78,11 @@ class HeartRateActivity : AppCompatActivity() {
 
     private var dataPointListener: OnDataPointListener? = null
 
-    private var lastDataPointTimestamp: Long = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_heart_rate)
+        setContentView(R.layout.activity_mission)
         // This method sets up our custom logger, which will print all log messages to the device
         // screen, as well as to adb logcat.
         initializeLogging()
@@ -192,6 +189,7 @@ class HeartRateActivity : AppCompatActivity() {
         // To create a subscription, invoke the Recording API. As soon as the subscription is
         // active, fitness data will start recording.
         // [START subscribe_to_datatype]
+        /*
         Fitness.getRecordingClient(this, getGoogleAccount())
             .subscribe(DataType.TYPE_CALORIES_EXPENDED)
             .addOnSuccessListener {
@@ -226,13 +224,14 @@ class HeartRateActivity : AppCompatActivity() {
                 Toast.makeText(this, "There was an error starting the session", Toast.LENGTH_LONG)
                     .show()
             }
-
+            */
+          readDate(DataType.TYPE_HEART_RATE_BPM, Field.FIELD_BPM)
+          readDate(DataType.TYPE_STEP_COUNT_DELTA, Field.FIELD_STEPS)
     }
 
 
-
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun readDate () {
+    private fun readDate(dataType: DataType, field: Field) {
         // Read the data that's been collected throughout the past week.
         val endTime = LocalDateTime.now().atZone(ZoneId.systemDefault())
         val startTime = endTime.minusWeeks(1)
@@ -244,7 +243,7 @@ class HeartRateActivity : AppCompatActivity() {
                 // The data request can specify multiple data types to return,
                 // effectively combining multiple data queries into one call.
                 // This example demonstrates aggregating only one data type.
-                .aggregate(DataType.TYPE_CALORIES_EXPENDED)
+                .aggregate(dataType)
                 // Analogous to a "Group By" in SQL, defines how data should be
                 // aggregated.
                 // bucketByTime allows for a time span, whereas bucketBySession allows
@@ -259,23 +258,40 @@ class HeartRateActivity : AppCompatActivity() {
             .addOnSuccessListener { response ->
                 // The aggregate query puts datasets into buckets, so flatten into a
                 // single list of datasets
-
                 //read last element
                 val lastBucket = response.buckets.last()
                 val lastDataSet = lastBucket.dataSets.last()
                 val lastDataPoint = lastDataSet.dataPoints.last()
-                val lastCalories = lastDataPoint.getValue(Field.FIELD_CALORIES).asFloat().toInt()
+                var lastValue = ""
+                if (field == Field.FIELD_BPM) {
+                    lastValue = lastDataPoint.getValue(lastDataPoint.dataType.fields[0]).toString()
+                    val heartRateText = findViewById<TextView>(R.id.heartRateTextView)
+                    heartRateText.text = "Heart Rate: ${lastValue}"
+                } else if (field == Field.FIELD_STEPS) {
+                    lastValue = lastDataPoint.getValue(Field.FIELD_STEPS).toString()
+                    val stepsCountText = findViewById<TextView>(R.id.stepsTextView)
+                    stepsCountText.text = "Steps count: ${lastValue}"
+                }
+
                 val lastStartTime = lastDataPoint.getStartTimeString()
                 val lastEndTime = lastDataPoint.getEndTimeString()
 
-                Toast.makeText(this, "Last calories = $lastCalories", Toast.LENGTH_SHORT).show()
-                Toast.makeText(this, "Last start time = $lastStartTime", Toast.LENGTH_SHORT).show()
-                Toast.makeText(this, "Last end time = $lastEndTime", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Last value: $lastValue, start time: $lastStartTime, end time: $lastEndTime",
+                    Toast.LENGTH_LONG
+                ).show()
+
+
 
             }
             .addOnFailureListener { e ->
                 Log.w(TAG, "There was an error reading data from Google Fit", e)
-                Toast.makeText(this, "There was an error reading data from Google Fit", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "There was an error reading data from Google Fit",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
 
@@ -442,13 +458,6 @@ class HeartRateActivity : AppCompatActivity() {
     }
 
 
-
-
-
-
-
-
-
     /** Finds available data sources and attempts to register on a specific [DataType].  */
     private fun findFitnessDataSources() { // [START find_data_sources]
         Fitness.getSensorsClient(this, getGoogleAccount())
@@ -456,17 +465,27 @@ class HeartRateActivity : AppCompatActivity() {
                 DataSourcesRequest.Builder()
                     .setDataTypes(DataType.TYPE_LOCATION_SAMPLE)
                     .setDataSourceTypes(DataSource.TYPE_RAW)
-                    .build())
+                    .build()
+            )
             .addOnSuccessListener { dataSources ->
                 for (dataSource in dataSources) {
                     Log.i(TAG, "Data source found: $dataSource")
-                    Toast.makeText(this, "Data source found: $dataSource", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Data source found: $dataSource", Toast.LENGTH_SHORT)
+                        .show()
                     Log.i(TAG, "Data Source type: " + dataSource.dataType.name)
-                    Toast.makeText(this, "Data Source type: " + dataSource.dataType.name, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Data Source type: " + dataSource.dataType.name,
+                        Toast.LENGTH_SHORT
+                    ).show()
                     // Let's register a listener to receive Activity data!
                     if (dataSource.dataType == DataType.TYPE_LOCATION_SAMPLE && dataPointListener == null) {
                         Log.i(TAG, "Data source for TYPE_LOCATION_SAMPLE found!  Registering.")
-                        Toast.makeText(this, "Data source for TYPE_LOCATION_SAMPLE found!  Registering.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            "Data source for TYPE_LOCATION_SAMPLE found!  Registering.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         registerFitnessDataListener(dataSource, DataType.TYPE_LOCATION_SAMPLE)
                     }
                 }
@@ -485,7 +504,8 @@ class HeartRateActivity : AppCompatActivity() {
             for (field in dataPoint.dataType.fields) {
                 val value = dataPoint.getValue(field)
                 Log.i(TAG, "Detected DataPoint field: ${field.name}")
-                Toast.makeText(this, "Detected DataPoint field: ${field.name}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Detected DataPoint field: ${field.name}", Toast.LENGTH_SHORT)
+                    .show()
                 Log.i(TAG, "Detected DataPoint value: $value")
                 Toast.makeText(this, "Detected DataPoint value: $value", Toast.LENGTH_SHORT).show()
             }
@@ -535,10 +555,6 @@ class HeartRateActivity : AppCompatActivity() {
             }
         // [END unregister_data_listener]
     }
-
-
-
-
 
 
 }
