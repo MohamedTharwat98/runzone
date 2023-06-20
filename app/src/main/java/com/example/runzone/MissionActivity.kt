@@ -70,6 +70,7 @@ class HeartRateActivity : AppCompatActivity() {
             .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_LOCATION_SAMPLE, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.AGGREGATE_SPEED_SUMMARY, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_SPEED, FitnessOptions.ACCESS_READ)
             .build()
     }
 
@@ -225,8 +226,9 @@ class HeartRateActivity : AppCompatActivity() {
                     .show()
             }
             */
-          readDate(DataType.TYPE_HEART_RATE_BPM, Field.FIELD_BPM)
-          readDate(DataType.TYPE_STEP_COUNT_DELTA, Field.FIELD_STEPS)
+        readDate(DataType.TYPE_HEART_RATE_BPM, Field.FIELD_BPM)
+        readDate(DataType.TYPE_STEP_COUNT_DELTA, Field.FIELD_STEPS)
+        readDate(DataType.TYPE_SPEED, Field.FIELD_SPEED)
     }
 
 
@@ -234,7 +236,9 @@ class HeartRateActivity : AppCompatActivity() {
     private fun readDate(dataType: DataType, field: Field) {
         // Read the data that's been collected throughout the past week.
         val endTime = LocalDateTime.now().atZone(ZoneId.systemDefault())
-        val startTime = endTime.minusWeeks(1)
+        //val startTime = endTime.minusWeeks(1)
+        //val startTime = endTime.minusHours(1) //last 1 hour
+        val startTime = endTime.minusMinutes(30) //last 30 minutes
         Log.i(TAG, "Range Start: $startTime")
         Log.i(TAG, "Range End: $endTime")
 
@@ -248,7 +252,9 @@ class HeartRateActivity : AppCompatActivity() {
                 // aggregated.
                 // bucketByTime allows for a time span, whereas bucketBySession allows
                 // bucketing by <a href="/fit/android/using-sessions">sessions</a>.
-                .bucketByTime(1, TimeUnit.DAYS)
+                //.bucketByTime(1, TimeUnit.DAYS) last one week
+                //.bucketByTime(1, TimeUnit.DAYS)  // Update time span to 1 day
+                .bucketByTime(30, TimeUnit.MINUTES)  // Update time span to 30 minutes
                 .setTimeRange(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
                 .build()
 
@@ -261,16 +267,37 @@ class HeartRateActivity : AppCompatActivity() {
                 //read last element
                 val lastBucket = response.buckets.last()
                 val lastDataSet = lastBucket.dataSets.last()
+                if (lastDataSet.isEmpty && field == Field.FIELD_BPM) {
+                    val heartRateText = findViewById<TextView>(R.id.heartRateTextView)
+                    heartRateText.text = "Heart Rate: No data"
+                    return@addOnSuccessListener
+                } else if (lastDataSet.isEmpty && field == Field.FIELD_STEPS) {
+                    val stepsCountText = findViewById<TextView>(R.id.stepsTextView)
+                    stepsCountText.text = "Steps count: No data"
+                    return@addOnSuccessListener
+                } else if (lastDataSet.isEmpty && field == Field.FIELD_SPEED) {
+                    val speedText = findViewById<TextView>(R.id.speedTextView)
+                    speedText.text = "Speed: No data"
+                    return@addOnSuccessListener
+                }
                 val lastDataPoint = lastDataSet.dataPoints.last()
                 var lastValue = ""
                 if (field == Field.FIELD_BPM) {
-                    lastValue = lastDataPoint.getValue(lastDataPoint.dataType.fields[0]).toString()
+                    lastValue =
+                        lastDataPoint.getValue(lastDataPoint.dataType.fields[0]).toString()
                     val heartRateText = findViewById<TextView>(R.id.heartRateTextView)
                     heartRateText.text = "Heart Rate: ${lastValue}"
                 } else if (field == Field.FIELD_STEPS) {
                     lastValue = lastDataPoint.getValue(Field.FIELD_STEPS).toString()
                     val stepsCountText = findViewById<TextView>(R.id.stepsTextView)
                     stepsCountText.text = "Steps count: ${lastValue}"
+                } else if (field == Field.FIELD_SPEED) {
+                    lastValue =
+                        lastDataPoint.getValue(lastDataPoint.dataType.fields[0]).toString()
+                    //number 0 is the average speed, number 1 is the max speed, number 2 is the min speed
+                    //DataType{com.google.speed.summary[average(f), max(f), min(f)]}
+                    val speedText = findViewById<TextView>(R.id.speedTextView)
+                    speedText.text = "Speed: ${lastValue}"
                 }
 
                 val lastStartTime = lastDataPoint.getStartTimeString()
@@ -281,7 +308,6 @@ class HeartRateActivity : AppCompatActivity() {
                     "Last value: $lastValue, start time: $lastStartTime, end time: $lastEndTime",
                     Toast.LENGTH_LONG
                 ).show()
-
 
 
             }
