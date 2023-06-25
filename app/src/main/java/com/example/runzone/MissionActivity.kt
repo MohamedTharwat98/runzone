@@ -20,9 +20,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -81,6 +84,19 @@ class HeartRateActivity : AppCompatActivity() {
     private var dataPointListener: OnDataPointListener? = null
 
 
+    private var seconds: Int = 0
+    private var isRunning: Boolean = false
+    private lateinit var handler: Handler
+
+    private val timerTextView: TextView by lazy {
+        findViewById<TextView>(R.id.timerTextView)
+    }
+
+    private val startButton: Button by lazy {
+        findViewById<Button>(R.id.startButton)
+    }
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,6 +106,45 @@ class HeartRateActivity : AppCompatActivity() {
         initializeLogging()
 
         checkPermissionsAndRun(FitActionRequestCode.SUBSCRIBE)
+
+        handler = Handler(Looper.getMainLooper())
+
+
+        startButton.setOnClickListener {
+            if (!isRunning) {
+                startTimer()
+                startButton.text = "Stop"
+            } else {
+                stopTimer()
+                startButton.text = "Start"
+            }
+        }
+    }
+
+
+    private fun startTimer() {
+        isRunning = true
+        handler.postDelayed(timerRunnable, 1000)
+    }
+
+    private fun stopTimer() {
+        isRunning = false
+        handler.removeCallbacks(timerRunnable)
+    }
+
+    private val timerRunnable = object : Runnable {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun run() {
+            seconds++
+            val hours = seconds / 3600
+            val minutes = (seconds % 3600) / 60
+            val secs = seconds % 60
+
+            timerTextView.text = String.format("%02d:%02d:%02d", hours, minutes, secs)
+
+            handler.postDelayed(this, 1000)
+            readAllData()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -227,15 +282,25 @@ class HeartRateActivity : AppCompatActivity() {
                     .show()
             }
             */
-        readDate(DataType.TYPE_HEART_RATE_BPM, Field.FIELD_BPM)
-        readDate(DataType.TYPE_STEP_COUNT_DELTA, Field.FIELD_STEPS)
-        readDate(DataType.TYPE_SPEED, Field.FIELD_SPEED)
-        readDate(DataType.TYPE_DISTANCE_DELTA, Field.FIELD_DISTANCE)
+
+    }
+
+    /**
+     * Reads fitness data by using a [DataReadRequest].  It is possible to read data in
+     * readData() method.
+     *
+     */
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun readAllData () {
+        readData(DataType.TYPE_HEART_RATE_BPM, Field.FIELD_BPM)
+        readData(DataType.TYPE_STEP_COUNT_DELTA, Field.FIELD_STEPS)
+        readData(DataType.TYPE_SPEED, Field.FIELD_SPEED)
+        readData(DataType.TYPE_DISTANCE_DELTA, Field.FIELD_DISTANCE)
     }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun readDate(dataType: DataType, field: Field) {
+    private fun readData(dataType: DataType, field: Field) {
         // Read the data that's been collected throughout the past week.
         val endTime = LocalDateTime.now().atZone(ZoneId.systemDefault())
         //val startTime = endTime.minusWeeks(1)
@@ -292,33 +357,28 @@ class HeartRateActivity : AppCompatActivity() {
                     lastValue =
                         lastDataPoint.getValue(lastDataPoint.dataType.fields[0]).toString()
                     val heartRateText = findViewById<TextView>(R.id.heartRateTextView)
-                    heartRateText.text = "Heart Rate: ${lastValue}"
+                    heartRateText.text = "Heart Rate: ${lastValue} bpm"
                 } else if (field == Field.FIELD_STEPS) {
                     lastValue = lastDataPoint.getValue(Field.FIELD_STEPS).toString()
                     val stepsCountText = findViewById<TextView>(R.id.stepsTextView)
-                    stepsCountText.text = "Steps count: ${lastValue}"
+                    stepsCountText.text = "Steps count: ${lastValue} steps"
                 } else if (field == Field.FIELD_SPEED) {
                     lastValue =
                         lastDataPoint.getValue(lastDataPoint.dataType.fields[0]).toString()
                     //number 0 is the average speed, number 1 is the max speed, number 2 is the min speed
                     //DataType{com.google.speed.summary[average(f), max(f), min(f)]}
                     val speedText = findViewById<TextView>(R.id.speedTextView)
-                    speedText.text = "Speed: ${lastValue}"
+                    speedText.text = "Speed: ${lastValue} m/s"
                 } else if (field == Field.FIELD_DISTANCE) {
                     lastValue =
                         lastDataPoint.getValue(lastDataPoint.dataType.fields[0]).toString()
                     val distanceText = findViewById<TextView>(R.id.distanceTextView)
-                    distanceText.text = "Distance: ${lastValue}"
+                    distanceText.text = "Distance: ${lastValue} m"
                 }
 
                 val lastStartTime = lastDataPoint.getStartTimeString()
                 val lastEndTime = lastDataPoint.getEndTimeString()
 
-                Toast.makeText(
-                    this,
-                    "Last value: $lastValue, start time: $lastStartTime, end time: $lastEndTime",
-                    Toast.LENGTH_LONG
-                ).show()
 
 
             }

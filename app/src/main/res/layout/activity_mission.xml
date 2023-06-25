@@ -5,22 +5,24 @@
     android:layout_height="match_parent"
     tools:context=".HeartRateActivity">
 
+
     <TextView
         android:id="@+id/heartRateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="525dp"
+        android:layout_marginTop="649dp"
         android:text="Heart Rate :"
         android:textSize="30sp"
         android:textStyle="bold" />
+
 
     <TextView
         android:id="@+id/stepsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="142dp"
+        android:layout_marginTop="441dp"
         android:text="Steps count :"
         android:textSize="30sp"
         android:textStyle="bold" />
@@ -30,21 +32,42 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="291dp"
+        android:layout_marginTop="515dp"
         android:text="Speed :"
         android:textSize="30sp"
         android:textStyle="bold" />
-
 
     <TextView
         android:id="@+id/distanceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="415dp"
+        android:layout_marginTop="586dp"
         android:text="Distance :"
         android:textSize="30sp"
         android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/timerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="89dp"
+        android:text="Time :"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="300dp"
+        android:layout_height="94dp"
+        android:layout_gravity="center"
+        android:layout_below="@id/timerTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/yellow"
+        android:text="Start" />
 
 
 </RelativeLayout>
