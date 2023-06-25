@@ -8,66 +8,78 @@
 
     <TextView
         android:id="@+id/heartRateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="196dp"
+        android:layout_height="109dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="649dp"
-        android:text="Heart Rate :"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="331dp"
+        android:layout_marginRight="6dp"
+        android:gravity="center"
+        android:text="   \n HEART RATE"
         android:textSize="30sp"
         android:textStyle="bold" />
 
 
     <TextView
         android:id="@+id/stepsTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="196dp"
+        android:layout_height="109dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="441dp"
-        android:text="Steps count :"
+        android:layout_marginTop="157dp"
+        android:gravity="center"
+        android:text="   \n STEPS"
         android:textSize="30sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/speedTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="196dp"
+        android:layout_height="109dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="515dp"
-        android:text="Speed :"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="159dp"
+        android:layout_marginRight="0dp"
+        android:gravity="center"
+        android:text="    \n SPEED"
         android:textSize="30sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/distanceTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="196dp"
+        android:layout_height="109dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="586dp"
-        android:text="Distance :"
+        android:layout_marginTop="332dp"
+        android:gravity="center"
+        android:text="    \n DISTANCE"
         android:textSize="30sp"
         android:textStyle="bold" />
 
-
     <TextView
         android:id="@+id/timerTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="129dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="89dp"
-        android:text="Time :"
+        android:layout_marginTop="0dp"
+        android:text=" 00:00:00 \n TIME"
+        android:gravity="center"
         android:textSize="30sp"
         android:textStyle="bold" />
 
     <Button
         android:id="@+id/startButton"
-        android:layout_width="300dp"
-        android:layout_height="94dp"
+        android:layout_width="352dp"
+        android:layout_height="109dp"
+        android:layout_below="@+id/timerTextView"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="center"
-        android:layout_below="@id/timerTextView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:textColor="@color/yellow"
-        android:text="Start" />
+        android:layout_marginTop="394dp"
+        android:layout_marginBottom="99dp"
+        android:layout_centerInParent="true"
+        android:text="Start"
+        android:textColor="@color/yellow" />
 
 
 </RelativeLayout>

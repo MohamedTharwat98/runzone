@@ -141,7 +141,7 @@ class HeartRateActivity : AppCompatActivity() {
             val secs = seconds % 60
 
             timerTextView.text = String.format("%02d:%02d:%02d", hours, minutes, secs)
-
+            timerTextView.text = " ${timerTextView.text} \n Time"
             handler.postDelayed(this, 1000)
             readAllData()
         }
@@ -336,19 +336,19 @@ class HeartRateActivity : AppCompatActivity() {
                 val lastDataSet = lastBucket.dataSets.last()
                 if (lastDataSet.isEmpty && field == Field.FIELD_BPM) {
                     val heartRateText = findViewById<TextView>(R.id.heartRateTextView)
-                    heartRateText.text = "Heart Rate: No data"
+                    heartRateText.text = "No data \n HEART RATE"
                     return@addOnSuccessListener
                 } else if (lastDataSet.isEmpty && field == Field.FIELD_STEPS) {
                     val stepsCountText = findViewById<TextView>(R.id.stepsTextView)
-                    stepsCountText.text = "Steps count: No data"
+                    stepsCountText.text = "No data \n STEPS"
                     return@addOnSuccessListener
                 } else if (lastDataSet.isEmpty && field == Field.FIELD_SPEED) {
                     val speedText = findViewById<TextView>(R.id.speedTextView)
-                    speedText.text = "Speed: No data"
+                    speedText.text = "No data \n SPEED"
                     return@addOnSuccessListener
                 } else if (lastDataSet.isEmpty && field == Field.FIELD_DISTANCE) {
                     val distanceText = findViewById<TextView>(R.id.distanceTextView)
-                    distanceText.text = "Distance: No data"
+                    distanceText.text = "No data \n DISTANCE"
                     return@addOnSuccessListener
                 }
                 val lastDataPoint = lastDataSet.dataPoints.last()
@@ -357,23 +357,23 @@ class HeartRateActivity : AppCompatActivity() {
                     lastValue =
                         lastDataPoint.getValue(lastDataPoint.dataType.fields[0]).toString()
                     val heartRateText = findViewById<TextView>(R.id.heartRateTextView)
-                    heartRateText.text = "Heart Rate: ${lastValue} bpm"
+                    heartRateText.text = "${lastValue} bpm \n HEART RATE"
                 } else if (field == Field.FIELD_STEPS) {
                     lastValue = lastDataPoint.getValue(Field.FIELD_STEPS).toString()
                     val stepsCountText = findViewById<TextView>(R.id.stepsTextView)
-                    stepsCountText.text = "Steps count: ${lastValue} steps"
+                    stepsCountText.text = "${lastValue} \n STEPS"
                 } else if (field == Field.FIELD_SPEED) {
                     lastValue =
                         lastDataPoint.getValue(lastDataPoint.dataType.fields[0]).toString()
                     //number 0 is the average speed, number 1 is the max speed, number 2 is the min speed
                     //DataType{com.google.speed.summary[average(f), max(f), min(f)]}
                     val speedText = findViewById<TextView>(R.id.speedTextView)
-                    speedText.text = "Speed: ${lastValue} m/s"
+                    speedText.text = "${lastValue} m/s \n SPEED"
                 } else if (field == Field.FIELD_DISTANCE) {
                     lastValue =
                         lastDataPoint.getValue(lastDataPoint.dataType.fields[0]).toString()
                     val distanceText = findViewById<TextView>(R.id.distanceTextView)
-                    distanceText.text = "Distance: ${lastValue} m"
+                    distanceText.text = "${lastValue} m \n DISTANCE"
                 }
 
                 val lastStartTime = lastDataPoint.getStartTimeString()
