@@ -42,6 +42,7 @@ import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.android.gms.fitness.request.DataSourcesRequest
 import com.google.android.gms.fitness.request.OnDataPointListener
 import com.google.android.gms.fitness.request.SensorRequest
+import java.lang.Math.ceil
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -363,15 +364,15 @@ class HeartRateActivity : AppCompatActivity() {
                     val stepsCountText = findViewById<TextView>(R.id.stepsTextView)
                     stepsCountText.text = "${lastValue} \n STEPS"
                 } else if (field == Field.FIELD_SPEED) {
-                    lastValue =
-                        lastDataPoint.getValue(lastDataPoint.dataType.fields[0]).toString()
+                    val value = lastDataPoint.getValue((lastDataPoint.dataType.fields[0])).asFloat()
+                    lastValue = ceil(value.toDouble()).toString()
                     //number 0 is the average speed, number 1 is the max speed, number 2 is the min speed
                     //DataType{com.google.speed.summary[average(f), max(f), min(f)]}
                     val speedText = findViewById<TextView>(R.id.speedTextView)
                     speedText.text = "${lastValue} m/s \n SPEED"
                 } else if (field == Field.FIELD_DISTANCE) {
-                    lastValue =
-                        lastDataPoint.getValue(lastDataPoint.dataType.fields[0]).toString()
+                    val value = lastDataPoint.getValue(lastDataPoint.dataType.fields[0]).asFloat()
+                    lastValue = ceil(value.toDouble()).toString()
                     val distanceText = findViewById<TextView>(R.id.distanceTextView)
                     distanceText.text = "${lastValue} m \n DISTANCE"
                 }
