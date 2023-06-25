@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".HeartRateActivity">
 
-
     <TextView
         android:id="@+id/heartRateTextView"
         android:layout_width="196dp"
@@ -19,7 +18,6 @@
         android:text="   \n HEART RATE"
         android:textSize="30sp"
         android:textStyle="bold" />
-
 
     <TextView
         android:id="@+id/stepsTextView"
@@ -68,11 +66,18 @@
         android:textSize="30sp"
         android:textStyle="bold" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black"
+        android:layout_below="@id/timerTextView"
+        android:layout_marginTop="1dp"/>
+
     <Button
         android:id="@+id/startButton"
         android:layout_width="352dp"
         android:layout_height="109dp"
-        android:layout_below="@+id/timerTextView"
+        android:layout_below="@id/timerTextView"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center"
         android:layout_marginTop="394dp"
@@ -80,6 +85,5 @@
         android:layout_centerInParent="true"
         android:text="Start"
         android:textColor="@color/yellow" />
-
 
 </RelativeLayout>
