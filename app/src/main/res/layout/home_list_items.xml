@@ -1,9 +1,11 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="300dp"
     android:orientation="horizontal"
-    android:padding="40dp">
+    android:padding="40dp"
+    android:gravity="center_vertical"
+    >
 
     <ImageView
         android:id="@+id/home_list_item_image"
@@ -19,16 +21,16 @@
 
         <TextView
             android:id="@+id/home_list_item_title"
-            android:layout_width="220dp"
-            android:layout_height="42dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="Title"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/home_list_item_details"
-            android:layout_width="222dp"
-            android:layout_height="86dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="Details"
             android:textSize="14sp" />
 

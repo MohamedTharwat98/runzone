@@ -109,14 +109,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun posToList() {
-        for (i in 1..3) {
+        for (i in 1..2) {
             if (i == 1) {
                 addToList("Escape from Dystopia", "A daring runner escapes an oppressive city, navigating tunnels, evading patrols, and outrunning pursuit to lead the resistance to victory.", R.drawable.escapefromdystopia)
-            }/* else if (i == 2) {
-                addToList("Spiderman ", "Peter parker begins ", R.drawable.spidermanlogo)
-            } else {
-                addToList("Superman ", "Superman begins ", R.drawable.supermanlogo)
-            }*/
+            }else {
+                addToList("Run Zone", "Unlock Your Potential, Embrace the Run!", R.drawable.logo2)
+            }
 
         }
     }
