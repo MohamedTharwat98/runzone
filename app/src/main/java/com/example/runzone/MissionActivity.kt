@@ -18,6 +18,8 @@ package com.example.runzone
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -79,6 +81,8 @@ class HeartRateActivity : AppCompatActivity() {
             .build()
     }
 
+
+
     private val runningQOrLater =
         android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
 
@@ -100,6 +104,7 @@ class HeartRateActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+        var mediaPlayer = MediaPlayer.create(this, R.raw.test)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mission)
         // This method sets up our custom logger, which will print all log messages to the device
@@ -115,9 +120,11 @@ class HeartRateActivity : AppCompatActivity() {
             if (!isRunning) {
                 startTimer()
                 startButton.text = "Stop"
+                mediaPlayer.start()
             } else {
                 stopTimer()
                 startButton.text = "Start"
+                mediaPlayer.pause()
             }
         }
     }
@@ -147,6 +154,8 @@ class HeartRateActivity : AppCompatActivity() {
             readAllData()
         }
     }
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun checkPermissionsAndRun(fitActionRequestCode: FitActionRequestCode) {
