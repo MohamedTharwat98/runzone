@@ -24,10 +24,6 @@ class MainActivity : AppCompatActivity() {
                         val homeFragment = HomeFragment()
                         replaceFragment(homeFragment)
                     }
-                    R.id.profile_tab -> {
-                        val profileFragment = ProfileFragment()
-                        replaceFragment(profileFragment)
-                    }
                     R.id.settings_tab -> {
                         val settingsFragment = SettingsFragment()
                         replaceFragment(settingsFragment)
