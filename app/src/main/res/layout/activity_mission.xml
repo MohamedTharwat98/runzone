@@ -7,8 +7,8 @@
 
     <TextView
         android:id="@+id/heartRateTextView"
-        android:layout_width="196dp"
-        android:layout_height="109dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
@@ -16,24 +16,24 @@
         android:layout_marginRight="6dp"
         android:gravity="center"
         android:text="   \n HEART RATE"
-        android:textSize="30sp"
+        android:textSize="15sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/stepsTextView"
-        android:layout_width="196dp"
-        android:layout_height="109dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="157dp"
         android:gravity="center"
         android:text="   \n STEPS"
-        android:textSize="30sp"
+        android:textSize="15sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/speedTextView"
-        android:layout_width="196dp"
-        android:layout_height="109dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
@@ -41,18 +41,18 @@
         android:layout_marginRight="0dp"
         android:gravity="center"
         android:text="    \n SPEED"
-        android:textSize="30sp"
+        android:textSize="15sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/distanceTextView"
-        android:layout_width="196dp"
-        android:layout_height="109dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="332dp"
         android:gravity="center"
         android:text="    \n DISTANCE"
-        android:textSize="30sp"
+        android:textSize="15sp"
         android:textStyle="bold" />
 
     <TextView
@@ -72,6 +72,8 @@
         android:background="@android:color/black"
         android:layout_below="@id/timerTextView"
         android:layout_marginTop="1dp"/>
+
+
 
     <Button
         android:id="@+id/startButton"
