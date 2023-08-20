@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".HeartRateActivity"
     android:id="@+id/activity_mission"
-    android:background="@color/whi"
+    android:background="@color/white"
     >
 
     <TextView
@@ -93,18 +93,18 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/black"
+        android:background="@android:color/white"
         android:layout_below="@id/timerTextView"
         android:layout_marginTop="1dp"/>
 
 
     <ImageView
-        android:id="@+id/myImageView"
+        android:id="@+id/bgImageView"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="420dp"
         android:layout_below="@+id/stepsLine"
         android:contentDescription="Description of the image"
-        android:src="@drawable/escapefromdystopiabg4" />
+         />
 
     <Button
         android:id="@+id/startButton"

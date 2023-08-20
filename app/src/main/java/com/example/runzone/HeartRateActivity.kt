@@ -3,7 +3,6 @@ package com.example.runzone
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -13,7 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
-import android.widget.RelativeLayout
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -136,13 +135,11 @@ open class HeartRateActivity : AppCompatActivity() {
         missionType = intent.getStringExtra("missionType").toString()
 
         if (missionType=="story") {
-            val mainLayout = findViewById<RelativeLayout>(R.id.activity_mission)
-            // Set the background resource
-           // mainLayout.setBackgroundResource(R.drawable.escapefromdystopiabg1)
+            val imageView = findViewById<ImageView>(R.id.bgImageView)
+            imageView.setImageResource(R.drawable.missionbg3)
         } else {
-            val mainLayout = findViewById<RelativeLayout>(R.id.activity_mission)
-            // Set the background resource
-            //mainLayout.setBackgroundResource(R.drawable.escapefromdystopiabg2)
+            val imageView = findViewById<ImageView>(R.id.bgImageView)
+            imageView.setImageResource(R.drawable.directmission1)
         }
 
         // This method sets up our custom logger, which will print all log messages to the device
@@ -325,10 +322,12 @@ open class HeartRateActivity : AppCompatActivity() {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     fun readAllData () {
-        updateHeartRateIntensity(readData(DataType.TYPE_HEART_RATE_BPM, Field.FIELD_BPM))
+        readData(DataType.TYPE_HEART_RATE_BPM, Field.FIELD_BPM)
         readData(DataType.TYPE_STEP_COUNT_DELTA, Field.FIELD_STEPS)
         readData(DataType.TYPE_SPEED, Field.FIELD_SPEED)
         readData(DataType.TYPE_DISTANCE_DELTA, Field.FIELD_DISTANCE)
+
+        updateHeartRateIntensity(readData(DataType.TYPE_HEART_RATE_BPM, Field.FIELD_BPM))
     }
 
 
