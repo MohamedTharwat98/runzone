@@ -3,7 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HeartRateActivity">
+    tools:context=".HeartRateActivity"
+    android:id="@+id/activity_mission"
+    android:background="@color/black"
+    >
 
     <TextView
         android:id="@+id/heartRateTextView"
@@ -12,10 +15,12 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginTop="331dp"
-        android:layout_marginRight="6dp"
+        android:layout_marginTop="99dp"
+        android:layout_marginRight="2dp"
         android:gravity="center"
         android:text="   \n HEART RATE"
+        android:background="@color/black"
+        android:textColor="@color/yellow"
         android:textSize="15sp"
         android:textStyle="bold" />
 
@@ -24,9 +29,11 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="157dp"
+        android:layout_marginTop="101dp"
         android:gravity="center"
         android:text="   \n STEPS"
+        android:background="@color/black"
+        android:textColor="@color/yellow"
         android:textSize="15sp"
         android:textStyle="bold" />
 
@@ -37,10 +44,16 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginTop="159dp"
-        android:layout_marginRight="0dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="102dp"
+        android:layout_marginEnd="103dp"
+        android:layout_marginRight="205dp"
+        android:layout_toStartOf="@+id/heartRateTextView"
+        android:layout_toEndOf="@+id/distanceTextView"
         android:gravity="center"
         android:text="    \n SPEED"
+        android:background="@color/black"
+        android:textColor="@color/yellow"
         android:textSize="15sp"
         android:textStyle="bold" />
 
@@ -49,21 +62,35 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="332dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="98dp"
+        android:layout_toEndOf="@+id/stepsTextView"
         android:gravity="center"
         android:text="    \n DISTANCE"
+        android:background="@color/black"
+        android:textColor="@color/yellow"
         android:textSize="15sp"
         android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/stepsLine"
+        android:background="@android:color/black"
+        android:layout_below="@id/stepsTextView"
+        android:layout_marginTop="1dp"/>
 
     <TextView
         android:id="@+id/timerTextView"
         android:layout_width="match_parent"
-        android:layout_height="129dp"
+        android:layout_height="100dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp"
         android:text=" 00:00:00 \n TIME"
+        android:background="@color/black"
+        android:textColor="@color/yellow"
         android:gravity="center"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <View
@@ -74,19 +101,27 @@
         android:layout_marginTop="1dp"/>
 
 
+    <ImageView
+        android:id="@+id/myImageView"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_below="@+id/stepsLine"
+        android:contentDescription="Description of the image"
+        android:src="@drawable/escapefromdystopiabg4" />
 
     <Button
         android:id="@+id/startButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="86dp"
         android:layout_below="@id/timerTextView"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
-        android:layout_marginTop="394dp"
-        android:layout_marginBottom="99dp"
+        android:layout_marginTop="535dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/play_button"
         android:text="Start"
         android:textColor="@color/yellow" />
+
 
 </RelativeLayout>
