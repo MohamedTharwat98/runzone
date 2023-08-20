@@ -1,25 +1,9 @@
-/*
- * Copyright (C) 2014 Google, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.example.runzone
 
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -28,9 +12,11 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -69,7 +55,7 @@ enum class FitActionRequestCode {
  * and stop a subscription to a given data type, as well as read the current daily step total.
  *
  */
-class HeartRateActivity : AppCompatActivity() {
+open class HeartRateActivity : AppCompatActivity() {
     private val fitnessOptions: FitnessOptions by lazy {
         FitnessOptions.builder()
             .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
@@ -81,19 +67,17 @@ class HeartRateActivity : AppCompatActivity() {
             .build()
     }
 
-
-
     private val runningQOrLater =
         android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
 
     private var dataPointListener: OnDataPointListener? = null
 
 
-    private var seconds: Int = 0
-    private var isRunning: Boolean = false
-    private lateinit var handler: Handler
+    var seconds: Int = 0
+    var isRunning: Boolean = false
+    lateinit var handler: Handler
 
-    private val timerTextView: TextView by lazy {
+    val timerTextView: TextView by lazy {
         findViewById<TextView>(R.id.timerTextView)
     }
 
@@ -101,11 +85,50 @@ class HeartRateActivity : AppCompatActivity() {
         findViewById<Button>(R.id.startButton)
     }
 
+    public var maxHR = 0;
+
+    public var heartRateIntensity = 0;
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
-        var mediaPlayer = MediaPlayer.create(this, R.raw.test)
+
         super.onCreate(savedInstanceState)
+
+        showAgeInputDialog();
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun showAgeInputDialog() {
+        val popupView = layoutInflater.inflate(R.layout.age_box, null)
+        val editTextAge = popupView.findViewById<EditText>(R.id.editTextAge)
+
+        val alertDialogBuilder = AlertDialog.Builder(this)
+            .setView(popupView)
+            .setTitle("Enter Your Age")
+            .setPositiveButton("Start Mission") { dialog, which ->
+                val age = editTextAge.text.toString()
+                // Handle the entered age here
+                try {
+                    val ageInt = age.toInt()
+                    maxHR = 220 - ageInt
+                    Toast.makeText(this,"Your maximum Heart Rate Beat per minute is : ${maxHR}",Toast.LENGTH_SHORT).show()
+                    startMission()
+                } catch (e: NumberFormatException) {
+                    Toast.makeText(this,"Your age must be a valid number ",Toast.LENGTH_SHORT).show()
+                }
+
+            }
+            .setNegativeButton("Cancel", null)
+
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun startMission () {
         setContentView(R.layout.activity_mission)
         // This method sets up our custom logger, which will print all log messages to the device
         // screen, as well as to adb logcat.
@@ -120,40 +143,25 @@ class HeartRateActivity : AppCompatActivity() {
             if (!isRunning) {
                 startTimer()
                 startButton.text = "Stop"
-                mediaPlayer.start()
             } else {
                 stopTimer()
                 startButton.text = "Start"
-                mediaPlayer.pause()
             }
         }
     }
 
 
-    private fun startTimer() {
+     open fun startTimer() {
         isRunning = true
         handler.postDelayed(timerRunnable, 1000)
     }
 
-    private fun stopTimer() {
+     open fun stopTimer() {
         isRunning = false
         handler.removeCallbacks(timerRunnable)
     }
 
-    private val timerRunnable = object : Runnable {
-        @RequiresApi(Build.VERSION_CODES.O)
-        override fun run() {
-            seconds++
-            val hours = seconds / 3600
-            val minutes = (seconds % 3600) / 60
-            val secs = seconds % 60
-
-            timerTextView.text = String.format("%02d:%02d:%02d", hours, minutes, secs)
-            timerTextView.text = " ${timerTextView.text} \n Time"
-            handler.postDelayed(this, 1000)
-            readAllData()
-        }
-    }
+    private val timerRunnable = Runnable { }
 
 
 
@@ -301,8 +309,8 @@ class HeartRateActivity : AppCompatActivity() {
      *
      */
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun readAllData () {
-        readData(DataType.TYPE_HEART_RATE_BPM, Field.FIELD_BPM)
+    fun readAllData () {
+        updateHeartRateIntensity(readData(DataType.TYPE_HEART_RATE_BPM, Field.FIELD_BPM))
         readData(DataType.TYPE_STEP_COUNT_DELTA, Field.FIELD_STEPS)
         readData(DataType.TYPE_SPEED, Field.FIELD_SPEED)
         readData(DataType.TYPE_DISTANCE_DELTA, Field.FIELD_DISTANCE)
@@ -310,7 +318,7 @@ class HeartRateActivity : AppCompatActivity() {
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun readData(dataType: DataType, field: Field) {
+    private fun readData(dataType: DataType, field: Field) : String {
         // Read the data that's been collected throughout the past week.
         val endTime = LocalDateTime.now().atZone(ZoneId.systemDefault())
         //val startTime = endTime.minusWeeks(1)
@@ -335,6 +343,7 @@ class HeartRateActivity : AppCompatActivity() {
                 .setTimeRange(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
                 .build()
 
+        var returnValue = ""
 
         Fitness.getHistoryClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
             .readData(readRequest)
@@ -389,7 +398,7 @@ class HeartRateActivity : AppCompatActivity() {
                 val lastStartTime = lastDataPoint.getStartTimeString()
                 val lastEndTime = lastDataPoint.getEndTimeString()
 
-
+                returnValue = lastValue
 
             }
             .addOnFailureListener { e ->
@@ -401,6 +410,17 @@ class HeartRateActivity : AppCompatActivity() {
                 ).show()
             }
 
+        return returnValue
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun updateHeartRateIntensity (heartRate : String) {
+            if (heartRate == "") {
+                Toast.makeText(this,"Can not read heart rate data !",Toast.LENGTH_SHORT).show()
+            } else {
+               heartRateIntensity = heartRate.toInt() / maxHR
+            }
 
     }
 

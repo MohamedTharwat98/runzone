@@ -14,6 +14,8 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+
 
 
     <application
@@ -41,6 +43,14 @@
 
         <activity
             android:name=".MainActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".DirectFeedbackMission"
+            android:exported="true" />
+
+        <activity
+            android:name=".EscapeFromDystopia"
             android:exported="true" />
     </application>
 

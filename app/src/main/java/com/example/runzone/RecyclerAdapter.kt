@@ -25,8 +25,14 @@ class RecyclerAdapter(
 
         init {
             itemView.setOnClickListener { v: View ->
-                val intent = Intent(context, HeartRateActivity::class.java)
+                if (itemTitle.text=="Run Zone"){
+                val intent = Intent(context, DirectFeedbackMission::class.java)
                 context.startActivity(intent)
+                }
+                else {
+                    val intent = Intent(context, EscapeFromDystopia::class.java)
+                    context.startActivity(intent)
+                }
             }
         }
 
