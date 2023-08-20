@@ -3,13 +3,13 @@ package com.example.runzone
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
+import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 
 class EscapeFromDystopia : HeartRateActivity (){
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Add your custom code here for ChildActivity1's onCreate method
 
     }
 

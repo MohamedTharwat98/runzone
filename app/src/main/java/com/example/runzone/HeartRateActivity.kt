@@ -13,6 +13,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -85,10 +86,11 @@ open class HeartRateActivity : AppCompatActivity() {
         findViewById<Button>(R.id.startButton)
     }
 
-    public var maxHR = 0;
+     var maxHR = 0;
 
-    public var heartRateIntensity = 0;
+     var heartRateIntensity = 0;
 
+    public var missionType = "";
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -130,6 +132,19 @@ open class HeartRateActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun startMission () {
         setContentView(R.layout.activity_mission)
+
+        missionType = intent.getStringExtra("missionType").toString()
+
+        if (missionType=="story") {
+            val mainLayout = findViewById<RelativeLayout>(R.id.activity_mission)
+            // Set the background resource
+            mainLayout.setBackgroundResource(R.drawable.escapefromdystopiabg1)
+        } else {
+            val mainLayout = findViewById<RelativeLayout>(R.id.activity_mission)
+            // Set the background resource
+            mainLayout.setBackgroundResource(R.drawable.escapefromdystopiabg2)
+        }
+
         // This method sets up our custom logger, which will print all log messages to the device
         // screen, as well as to adb logcat.
         initializeLogging()
