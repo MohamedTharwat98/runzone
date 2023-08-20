@@ -138,11 +138,11 @@ open class HeartRateActivity : AppCompatActivity() {
         if (missionType=="story") {
             val mainLayout = findViewById<RelativeLayout>(R.id.activity_mission)
             // Set the background resource
-            mainLayout.setBackgroundResource(R.drawable.escapefromdystopiabg1)
+           // mainLayout.setBackgroundResource(R.drawable.escapefromdystopiabg1)
         } else {
             val mainLayout = findViewById<RelativeLayout>(R.id.activity_mission)
             // Set the background resource
-            mainLayout.setBackgroundResource(R.drawable.escapefromdystopiabg2)
+            //mainLayout.setBackgroundResource(R.drawable.escapefromdystopiabg2)
         }
 
         // This method sets up our custom logger, which will print all log messages to the device

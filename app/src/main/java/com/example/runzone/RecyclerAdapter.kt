@@ -1,5 +1,6 @@
 package com.example.runzone
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ class RecyclerAdapter(
     private var images: List<Int>,
     private val context: Context
 ) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
+    @SuppressLint("SuspiciousIndentation")
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val itemTitle: TextView = itemView.findViewById(R.id.home_list_item_title)
