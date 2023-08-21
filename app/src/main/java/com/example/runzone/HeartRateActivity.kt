@@ -1,8 +1,7 @@
 package com.example.runzone
 
 import android.Manifest
-import android.content.Intent
-import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -12,24 +11,15 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.fitness.Fitness
-import com.google.android.gms.fitness.FitnessOptions
-import com.google.android.gms.fitness.data.DataPoint
-import com.google.android.gms.fitness.data.DataSource
-import com.google.android.gms.fitness.data.DataType
-import com.google.android.gms.fitness.data.Field
-import com.google.android.gms.fitness.request.DataReadRequest
-import com.google.android.gms.fitness.request.DataSourcesRequest
-import com.google.android.gms.fitness.request.OnDataPointListener
-import com.google.android.gms.fitness.request.SensorRequest
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.polar.sdk.api.PolarBleApi
 import com.polar.sdk.api.PolarBleApiCallback
 import com.polar.sdk.api.PolarBleApiDefaultImpl
@@ -38,14 +28,9 @@ import com.polar.sdk.api.model.PolarDeviceInfo
 import com.polar.sdk.api.model.PolarHrData
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
-import java.lang.Math.ceil
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.util.Timer
+import java.util.TimerTask
 import java.util.UUID
-import java.util.concurrent.TimeUnit
-
-
 
 const val TAG = "HeartRateActivity"
 
@@ -75,11 +60,15 @@ open class HeartRateActivity : AppCompatActivity() {
 
      var maxHR = 0
 
-     var heartRateIntensity = 0
 
      var missionType = ""
 
     private var hrDisposable: Disposable? = null
+
+
+    private lateinit var heartRateChart: LineChart
+    private lateinit var dataSet: LineDataSet
+    private val entries = ArrayList<Entry>()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -134,13 +123,7 @@ open class HeartRateActivity : AppCompatActivity() {
 
         missionType = intent.getStringExtra("missionType").toString()
 
-        if (missionType=="story") {
-            val imageView = findViewById<ImageView>(R.id.bgImageView)
-            imageView.setImageResource(R.drawable.missionbg3)
-        } else {
-            val imageView = findViewById<ImageView>(R.id.bgImageView)
-            imageView.setImageResource(R.drawable.directmission1)
-        }
+
 
         // This method sets up our custom logger, which will print all log messages to the device
         // screen, as well as to adb logcat.
@@ -153,7 +136,6 @@ open class HeartRateActivity : AppCompatActivity() {
 
         val maxHeartRateText = findViewById<TextView>(R.id.maxHRTextView)
         maxHeartRateText.text = "${maxHR} bpm \n HEART RATE"
-
 
         handler = Handler(Looper.getMainLooper())
 
@@ -168,7 +150,6 @@ open class HeartRateActivity : AppCompatActivity() {
             }
         }
     }
-
 
      open fun startTimer() {
         isRunning = true
@@ -304,6 +285,9 @@ open class HeartRateActivity : AppCompatActivity() {
 
                             val heartRateText = findViewById<TextView>(R.id.heartRateTextView)
                             heartRateText.text = "${sample.hr} bpm \n HEART RATE"
+                            var currentHr = sample.hr
+
+                            processChart(currentHr)
 
                         }
                     },
@@ -336,5 +320,42 @@ open class HeartRateActivity : AppCompatActivity() {
     }
 
 
+
+   private fun processChart(currentHr : Int) {
+       heartRateChart = findViewById(R.id.heartRateChart)
+
+       dataSet = LineDataSet(entries, "Heart Rate")
+       dataSet.color = Color.BLUE
+       dataSet.setDrawCircles(true)
+       dataSet.setDrawValues(true)
+
+       val lineData = LineData(dataSet)
+       heartRateChart.data = lineData
+
+
+       // Start a timer to update the chart every second
+       val timer = Timer()
+       timer.scheduleAtFixedRate(object : TimerTask() {
+           override fun run() {
+               // Add a new data point to the chart
+               runOnUiThread {
+                  val heartRateIntensity = if (currentHr >= 0) {
+                      (currentHr.toFloat() / maxHR.toFloat()) * 100
+                   } else {
+                       0.0
+                   }
+
+                   Toast.makeText(this@HeartRateActivity,"Intensity : ${heartRateIntensity}",Toast.LENGTH_SHORT).show()
+
+                   // Get heart rate data from your source
+                   entries.add(Entry(entries.size.toFloat(), heartRateIntensity.toFloat()))
+                   dataSet.notifyDataSetChanged()
+                   heartRateChart.notifyDataSetChanged()
+                   heartRateChart.invalidate() // Refresh the chart
+
+               }
+           }
+       }, 0, 1000) // Update every second
+   }
 
 }
