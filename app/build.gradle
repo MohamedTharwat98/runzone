@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.runzone"
-        minSdk 22
+        minSdk 24
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -43,6 +43,10 @@ android {
 }
 
 dependencies {
+
+    implementation 'com.github.polarofficial:polar-ble-sdk:5.1.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.6'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
 
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'

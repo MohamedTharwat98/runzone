@@ -7,6 +7,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
     repositories {
+        maven { url 'https://jitpack.io' }
         google()  // Google's Maven repository
         mavenCentral()
     }
