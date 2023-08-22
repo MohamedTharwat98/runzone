@@ -1,6 +1,8 @@
 package com.example.runzone
 
 import android.Manifest
+import android.animation.AnimatorInflater
+import android.animation.AnimatorSet
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -9,6 +11,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -33,6 +36,7 @@ import io.reactivex.rxjava3.disposables.Disposable
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
+
 
 const val TAG = "HeartRateActivity"
 
@@ -74,6 +78,8 @@ open class HeartRateActivity : AppCompatActivity() {
     private lateinit var dataSet: BarDataSet
     private val entries = ArrayList<BarEntry>()
 
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -92,6 +98,7 @@ open class HeartRateActivity : AppCompatActivity() {
         )
 
         showAgeInputDialog();
+
 
     }
 
@@ -142,6 +149,10 @@ open class HeartRateActivity : AppCompatActivity() {
         maxHeartRateText.text = "${maxHR} bpm \nMAX-HR"
 
         processChart()
+
+        blinkSections()
+
+
 
         handler = Handler(Looper.getMainLooper())
 
@@ -200,6 +211,8 @@ open class HeartRateActivity : AppCompatActivity() {
         // You may enable only the features you are interested
 
         api.setApiCallback(object : PolarBleApiCallback() {
+
+
 
             override fun blePowerStateChanged(powered: Boolean) {
                 Log.d("MyApp", "BLE power: $powered")
@@ -450,4 +463,19 @@ open class HeartRateActivity : AppCompatActivity() {
        }, 0, 1000) // Update every second
    }
 
+    fun blinkSections () {
+        val sectionToBlink: View
+        val blinkAnimation: AnimatorSet
+
+        // Find the section view you want to blink
+        sectionToBlink = findViewById(R.id.section1) // Change to the actual ID
+
+        // Load the blink animation
+        blinkAnimation = AnimatorInflater.loadAnimator(this, R.animator.blink_animation) as AnimatorSet
+
+        // Apply the animation to the section view
+        sectionToBlink.setLayerType(View.LAYER_TYPE_HARDWARE, null) // Improves performance
+        blinkAnimation.setTarget(sectionToBlink)
+        blinkAnimation.start()
+    }
 }
