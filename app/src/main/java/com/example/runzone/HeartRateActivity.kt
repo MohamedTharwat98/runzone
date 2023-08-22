@@ -139,7 +139,7 @@ open class HeartRateActivity : AppCompatActivity() {
         enableFeaturesToPolarSensor()
 
         val maxHeartRateText = findViewById<TextView>(R.id.maxHRTextView)
-        maxHeartRateText.text = "${maxHR} bpm \n HEART RATE"
+        maxHeartRateText.text = "${maxHR} bpm \nMAX-HR"
 
         processChart()
 
