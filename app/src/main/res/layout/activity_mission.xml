@@ -98,7 +98,7 @@
         android:layout_below="@id/timerTextView"
         android:layout_marginTop="1dp"/>
 
-    <com.github.mikephil.charting.charts.LineChart
+    <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/heartRateChart"
         android:layout_width="match_parent"
         android:layout_height="420dp"

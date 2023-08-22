@@ -16,10 +16,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.polar.sdk.api.PolarBleApi
 import com.polar.sdk.api.PolarBleApiCallback
 import com.polar.sdk.api.PolarBleApiDefaultImpl
@@ -65,10 +67,12 @@ open class HeartRateActivity : AppCompatActivity() {
 
     private var hrDisposable: Disposable? = null
 
+    var currentHr = 0
 
-    private lateinit var heartRateChart: LineChart
-    private lateinit var dataSet: LineDataSet
-    private val entries = ArrayList<Entry>()
+
+    private lateinit var heartRateChart: BarChart
+    private lateinit var dataSet: BarDataSet
+    private val entries = ArrayList<BarEntry>()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -136,6 +140,8 @@ open class HeartRateActivity : AppCompatActivity() {
 
         val maxHeartRateText = findViewById<TextView>(R.id.maxHRTextView)
         maxHeartRateText.text = "${maxHR} bpm \n HEART RATE"
+
+        processChart()
 
         handler = Handler(Looper.getMainLooper())
 
@@ -285,9 +291,8 @@ open class HeartRateActivity : AppCompatActivity() {
 
                             val heartRateText = findViewById<TextView>(R.id.heartRateTextView)
                             heartRateText.text = "${sample.hr} bpm \n HEART RATE"
-                            var currentHr = sample.hr
+                            currentHr = sample.hr
 
-                            processChart(currentHr)
 
                         }
                     },
@@ -321,16 +326,61 @@ open class HeartRateActivity : AppCompatActivity() {
 
 
 
-   private fun processChart(currentHr : Int) {
+   private fun processChart() {
        heartRateChart = findViewById(R.id.heartRateChart)
 
-       dataSet = LineDataSet(entries, "Heart Rate")
-       dataSet.color = Color.BLUE
-       dataSet.setDrawCircles(true)
-       dataSet.setDrawValues(true)
+       heartRateChart.getDescription().setEnabled(false)
+       heartRateChart.setDrawGridBackground(true)
+       heartRateChart.setPinchZoom(true)
+       heartRateChart.setDrawBarShadow(true)
+       heartRateChart.setDrawValueAboveBar(false)
+       heartRateChart.setHighlightFullBarEnabled(false)
+       heartRateChart.getAxisLeft().setEnabled(false)
+       heartRateChart.getAxisRight().setEnabled(false)
+       heartRateChart.getXAxis().setEnabled(false)
+       //Get rid of negative Y Axis
+       heartRateChart.axisLeft.axisMinimum = 0f
 
-       val lineData = LineData(dataSet)
-       heartRateChart.data = lineData
+       // Initialize the entries list with default values for each bar
+       for (i in 0 until 5) { // Assuming you have 5 bars
+           entries.add(BarEntry(i.toFloat(), 0f)) // You can set the initial value as needed
+       }
+
+
+       dataSet = BarDataSet(entries, "Heart Rate")
+       dataSet.setDrawValues(false)
+
+       // Set custom colors for each bar
+       val colors = intArrayOf(
+           Color.GRAY,  // First bar (gray)
+           Color.BLUE,  // Second bar (blue)
+           Color.GREEN,  // Third bar (green)
+           Color.YELLOW,  // Fourth bar (yellow)
+           Color.RED // Fifth bar (red)
+
+       )
+       dataSet.setColors(*colors)
+
+
+       val barData = BarData(dataSet)
+       barData.setBarWidth(0.9f)
+       heartRateChart.data = barData
+
+
+       // Set a label for the X-axis
+       val xAxis = heartRateChart.xAxis
+       xAxis.valueFormatter = IndexAxisValueFormatter(arrayOf("Label1", "Label2", "Label3", "Label4", "Label5")) // Replace with your labels
+
+       // Set a label for the Y-axis
+       val yAxis = heartRateChart.axisLeft
+       yAxis.axisMinimum = 0f
+       yAxis.axisMaximum = 700f // Adjust maximum value as needed
+       yAxis.setDrawLabels(true) // Ensure labels are drawn on the Y-axis
+       yAxis.valueFormatter = object : ValueFormatter() {
+           override fun getFormattedValue(value: Float): String {
+               return "${value.toInt()} %" // Customize formatting as needed
+           }
+       }
 
 
        // Start a timer to update the chart every second
@@ -345,10 +395,52 @@ open class HeartRateActivity : AppCompatActivity() {
                        0.0
                    }
 
-                   Toast.makeText(this@HeartRateActivity,"Intensity : ${heartRateIntensity}",Toast.LENGTH_SHORT).show()
+                   val barIndex : Float
+                   val newBarEntry : BarEntry
+                   if (heartRateIntensity.toFloat()<=57) {
+                       // Update the first bar's value (index 0)
+                       barData.getDataSetByIndex(0).apply {
+                           barIndex = 0F
+                           val currentBarValue = entries[barIndex.toInt()].y
+                           val updatedBarValue = currentBarValue + 1
+                           newBarEntry = BarEntry(barIndex, updatedBarValue)
+                           entries[barIndex.toInt()] = newBarEntry
+                       }
+                   } else if (heartRateIntensity.toFloat()>57 && heartRateIntensity.toFloat()<63 ) {
+                       barData.getDataSetByIndex(1).apply {
+                           barIndex = 1F
+                           val currentBarValue = entries[barIndex.toInt()].y
+                           val updatedBarValue = currentBarValue + 1
+                           newBarEntry = BarEntry(barIndex, updatedBarValue)
+                           entries[barIndex.toInt()] = newBarEntry
+                       }
+                   } else if (heartRateIntensity.toFloat()>64 && heartRateIntensity.toFloat()<76 ) {
+                       barData.getDataSetByIndex(2).apply {
+                           barIndex = 2F
+                           val currentBarValue = entries[barIndex.toInt()].y
+                           val updatedBarValue = currentBarValue + 1
+                           newBarEntry = BarEntry(barIndex, updatedBarValue)
+                           entries[barIndex.toInt()] = newBarEntry
+                       }
+                   } else if (heartRateIntensity.toFloat()>76 && heartRateIntensity.toFloat()<95 ) {
+                       barData.getDataSetByIndex(3).apply {
+                           barIndex = 3F
+                           val currentBarValue = entries[barIndex.toInt()].y
+                           val updatedBarValue = currentBarValue + 1
+                           newBarEntry = BarEntry(barIndex, updatedBarValue)
+                           entries[barIndex.toInt()] = newBarEntry
+                       }
+                   } else if (heartRateIntensity.toFloat()>95 && heartRateIntensity.toFloat()<100 ) {
+                       barData.getDataSetByIndex(4).apply {
+                           barIndex = 4F
+                           val currentBarValue = entries[barIndex.toInt()].y
+                           val updatedBarValue = currentBarValue + 1
+                           newBarEntry = BarEntry(barIndex, updatedBarValue)
+                           entries[barIndex.toInt()] = newBarEntry
+                       }
+                   }
 
                    // Get heart rate data from your source
-                   entries.add(Entry(entries.size.toFloat(), heartRateIntensity.toFloat()))
                    dataSet.notifyDataSetChanged()
                    heartRateChart.notifyDataSetChanged()
                    heartRateChart.invalidate() // Refresh the chart
