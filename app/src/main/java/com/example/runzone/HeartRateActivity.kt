@@ -16,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.ToggleButton
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -33,6 +34,7 @@ import com.polar.sdk.api.model.PolarDeviceInfo
 import com.polar.sdk.api.model.PolarHrData
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
+import java.util.Date
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
@@ -60,8 +62,8 @@ open class HeartRateActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.timerTextView)
     }
 
-    private val startButton: Button by lazy {
-        findViewById<Button>(R.id.startButton)
+    private val startButton: ToggleButton by lazy {
+        findViewById<ToggleButton>(R.id.startButton)
     }
 
      var maxHR = 0
@@ -134,6 +136,13 @@ open class HeartRateActivity : AppCompatActivity() {
 
         missionType = intent.getStringExtra("missionType").toString()
 
+        handler = Handler(Looper.getMainLooper())
+
+        isRunning = true
+
+        startButton.isChecked = true
+
+        startTimer()
 
 
         // This method sets up our custom logger, which will print all log messages to the device
@@ -152,18 +161,24 @@ open class HeartRateActivity : AppCompatActivity() {
 
         blinkSections()
 
-
-
-        handler = Handler(Looper.getMainLooper())
+        val session = Session(
+            duration = "1 hour",
+            date = Date(),
+            avgHR = 120.5F,
+            maxHR = 160.2F,
+            age = 25,
+            missionType = missionType,
+            chartEntries = ArrayList()
+        )
 
 
         startButton.setOnClickListener {
             if (!isRunning) {
                 startTimer()
-                startButton.text = "Stop"
+                startButton.isChecked = true
             } else {
                 stopTimer()
-                startButton.text = "Start"
+                startButton.isChecked = false
             }
         }
     }

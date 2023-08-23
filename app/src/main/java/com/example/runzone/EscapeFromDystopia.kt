@@ -30,7 +30,6 @@ class EscapeFromDystopia : HeartRateActivity (){
 
             checkAudio(minutes,secs)
 
-            //readAllData()
         }
     }
 

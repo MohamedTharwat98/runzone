@@ -29,7 +29,7 @@ class DirectFeedbackMission : HeartRateActivity (){
 
             checkAudio(minutes,secs)
 
-            //readAllData()
+
         }
     }
 
