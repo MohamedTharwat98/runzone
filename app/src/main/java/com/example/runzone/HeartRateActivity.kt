@@ -26,6 +26,8 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.polar.sdk.api.PolarBleApi
 import com.polar.sdk.api.PolarBleApiCallback
 import com.polar.sdk.api.PolarBleApiDefaultImpl
@@ -66,6 +68,10 @@ open class HeartRateActivity : AppCompatActivity() {
         findViewById<ToggleButton>(R.id.startButton)
     }
 
+    private val stopButton: Button by lazy {
+        findViewById<Button>(R.id.stopButton)
+    }
+
      var maxHR = 0
 
 
@@ -74,6 +80,8 @@ open class HeartRateActivity : AppCompatActivity() {
     private var hrDisposable: Disposable? = null
 
     var currentHr = 0
+
+    var runnersAge = 0
 
 
     private lateinit var heartRateChart: BarChart
@@ -113,10 +121,11 @@ open class HeartRateActivity : AppCompatActivity() {
             .setView(popupView)
             .setTitle("Enter Your Age")
             .setPositiveButton("Start Mission") { dialog, which ->
-                val age = editTextAge.text.toString()
+                var age = editTextAge.text.toString()
                 // Handle the entered age here
                 try {
                     val ageInt = age.toInt()
+                    runnersAge = ageInt
                     maxHR = 220 - ageInt
                     startMission()
                 } catch (e: NumberFormatException) {
@@ -162,14 +171,38 @@ open class HeartRateActivity : AppCompatActivity() {
         blinkSections()
 
         val session = Session(
-            duration = "1 hour",
+            duration = "",
             date = Date(),
-            avgHR = 120.5F,
-            maxHR = 160.2F,
-            age = 25,
+            maxHR = maxHR.toFloat(),
             missionType = missionType,
+            age = runnersAge,
             chartEntries = ArrayList()
         )
+
+
+
+        stopButton.setOnClickListener {
+            session.chartEntries = entries
+            val hours = seconds / 3600
+            val minutes = (seconds % 3600) / 60
+            val secs = seconds % 60
+            val timer = String.format("%02d:%02d:%02d", hours, minutes, secs)
+            session.duration = timer
+
+            val databaseRef: DatabaseReference = FirebaseDatabase.getInstance("https://plucky-balm-389709-default-rtdb.europe-west1.firebasedatabase.app/").getReference("sessions")
+            val sessionKey: String? = databaseRef.push().key
+
+            if (sessionKey != null) {
+                databaseRef.child(sessionKey).setValue(session)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Session data saved successfully", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(this, "Error saving session data: ${it.message}", Toast.LENGTH_SHORT).show()
+                    }
+            }
+
+        }
 
 
         startButton.setOnClickListener {
