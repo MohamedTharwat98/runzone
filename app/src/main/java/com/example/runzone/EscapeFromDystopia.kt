@@ -4,6 +4,7 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 
 class EscapeFromDystopia : HeartRateActivity (){
@@ -28,28 +29,29 @@ class EscapeFromDystopia : HeartRateActivity (){
             timerTextView.text = " ${timerTextView.text} \n Time"
             handler.postDelayed(this, 1000)
 
+
             checkAudio(minutes,secs)
 
         }
     }
 
     private fun checkAudio (minutes: Int,  secs : Int) {
-        if (minutes == 0 && secs == 5) {
+        if (minutes == 5 && secs == 0) {
             //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.narrator1)
             //mediaPlayer.start()
             blinkSections(1)
         }
-        if (minutes == 0 && secs == 10) {
+        if (minutes == 15 && secs == 0) {
             //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.resistanceleader)
             //mediaPlayer.start()
             blinkSections(2)
         }
-        if (minutes == 0 && secs == 15) {
+        if (minutes == 20 && secs == 0) {
             //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.resistanceleader)
             //mediaPlayer.start()
             blinkSections(3)
         }
-        if (minutes == 0 && secs == 20) {
+        if (minutes == 25 && secs == 0) {
             //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.resistanceleader)
             //mediaPlayer.start()
             blinkSections(4)

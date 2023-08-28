@@ -38,7 +38,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/speedTextView"
+        android:id="@+id/hrIntensityTextView"
         android:layout_width="10dp"
         android:layout_height="100dp"
         android:layout_alignParentTop="true"
@@ -51,7 +51,7 @@
         android:layout_toEndOf="@+id/distanceTextView"
         android:background="@color/black"
         android:gravity="center"
-        android:text="    \n SPEED"
+        android:text="    \n HR-INTENSITY"
         android:textColor="@color/yellow"
         android:textSize="15sp"
         android:textStyle="bold" />

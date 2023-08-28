@@ -4,6 +4,7 @@ import android.Manifest
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
 import android.graphics.Color
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -84,7 +85,15 @@ open class HeartRateActivity : AppCompatActivity() {
 
     var runnersAge = 0
 
+    var zoneNumber = 0
 
+    var inZone = false
+
+    var zoneTimeSeconds = 0
+
+    var zoneTimeMinutes = 0
+
+    lateinit var warning : MediaPlayer
 
     private lateinit var heartRateChart: BarChart
     private lateinit var dataSet: BarDataSet
@@ -153,10 +162,14 @@ open class HeartRateActivity : AppCompatActivity() {
 
         isRunning = true
 
+        inZone = true
+
         startButton.isChecked = true
 
         startTimer()
 
+        // to be continued !!
+        warning = MediaPlayer.create(this, R.raw.narratorslowdown)
 
         // This method sets up our custom logger, which will print all log messages to the device
         // screen, as well as to adb logcat.
@@ -222,6 +235,9 @@ open class HeartRateActivity : AppCompatActivity() {
                 startTimer()
                 startButton.isChecked = true
             } else {
+                if (warning.isPlaying) {
+                    warning.pause()
+                }
                 stopTimer()
                 startButton.isChecked = false
             }
@@ -362,11 +378,16 @@ open class HeartRateActivity : AppCompatActivity() {
                                 //Toast.makeText(this,"rrText : ${rrText}",Toast.LENGTH_SHORT).show()
                             }
 
-                            if(isRunning) {
+                            if(isRunning && inZone) {
                                 val heartRateText = findViewById<TextView>(R.id.heartRateTextView)
                                 heartRateText.text = "${sample.hr} bpm \n HEART RATE"
                                 currentHr = sample.hr
+                            } else {
+                                currentHr = sample.hr
                             }
+
+                            checkZone()
+
 
                         }
                     },
@@ -463,7 +484,7 @@ open class HeartRateActivity : AppCompatActivity() {
            override fun run() {
                // Add a new data point to the chart
                runOnUiThread {
-                   if(isRunning) {
+                   if(isRunning && inZone) {
                        val heartRateIntensity = if (currentHr >= 0) {
                            (currentHr.toFloat() / maxHR.toFloat()) * 100
                        } else {
@@ -640,6 +661,42 @@ open class HeartRateActivity : AppCompatActivity() {
     }
 
 
+    fun checkZone () {
+
+        val heartRateIntensity = if (currentHr >= 0) {
+            (currentHr.toFloat() / maxHR.toFloat()) * 100
+        } else {
+            0.0
+        }
+
+        val hrIntensityText = findViewById<TextView>(R.id.hrIntensityTextView)
+        hrIntensityText.text = "${heartRateIntensity.toInt()} % \n HR-INTENSITY"
+
+
+        if (zoneNumber == 0) {
+            if (heartRateIntensity.toFloat() <= 57 && !inZone) {
+                inZone = true
+                startTimer()
+                Toast.makeText(this,"Right Zone Again !",Toast.LENGTH_SHORT).show()
+            } else if (heartRateIntensity.toFloat() >= 57 && inZone)
+            {
+                inZone = false
+                stopTimer()
+                Toast.makeText(this,"Wrong Zone !",Toast.LENGTH_SHORT).show()
+                playWarning(heartRateIntensity.toInt())
+            }
+        }
+
+
+    }
+
+    open fun playWarning (hrIntensity: Int) {
+        if (zoneNumber == 0 && hrIntensity > 57) {
+            Toast.makeText(this,"Playing warning !",Toast.LENGTH_SHORT).show()
+            //warning = MediaPlayer.create(this, R.raw.narratorslowdown)
+            warning.start()
+        }
+    }
 
 
 }
