@@ -172,17 +172,25 @@ open class HeartRateActivity : AppCompatActivity() {
 
         val session = Session(
             duration = "",
-            date = Date(),
+            date = Date().toString(),
             maxHR = maxHR.toFloat(),
             missionType = missionType,
             age = runnersAge,
-            chartEntries = ArrayList()
+            zone0 = 0F,
+            zone1 = 0F,
+            zone2 = 0F,
+            zone3 = 0F,
+            zone4 = 0F
         )
 
 
 
         stopButton.setOnClickListener {
-            session.chartEntries = entries
+            session.zone0 = entries.get(0).y
+            session.zone1 = entries.get(1).y
+            session.zone2 = entries.get(2).y
+            session.zone3 = entries.get(3).y
+            session.zone4 = entries.get(4).y
             val hours = seconds / 3600
             val minutes = (seconds % 3600) / 60
             val secs = seconds % 60

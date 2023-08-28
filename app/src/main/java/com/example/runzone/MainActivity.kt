@@ -24,11 +24,17 @@ class MainActivity : AppCompatActivity() {
                         val homeFragment = HomeFragment()
                         replaceFragment(homeFragment)
                     }
+                    R.id.sessionsList_tab -> {
+                        val sessionsList = SessionsListFragment()
+                        replaceFragment(sessionsList)
+                    }
                     R.id.settings_tab -> {
                         val settingsFragment = SettingsFragment()
                         replaceFragment(settingsFragment)
                     }
+
                     else -> {}
+
                 }
             }
             return@setOnItemSelectedListener true
