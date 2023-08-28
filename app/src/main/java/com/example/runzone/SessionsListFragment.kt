@@ -110,7 +110,7 @@ class SessionsListFragment : Fragment() {
             avgHRTextView.text = "Average Heart Rate : "+ session?.avgHR.toString()
              maxHRTextView.text= "Max Heart Rate : " + session?.maxHR.toString()
              ageTextView.text= "Age : " + session?.age.toString()
-             missionTypeTextView.text = "Mission Type :" + session?.missionType.toString()
+             missionTypeTextView.text = "Mission Type : " + session?.missionType.toString()
              zone0TextView.text = "Zone 0 = " + session?.zone0.toString()+ " seconds"
              zone1TextView.text = "Zone 1 = " + session?.zone1.toString()+ " seconds"
              zone2TextView.text = "Zone 2 = " + session?.zone2.toString()+ " seconds"
