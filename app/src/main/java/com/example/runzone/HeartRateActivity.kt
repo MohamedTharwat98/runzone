@@ -20,6 +20,7 @@ import android.widget.ToggleButton
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.alpha
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -84,9 +85,12 @@ open class HeartRateActivity : AppCompatActivity() {
     var runnersAge = 0
 
 
+
     private lateinit var heartRateChart: BarChart
     private lateinit var dataSet: BarDataSet
     private val entries = ArrayList<BarEntry>()
+
+    private val blinkHandlers = mutableMapOf<View, Handler>() // Store handlers for blinking animations
 
 
 
@@ -168,7 +172,7 @@ open class HeartRateActivity : AppCompatActivity() {
 
         processChart()
 
-        blinkSections()
+        blinkSections(0)
 
         val session = Session(
             duration = "",
@@ -358,10 +362,11 @@ open class HeartRateActivity : AppCompatActivity() {
                                 //Toast.makeText(this,"rrText : ${rrText}",Toast.LENGTH_SHORT).show()
                             }
 
-                            val heartRateText = findViewById<TextView>(R.id.heartRateTextView)
-                            heartRateText.text = "${sample.hr} bpm \n HEART RATE"
-                            currentHr = sample.hr
-
+                            if(isRunning) {
+                                val heartRateText = findViewById<TextView>(R.id.heartRateTextView)
+                                heartRateText.text = "${sample.hr} bpm \n HEART RATE"
+                                currentHr = sample.hr
+                            }
 
                         }
                     },
@@ -458,80 +463,183 @@ open class HeartRateActivity : AppCompatActivity() {
            override fun run() {
                // Add a new data point to the chart
                runOnUiThread {
-                  val heartRateIntensity = if (currentHr >= 0) {
-                      (currentHr.toFloat() / maxHR.toFloat()) * 100
-                   } else {
-                       0.0
-                   }
+                   if(isRunning) {
+                       val heartRateIntensity = if (currentHr >= 0) {
+                           (currentHr.toFloat() / maxHR.toFloat()) * 100
+                       } else {
+                           0.0
+                       }
 
-                   val barIndex : Float
-                   val newBarEntry : BarEntry
-                   if (heartRateIntensity.toFloat()<=57) {
-                       // Update the first bar's value (index 0)
-                       barData.getDataSetByIndex(0).apply {
-                           barIndex = 0F
-                           val currentBarValue = entries[barIndex.toInt()].y
-                           val updatedBarValue = currentBarValue + 1
-                           newBarEntry = BarEntry(barIndex, updatedBarValue)
-                           entries[barIndex.toInt()] = newBarEntry
+                       val barIndex: Float
+                       val newBarEntry: BarEntry
+                       if (heartRateIntensity.toFloat() <= 57) {
+                           // Update the first bar's value (index 0)
+                           barData.getDataSetByIndex(0).apply {
+                               barIndex = 0F
+                               val currentBarValue = entries[barIndex.toInt()].y
+                               val updatedBarValue = currentBarValue + 1
+                               newBarEntry = BarEntry(barIndex, updatedBarValue)
+                               entries[barIndex.toInt()] = newBarEntry
+                           }
+                       } else if (heartRateIntensity.toFloat() > 57 && heartRateIntensity.toFloat() < 63) {
+                           barData.getDataSetByIndex(1).apply {
+                               barIndex = 1F
+                               val currentBarValue = entries[barIndex.toInt()].y
+                               val updatedBarValue = currentBarValue + 1
+                               newBarEntry = BarEntry(barIndex, updatedBarValue)
+                               entries[barIndex.toInt()] = newBarEntry
+                           }
+                       } else if (heartRateIntensity.toFloat() > 64 && heartRateIntensity.toFloat() < 76) {
+                           barData.getDataSetByIndex(2).apply {
+                               barIndex = 2F
+                               val currentBarValue = entries[barIndex.toInt()].y
+                               val updatedBarValue = currentBarValue + 1
+                               newBarEntry = BarEntry(barIndex, updatedBarValue)
+                               entries[barIndex.toInt()] = newBarEntry
+                           }
+                       } else if (heartRateIntensity.toFloat() > 76 && heartRateIntensity.toFloat() < 95) {
+                           barData.getDataSetByIndex(3).apply {
+                               barIndex = 3F
+                               val currentBarValue = entries[barIndex.toInt()].y
+                               val updatedBarValue = currentBarValue + 1
+                               newBarEntry = BarEntry(barIndex, updatedBarValue)
+                               entries[barIndex.toInt()] = newBarEntry
+                           }
+                       } else if (heartRateIntensity.toFloat() > 95 && heartRateIntensity.toFloat() < 100) {
+                           barData.getDataSetByIndex(4).apply {
+                               barIndex = 4F
+                               val currentBarValue = entries[barIndex.toInt()].y
+                               val updatedBarValue = currentBarValue + 1
+                               newBarEntry = BarEntry(barIndex, updatedBarValue)
+                               entries[barIndex.toInt()] = newBarEntry
+                           }
                        }
-                   } else if (heartRateIntensity.toFloat()>57 && heartRateIntensity.toFloat()<63 ) {
-                       barData.getDataSetByIndex(1).apply {
-                           barIndex = 1F
-                           val currentBarValue = entries[barIndex.toInt()].y
-                           val updatedBarValue = currentBarValue + 1
-                           newBarEntry = BarEntry(barIndex, updatedBarValue)
-                           entries[barIndex.toInt()] = newBarEntry
-                       }
-                   } else if (heartRateIntensity.toFloat()>64 && heartRateIntensity.toFloat()<76 ) {
-                       barData.getDataSetByIndex(2).apply {
-                           barIndex = 2F
-                           val currentBarValue = entries[barIndex.toInt()].y
-                           val updatedBarValue = currentBarValue + 1
-                           newBarEntry = BarEntry(barIndex, updatedBarValue)
-                           entries[barIndex.toInt()] = newBarEntry
-                       }
-                   } else if (heartRateIntensity.toFloat()>76 && heartRateIntensity.toFloat()<95 ) {
-                       barData.getDataSetByIndex(3).apply {
-                           barIndex = 3F
-                           val currentBarValue = entries[barIndex.toInt()].y
-                           val updatedBarValue = currentBarValue + 1
-                           newBarEntry = BarEntry(barIndex, updatedBarValue)
-                           entries[barIndex.toInt()] = newBarEntry
-                       }
-                   } else if (heartRateIntensity.toFloat()>95 && heartRateIntensity.toFloat()<100 ) {
-                       barData.getDataSetByIndex(4).apply {
-                           barIndex = 4F
-                           val currentBarValue = entries[barIndex.toInt()].y
-                           val updatedBarValue = currentBarValue + 1
-                           newBarEntry = BarEntry(barIndex, updatedBarValue)
-                           entries[barIndex.toInt()] = newBarEntry
-                       }
-                   }
 
-                   // Get heart rate data from your source
-                   dataSet.notifyDataSetChanged()
-                   heartRateChart.notifyDataSetChanged()
-                   heartRateChart.invalidate() // Refresh the chart
+                       // Get heart rate data from your source
+                       dataSet.notifyDataSetChanged()
+                       heartRateChart.notifyDataSetChanged()
+                       heartRateChart.invalidate() // Refresh the chart
+                   }
 
                }
            }
        }, 0, 1000) // Update every second
    }
 
-    fun blinkSections () {
-        val sectionToBlink: View
-        val blinkAnimation: AnimatorSet
+    fun blinkSections (sectionNumber : Int) {
+        val section0 : View = findViewById(R.id.section0)
+        val section1 : View = findViewById(R.id.section1)
+        val section2 : View = findViewById(R.id.section2)
+        val section3 : View = findViewById(R.id.section3)
+        val section4 : View = findViewById(R.id.section4)
+        // Stop blinking for the previous section
+        if (sectionNumber > 0) {
+            stopBlinking(when (sectionNumber - 1) {
+                0 -> section0
+                1 -> section1
+                2 -> section2
+                3 -> section3
+                else -> section4
+            })
+        }
+        when (sectionNumber){
+           0 -> {
+               //Shadowed sections
+               section1.setBackgroundColor(Color.parseColor("#30889900"))
+               section2.setBackgroundColor(Color.parseColor("#30889900"))
+               section3.setBackgroundColor(Color.parseColor("#30889900"))
+               section4.setBackgroundColor(Color.parseColor("#30889900"))
 
-        // Find the section view you want to blink
-        sectionToBlink = findViewById(R.id.section1) // Change to the actual ID
 
-        // Load the blink animation
-        blinkAnimation = AnimatorInflater.loadAnimator(this, R.animator.blink_animation) as AnimatorSet
+               blinkSection(section0)
+           }
+            1 -> {
+                //Light sections
+                section0.setBackgroundColor(Color.parseColor("#80FFFF00"))
+                //Shadowed sections
+                section2.setBackgroundColor(Color.parseColor("#30889900"))
+                section3.setBackgroundColor(Color.parseColor("#30889900"))
+                section4.setBackgroundColor(Color.parseColor("#30889900"))
 
-        // Apply the animation to the section view
-        sectionToBlink.setLayerType(View.LAYER_TYPE_HARDWARE, null) // Improves performance
-        blinkAnimation.setTarget(sectionToBlink)
-        blinkAnimation.start()
+                blinkSection(section1)
+            }
+            2 -> {
+                //Light sections
+                section0.setBackgroundColor(Color.parseColor("#80FFFF00"))
+                section1.setBackgroundColor(Color.parseColor("#80FFFF00"))
+                //Shadowed sections
+                section3.setBackgroundColor(Color.parseColor("#30889900"))
+                section4.setBackgroundColor(Color.parseColor("#30889900"))
+
+
+
+
+                blinkSection(section2)
+            }
+            3 -> {
+                //Light sections
+                section0.setBackgroundColor(Color.parseColor("#80FFFF00"))
+                section1.setBackgroundColor(Color.parseColor("#80FFFF00"))
+                section2.setBackgroundColor(Color.parseColor("#80FFFF00"))
+                //Shadowed sections
+                section4.setBackgroundColor(Color.parseColor("#30889900"))
+
+
+
+
+                blinkSection(section3)
+            }
+            4 -> {
+                //Light sections
+                section0.setBackgroundColor(Color.parseColor("#80FFFF00"))
+                section1.setBackgroundColor(Color.parseColor("#80FFFF00"))
+                section2.setBackgroundColor(Color.parseColor("#80FFFF00"))
+                section3.setBackgroundColor(Color.parseColor("#80FFFF00"))
+
+
+                blinkSection(section4)
+            }
+
+        }
+
+
     }
+
+
+    fun blinkSection(section: View) {
+        if (blinkHandlers.containsKey(section)) {
+            return // Animation is already blinking
+        }
+
+        val handler = Handler()
+        blinkHandlers[section] = handler
+
+        val runnable = object : Runnable {
+            override fun run() {
+                section.animate()
+                    .alpha(0f)
+                    .setDuration(1000)
+                    .withEndAction {
+                        section.alpha = 1f
+                        handler.postDelayed(this, 1000) // Restart the animation
+                    }
+                    .start()
+            }
+        }
+
+        handler.post(runnable)
+    }
+
+    // Call this function to stop the blinking animation for a section
+    fun stopBlinking(section: View) {
+        val handler = blinkHandlers[section]
+        handler?.removeCallbacksAndMessages(null)
+        blinkHandlers.remove(section)
+        section.animate().cancel() // Cancel the ongoing animation
+        section.alpha = 1f // Restore the alpha value
+    }
+
+
+
+
 }

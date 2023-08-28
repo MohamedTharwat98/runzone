@@ -35,12 +35,24 @@ class EscapeFromDystopia : HeartRateActivity (){
 
     private fun checkAudio (minutes: Int,  secs : Int) {
         if (minutes == 0 && secs == 5) {
-            val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.narrator1)
-            mediaPlayer.start()
+            //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.narrator1)
+            //mediaPlayer.start()
+            blinkSections(1)
         }
-        if (minutes == 0 && secs == 35) {
-            val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.resistanceleader)
-            mediaPlayer.start()
+        if (minutes == 0 && secs == 10) {
+            //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.resistanceleader)
+            //mediaPlayer.start()
+            blinkSections(2)
+        }
+        if (minutes == 0 && secs == 15) {
+            //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.resistanceleader)
+            //mediaPlayer.start()
+            blinkSections(3)
+        }
+        if (minutes == 0 && secs == 20) {
+            //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.resistanceleader)
+            //mediaPlayer.start()
+            blinkSections(4)
         }
     }
 

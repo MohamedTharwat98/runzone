@@ -103,6 +103,13 @@
         >
 
         <View
+            android:id="@+id/section0"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#80FFFF00" />
+
+        <View
             android:id="@+id/section1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -125,13 +132,6 @@
 
         <View
             android:id="@+id/section4"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#80FFFF00" />
-
-        <View
-            android:id="@+id/section5"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
