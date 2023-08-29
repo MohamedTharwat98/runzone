@@ -29,34 +29,12 @@ class EscapeFromDystopia : HeartRateActivity (){
             timerTextView.text = " ${timerTextView.text} \n Time"
             handler.postDelayed(this, 1000)
 
-
-            checkAudio(minutes,secs)
+            updateZone(minutes,secs)
 
         }
     }
 
-    private fun checkAudio (minutes: Int,  secs : Int) {
-        if (minutes == 5 && secs == 0) {
-            //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.narrator1)
-            //mediaPlayer.start()
-            blinkSections(1)
-        }
-        if (minutes == 15 && secs == 0) {
-            //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.resistanceleader)
-            //mediaPlayer.start()
-            blinkSections(2)
-        }
-        if (minutes == 20 && secs == 0) {
-            //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.resistanceleader)
-            //mediaPlayer.start()
-            blinkSections(3)
-        }
-        if (minutes == 25 && secs == 0) {
-            //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.resistanceleader)
-            //mediaPlayer.start()
-            blinkSections(4)
-        }
-    }
+
 
 
 

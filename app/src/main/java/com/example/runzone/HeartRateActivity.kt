@@ -1,8 +1,6 @@
 package com.example.runzone
 
 import android.Manifest
-import android.animation.AnimatorInflater
-import android.animation.AnimatorSet
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Build
@@ -21,7 +19,6 @@ import android.widget.ToggleButton
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.alpha
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -93,7 +90,9 @@ open class HeartRateActivity : AppCompatActivity() {
 
     var zoneTimeMinutes = 0
 
-    lateinit var warning : MediaPlayer
+    lateinit var warningSlowDown : MediaPlayer
+
+    lateinit var warningSpeedUp : MediaPlayer
 
     private lateinit var heartRateChart: BarChart
     private lateinit var dataSet: BarDataSet
@@ -169,7 +168,8 @@ open class HeartRateActivity : AppCompatActivity() {
         startTimer()
 
         // to be continued !!
-        warning = MediaPlayer.create(this, R.raw.narratorslowdown)
+        warningSlowDown = MediaPlayer.create(this, R.raw.narratorslowdown)
+        warningSpeedUp = MediaPlayer.create(this,R.raw.narratorspeedup)
 
         // This method sets up our custom logger, which will print all log messages to the device
         // screen, as well as to adb logcat.
@@ -235,8 +235,8 @@ open class HeartRateActivity : AppCompatActivity() {
                 startTimer()
                 startButton.isChecked = true
             } else {
-                if (warning.isPlaying) {
-                    warning.pause()
+                if (warningSlowDown.isPlaying) {
+                    warningSlowDown.pause()
                 }
                 stopTimer()
                 startButton.isChecked = false
@@ -687,6 +687,61 @@ open class HeartRateActivity : AppCompatActivity() {
             }
         }
 
+        if (zoneNumber == 1) {
+            if (heartRateIntensity.toFloat() in 58.0..63.0 && !inZone) {
+                inZone = true
+                startTimer()
+                Toast.makeText(this,"Right Zone Again !",Toast.LENGTH_SHORT).show()
+            } else if (heartRateIntensity.toFloat() !in 58.0..63.0 && inZone)
+            {
+                inZone = false
+                stopTimer()
+                Toast.makeText(this,"Wrong Zone !",Toast.LENGTH_SHORT).show()
+                playWarning(heartRateIntensity.toInt())
+            }
+        }
+
+        if (zoneNumber == 2) {
+            if (heartRateIntensity.toFloat() in 64.0..76.0 && !inZone) {
+                inZone = true
+                startTimer()
+                Toast.makeText(this,"Right Zone Again !",Toast.LENGTH_SHORT).show()
+            } else if (heartRateIntensity.toFloat() !in 64.0..76.0 && inZone)
+            {
+                inZone = false
+                stopTimer()
+                Toast.makeText(this,"Wrong Zone !",Toast.LENGTH_SHORT).show()
+                playWarning(heartRateIntensity.toInt())
+            }
+        }
+
+        if (zoneNumber == 3) {
+            if (heartRateIntensity.toFloat() in 77.0..95.0 && !inZone) {
+                inZone = true
+                startTimer()
+                Toast.makeText(this,"Right Zone Again !",Toast.LENGTH_SHORT).show()
+            } else if (heartRateIntensity.toFloat() !in 77.0..95.0 && inZone)
+            {
+                inZone = false
+                stopTimer()
+                Toast.makeText(this,"Wrong Zone !",Toast.LENGTH_SHORT).show()
+                playWarning(heartRateIntensity.toInt())
+            }
+        }
+
+        if (zoneNumber == 4) {
+            if (heartRateIntensity.toFloat() in 96.0..100.0 && !inZone) {
+                inZone = true
+                startTimer()
+                Toast.makeText(this,"Right Zone Again !",Toast.LENGTH_SHORT).show()
+            } else if (heartRateIntensity.toFloat() !in 96.0..100.0 && inZone)
+            {
+                inZone = false
+                stopTimer()
+                Toast.makeText(this,"Wrong Zone !",Toast.LENGTH_SHORT).show()
+                playWarning(heartRateIntensity.toInt())
+            }
+        }
 
     }
 
@@ -694,8 +749,85 @@ open class HeartRateActivity : AppCompatActivity() {
         if (zoneNumber == 0 && hrIntensity > 57) {
             Toast.makeText(this,"Playing warning !",Toast.LENGTH_SHORT).show()
             //warning = MediaPlayer.create(this, R.raw.narratorslowdown)
-            warning.start()
+            warningSlowDown.start()
         }
+        if(zoneNumber == 1) {
+            if (hrIntensity > 63) {
+                Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                //warning = MediaPlayer.create(this, R.raw.narratorslowdown)
+                warningSlowDown.start()
+            } else if (hrIntensity < 58){
+                Toast.makeText(this,"Playing warning !",Toast.LENGTH_SHORT).show()
+                //warning = MediaPlayer.create(this, R.raw.narratorslowdown)
+                warningSpeedUp.start()
+            }
+        }
+        if(zoneNumber == 2) {
+            if (hrIntensity > 76) {
+                Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                //warning = MediaPlayer.create(this, R.raw.narratorslowdown)
+                warningSlowDown.start()
+            } else if (hrIntensity < 64){
+                Toast.makeText(this,"Playing warning !",Toast.LENGTH_SHORT).show()
+                //warning = MediaPlayer.create(this, R.raw.narratorslowdown)
+                warningSpeedUp.start()
+            }
+        }
+
+        if(zoneNumber == 3) {
+            if (hrIntensity > 95) {
+                Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                //warning = MediaPlayer.create(this, R.raw.narratorslowdown)
+                warningSlowDown.start()
+            } else if (hrIntensity < 77){
+                Toast.makeText(this,"Playing warning !",Toast.LENGTH_SHORT).show()
+                //warning = MediaPlayer.create(this, R.raw.narratorslowdown)
+                warningSpeedUp.start()
+            }
+        }
+
+        if(zoneNumber == 4) {
+            if (hrIntensity < 96){
+                Toast.makeText(this,"Playing warning !",Toast.LENGTH_SHORT).show()
+                //warning = MediaPlayer.create(this, R.raw.narratorslowdown)
+                warningSpeedUp.start()
+            }
+        }
+
+
+
+    }
+
+    fun updateZone (minutes : Int, secs : Int) {
+        //if (minutes == 5 && secs == 0) {
+        if (minutes == 0 && secs == 10) {
+            //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.narrator1)
+            //mediaPlayer.start()
+            zoneNumber = 1
+            blinkSections(1)
+        }
+        //if (minutes == 15 && secs == 0) {
+        if (minutes == 0 && secs == 30) {
+            //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.resistanceleader)
+            //mediaPlayer.start()
+            zoneNumber = 2
+            blinkSections(2)
+        }
+        //if (minutes == 20 && secs == 0) {
+        if (minutes == 0 && secs == 50) {
+            //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.resistanceleader)
+            //mediaPlayer.start()
+            zoneNumber = 3
+            blinkSections(3)
+        }
+        //if (minutes == 25 && secs == 0) {
+        if (minutes == 1 && secs == 10) {
+            //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.resistanceleader)
+            //mediaPlayer.start()
+            zoneNumber = 4
+            blinkSections(4)
+        }
+
     }
 
 

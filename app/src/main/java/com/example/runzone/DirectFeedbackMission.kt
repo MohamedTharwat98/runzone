@@ -27,17 +27,11 @@ class DirectFeedbackMission : HeartRateActivity (){
             timerTextView.text = " ${timerTextView.text} \n Time"
             handler.postDelayed(this, 1000)
 
-            checkAudio(minutes,secs)
-
+            updateZone(minutes,secs)
 
         }
     }
 
-
-
-    private fun checkAudio (minutes: Int,  secs : Int) {
-
-    }
 
 
     override fun startTimer() {
