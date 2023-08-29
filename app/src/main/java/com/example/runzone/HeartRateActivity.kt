@@ -94,6 +94,18 @@ open class HeartRateActivity : AppCompatActivity() {
 
     lateinit var warningSpeedUp : MediaPlayer
 
+    lateinit var zone0Audio : MediaPlayer
+
+    lateinit var zone1Audio : MediaPlayer
+
+    lateinit var zone2Audio : MediaPlayer
+
+    lateinit var zone3Audio : MediaPlayer
+
+    lateinit var zone4Audio : MediaPlayer
+
+    lateinit var endAudio : MediaPlayer
+
     private lateinit var heartRateChart: BarChart
     private lateinit var dataSet: BarDataSet
     private val entries = ArrayList<BarEntry>()
@@ -167,9 +179,8 @@ open class HeartRateActivity : AppCompatActivity() {
 
         startTimer()
 
-        // to be continued !!
-        warningSlowDown = MediaPlayer.create(this, R.raw.narratorslowdown)
-        warningSpeedUp = MediaPlayer.create(this,R.raw.narratorspeedup)
+        zone0Audio.start()
+
 
         // This method sets up our custom logger, which will print all log messages to the device
         // screen, as well as to adb logcat.
@@ -746,88 +757,83 @@ open class HeartRateActivity : AppCompatActivity() {
     }
 
     open fun playWarning (hrIntensity: Int) {
-        if (zoneNumber == 0 && hrIntensity > 57) {
-            Toast.makeText(this,"Playing warning !",Toast.LENGTH_SHORT).show()
-            //warning = MediaPlayer.create(this, R.raw.narratorslowdown)
-            warningSlowDown.start()
-        }
-        if(zoneNumber == 1) {
-            if (hrIntensity > 63) {
+        if (!otherMissionAudiosAreOn()) {
+            if (zoneNumber == 0 && hrIntensity > 57) {
                 Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
-                //warning = MediaPlayer.create(this, R.raw.narratorslowdown)
                 warningSlowDown.start()
-            } else if (hrIntensity < 58){
-                Toast.makeText(this,"Playing warning !",Toast.LENGTH_SHORT).show()
-                //warning = MediaPlayer.create(this, R.raw.narratorslowdown)
-                warningSpeedUp.start()
+            }
+            if (zoneNumber == 1) {
+                if (hrIntensity > 63) {
+                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                    warningSlowDown.start()
+                } else if (hrIntensity < 58) {
+                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                    warningSpeedUp.start()
+                }
+            }
+            if (zoneNumber == 2) {
+                if (hrIntensity > 76) {
+                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                    warningSlowDown.start()
+                } else if (hrIntensity < 64) {
+                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                    warningSpeedUp.start()
+                }
+            }
+
+            if (zoneNumber == 3) {
+                if (hrIntensity > 95) {
+                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                    warningSlowDown.start()
+                } else if (hrIntensity < 77) {
+                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                    warningSpeedUp.start()
+                }
+            }
+
+            if (zoneNumber == 4) {
+                if (hrIntensity < 96) {
+                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                    warningSpeedUp.start()
+                }
             }
         }
-        if(zoneNumber == 2) {
-            if (hrIntensity > 76) {
-                Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
-                //warning = MediaPlayer.create(this, R.raw.narratorslowdown)
-                warningSlowDown.start()
-            } else if (hrIntensity < 64){
-                Toast.makeText(this,"Playing warning !",Toast.LENGTH_SHORT).show()
-                //warning = MediaPlayer.create(this, R.raw.narratorslowdown)
-                warningSpeedUp.start()
-            }
-        }
-
-        if(zoneNumber == 3) {
-            if (hrIntensity > 95) {
-                Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
-                //warning = MediaPlayer.create(this, R.raw.narratorslowdown)
-                warningSlowDown.start()
-            } else if (hrIntensity < 77){
-                Toast.makeText(this,"Playing warning !",Toast.LENGTH_SHORT).show()
-                //warning = MediaPlayer.create(this, R.raw.narratorslowdown)
-                warningSpeedUp.start()
-            }
-        }
-
-        if(zoneNumber == 4) {
-            if (hrIntensity < 96){
-                Toast.makeText(this,"Playing warning !",Toast.LENGTH_SHORT).show()
-                //warning = MediaPlayer.create(this, R.raw.narratorslowdown)
-                warningSpeedUp.start()
-            }
-        }
-
-
-
     }
 
     fun updateZone (minutes : Int, secs : Int) {
-        //if (minutes == 5 && secs == 0) {
-        if (minutes == 0 && secs == 10) {
-            //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.narrator1)
-            //mediaPlayer.start()
+        if (minutes == 1 && secs == 0) {
             zoneNumber = 1
             blinkSections(1)
+            zone1Audio.start()
         }
-        //if (minutes == 15 && secs == 0) {
-        if (minutes == 0 && secs == 30) {
-            //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.resistanceleader)
-            //mediaPlayer.start()
+        if (minutes == 3 && secs == 0) {
             zoneNumber = 2
             blinkSections(2)
+            zone2Audio.start()
         }
-        //if (minutes == 20 && secs == 0) {
-        if (minutes == 0 && secs == 50) {
-            //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.resistanceleader)
-            //mediaPlayer.start()
+        if (minutes == 6 && secs == 0) {
             zoneNumber = 3
             blinkSections(3)
+            zone3Audio.start()
         }
-        //if (minutes == 25 && secs == 0) {
-        if (minutes == 1 && secs == 10) {
-            //val mediaPlayer = MediaPlayer.create(this@EscapeFromDystopia, R.raw.resistanceleader)
-            //mediaPlayer.start()
+        if (minutes == 8 && secs == 0) {
             zoneNumber = 4
             blinkSections(4)
+            zone4Audio.start()
+        }
+        if (minutes == 10 && secs == 0 ) {
+            endAudio.start()
         }
 
+    }
+
+     fun otherMissionAudiosAreOn () : Boolean {
+         if(zone0Audio.isPlaying || zone1Audio.isPlaying || zone2Audio.isPlaying ||
+
+         zone3Audio.isPlaying || zone4Audio.isPlaying || endAudio.isPlaying ) {
+             return true
+         }
+        return false
     }
 
 

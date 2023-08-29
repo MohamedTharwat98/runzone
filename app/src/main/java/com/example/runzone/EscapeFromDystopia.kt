@@ -3,14 +3,22 @@ package com.example.runzone
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
-import android.widget.RelativeLayout
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 
 class EscapeFromDystopia : HeartRateActivity (){
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        warningSlowDown = MediaPlayer.create(this, R.raw.narratorslowdown)
+        warningSpeedUp = MediaPlayer.create(this,R.raw.narratorspeedup)
+
+        zone0Audio = MediaPlayer.create(this, R.raw.escapefromdystopiazone0)
+        zone1Audio = MediaPlayer.create(this, R.raw.escapefromdystopiazone1)
+        zone2Audio = MediaPlayer.create(this, R.raw.escapefromdystopiazone2)
+        zone3Audio = MediaPlayer.create(this, R.raw.escapefromdystopiazone3)
+        zone4Audio = MediaPlayer.create(this, R.raw.escapefromdystopiazone4)
+        endAudio = MediaPlayer.create(this, R.raw.escapefromdystopiaend)
 
     }
 
