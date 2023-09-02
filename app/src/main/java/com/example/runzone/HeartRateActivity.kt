@@ -115,6 +115,13 @@ open class HeartRateActivity : AppCompatActivity() {
     private val blinkHandlers = mutableMapOf<View, Handler>() // Store handlers for blinking animations
 
 
+    var timeZone0 : Int = 0
+    var timeZone1 : Int = 0
+    var timeZone2 : Int = 0
+    var timeZone3 : Int = 0
+    var timeZone4 : Int = 0
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -176,11 +183,16 @@ open class HeartRateActivity : AppCompatActivity() {
                     val percentageZone3 = seekBarZone3.progress * 10
                     val percentageZone4 = seekBarZone4.progress * 10
 
+
                     val totalPercentage = percentageZone0 + percentageZone1 + percentageZone2 + percentageZone3 + percentageZone4
 
                     if (totalPercentage != 100) {
                         Toast.makeText(this, "Total percentage must be 100%", Toast.LENGTH_SHORT).show()
+                    } else if (percentageZone0 < 10 || percentageZone1 < 10 || percentageZone2 < 10 ||
+                        percentageZone3 < 10 || percentageZone4 < 10 ) {
+                        Toast.makeText(this, "A zone time must not be less than 10%", Toast.LENGTH_SHORT).show()
                     } else {
+                        calculateZonesTime(percentageZone0,percentageZone1,percentageZone2,percentageZone3,percentageZone4)
                         startMission()
                         alertDialog.dismiss() // Close the dialog after successful validation
                     }
@@ -904,27 +916,27 @@ open class HeartRateActivity : AppCompatActivity() {
     }
 
     fun updateZone (minutes : Int, secs : Int) {
-        if (minutes == 1 && secs == 0) {
+        if (minutes == timeZone0) {
             zoneNumber = 1
             blinkSections(1)
             zone1Audio.start()
         }
-        if (minutes == 3 && secs == 0) {
+        if (minutes == timeZone1) {
             zoneNumber = 2
             blinkSections(2)
             zone2Audio.start()
         }
-        if (minutes == 6 && secs == 0) {
+        if (minutes == timeZone2) {
             zoneNumber = 3
             blinkSections(3)
             zone3Audio.start()
         }
-        if (minutes == 8 && secs == 0) {
+        if (minutes == timeZone3) {
             zoneNumber = 4
             blinkSections(4)
             zone4Audio.start()
         }
-        if (minutes == 10 && secs == 0 ) {
+        if (minutes == timeZone4 ) {
             endAudio.start()
         }
 
@@ -937,6 +949,19 @@ open class HeartRateActivity : AppCompatActivity() {
              return true
          }
         return false
+    }
+
+    fun calculateZonesTime(percentageZone0:Int,percentageZone1:Int,percentageZone2:Int,percentageZone3:Int,percentageZone4:Int) {
+        // Total session time in minutes
+        val totalSessionTime = 30
+
+        // Calculate the time for each zone
+         timeZone0 = ((percentageZone0 / 100.0) * totalSessionTime).toInt()
+         timeZone1 = ((percentageZone1 / 100.0) * totalSessionTime).toInt()
+         timeZone2 = ((percentageZone2 / 100.0) * totalSessionTime).toInt()
+         timeZone3 = ((percentageZone3 / 100.0) * totalSessionTime).toInt()
+         timeZone4 = ((percentageZone4 / 100.0) * totalSessionTime).toInt()
+
     }
 
 
