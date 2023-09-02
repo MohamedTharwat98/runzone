@@ -148,9 +148,16 @@ open class HeartRateActivity : AppCompatActivity() {
         val alertDialogBuilder = AlertDialog.Builder(this)
             .setView(popupView)
             .setTitle("Pyramidal Heart Rate Zone Training")
-            .setPositiveButton("Start Mission") { dialog, which ->
-                var age = editTextAge.text.toString()
-                // Handle the entered age here
+            .setPositiveButton("Start Mission", null) // Set the positive button, but don't provide a click listener here
+            .setNegativeButton("Cancel", null)
+
+        val alertDialog = alertDialogBuilder.create()
+
+        alertDialog.setOnShowListener { dialog ->
+            val startButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            startButton.setOnClickListener {
+                val age = editTextAge.text.toString()
+
                 try {
                     val ageInt = age.toInt()
                     runnersAge = ageInt
@@ -163,34 +170,29 @@ open class HeartRateActivity : AppCompatActivity() {
                     val seekBarZone3 = popupView.findViewById<SeekBar>(R.id.seekBarZone3)
                     val seekBarZone4 = popupView.findViewById<SeekBar>(R.id.seekBarZone4)
 
-
                     val percentageZone0 = seekBarZone0.progress * 10
                     val percentageZone1 = seekBarZone1.progress * 10
                     val percentageZone2 = seekBarZone2.progress * 10
                     val percentageZone3 = seekBarZone3.progress * 10
                     val percentageZone4 = seekBarZone4.progress * 10
 
-
-
                     val totalPercentage = percentageZone0 + percentageZone1 + percentageZone2 + percentageZone3 + percentageZone4
-                    // Add similar lines to calculate the total percentage for all zones
 
                     if (totalPercentage != 100) {
                         Toast.makeText(this, "Total percentage must be 100%", Toast.LENGTH_SHORT).show()
                     } else {
                         startMission()
+                        alertDialog.dismiss() // Close the dialog after successful validation
                     }
                 } catch (e: NumberFormatException) {
                     Toast.makeText(this, "Your age must be a valid number", Toast.LENGTH_SHORT).show()
                 }
-
             }
-            .setNegativeButton("Cancel", null)
-
-        val alertDialog = alertDialogBuilder.create()
+        }
 
         alertDialog.show()
     }
+
 
     fun seekBarOnClick (popupView: View) {
         val seekBarZone0 = popupView.findViewById<SeekBar>(R.id.seekBarZone0)
