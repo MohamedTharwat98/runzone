@@ -1,11 +1,12 @@
-<!-- dialog_age_input.xml -->
+<!-- dialog_heart_rate_zones.xml -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Age Input -->
     <EditText
         android:id="@+id/editTextAge"
         android:layout_width="match_parent"
@@ -13,5 +14,181 @@
         android:hint="Enter your age"
         android:inputType="number" />
 
+    <!-- Zone Labels -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Heart Rate Zones (Percentage of Total Time)"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp" />
+
+    <!-- Zone 0 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="50dp"
+        >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Zone 0 :"
+            android:gravity="end"
+            android:paddingEnd="8dp"
+            android:layout_gravity="center_vertical"/>
+
+        <SeekBar
+            android:id="@+id/seekBarZone0"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0" />
+
+        <TextView
+            android:id="@+id/percentageZone0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+    <!-- Zone 1 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="50dp"
+        >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Zone 1 :"
+            android:gravity="end"
+            android:paddingEnd="8dp"
+            android:layout_gravity="center_vertical"/>
+
+        <SeekBar
+            android:id="@+id/seekBarZone1"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0" />
+
+        <TextView
+            android:id="@+id/percentageZone1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+
+    <!-- Zone 2 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="50dp"
+        >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Zone 2 :"
+            android:gravity="end"
+            android:paddingEnd="8dp"
+            android:layout_gravity="center_vertical"/>
+
+        <SeekBar
+            android:id="@+id/seekBarZone2"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0" />
+
+        <TextView
+            android:id="@+id/percentageZone2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+    <!-- Zone 3 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="50dp"
+        >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Zone 3 :"
+            android:gravity="end"
+            android:paddingEnd="8dp"
+            android:layout_gravity="center_vertical"/>
+
+        <SeekBar
+            android:id="@+id/seekBarZone3"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0" />
+
+        <TextView
+            android:id="@+id/percentageZone3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+
+    <!-- Zone 4 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="50dp"
+        >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Zone 4 :"
+            android:gravity="end"
+            android:paddingEnd="8dp"
+            android:layout_gravity="center_vertical"/>
+
+        <SeekBar
+            android:id="@+id/seekBarZone4"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0" />
+
+        <TextView
+            android:id="@+id/percentageZone4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
 
 </LinearLayout>

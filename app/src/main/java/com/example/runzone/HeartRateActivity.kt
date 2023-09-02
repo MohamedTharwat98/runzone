@@ -8,11 +8,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ToggleButton
@@ -141,9 +143,11 @@ open class HeartRateActivity : AppCompatActivity() {
         val popupView = layoutInflater.inflate(R.layout.age_box, null)
         val editTextAge = popupView.findViewById<EditText>(R.id.editTextAge)
 
+        seekBarOnClick(popupView)
+
         val alertDialogBuilder = AlertDialog.Builder(this)
             .setView(popupView)
-            .setTitle("Enter Your Age")
+            .setTitle("Pyramidal Heart Rate Zone Training")
             .setPositiveButton("Start Mission") { dialog, which ->
                 var age = editTextAge.text.toString()
                 // Handle the entered age here
@@ -151,16 +155,113 @@ open class HeartRateActivity : AppCompatActivity() {
                     val ageInt = age.toInt()
                     runnersAge = ageInt
                     maxHR = 220 - ageInt
-                    startMission()
+
+                    // Validate percentage input
+                    val seekBarZone0 = popupView.findViewById<SeekBar>(R.id.seekBarZone0)
+                    val seekBarZone1 = popupView.findViewById<SeekBar>(R.id.seekBarZone1)
+                    val seekBarZone2 = popupView.findViewById<SeekBar>(R.id.seekBarZone2)
+                    val seekBarZone3 = popupView.findViewById<SeekBar>(R.id.seekBarZone3)
+                    val seekBarZone4 = popupView.findViewById<SeekBar>(R.id.seekBarZone4)
+
+
+                    val percentageZone0 = seekBarZone0.progress * 10
+                    val percentageZone1 = seekBarZone1.progress * 10
+                    val percentageZone2 = seekBarZone2.progress * 10
+                    val percentageZone3 = seekBarZone3.progress * 10
+                    val percentageZone4 = seekBarZone4.progress * 10
+
+
+
+                    val totalPercentage = percentageZone0 + percentageZone1 + percentageZone2 + percentageZone3 + percentageZone4
+                    // Add similar lines to calculate the total percentage for all zones
+
+                    if (totalPercentage != 100) {
+                        Toast.makeText(this, "Total percentage must be 100%", Toast.LENGTH_SHORT).show()
+                    } else {
+                        startMission()
+                    }
                 } catch (e: NumberFormatException) {
-                    Toast.makeText(this,"Your age must be a valid number ",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Your age must be a valid number", Toast.LENGTH_SHORT).show()
                 }
 
             }
             .setNegativeButton("Cancel", null)
 
         val alertDialog = alertDialogBuilder.create()
+
         alertDialog.show()
+    }
+
+    fun seekBarOnClick (popupView: View) {
+        val seekBarZone0 = popupView.findViewById<SeekBar>(R.id.seekBarZone0)
+        val seekBarZone1 = popupView.findViewById<SeekBar>(R.id.seekBarZone1)
+        val seekBarZone2 = popupView.findViewById<SeekBar>(R.id.seekBarZone2)
+        val seekBarZone3 = popupView.findViewById<SeekBar>(R.id.seekBarZone3)
+        val seekBarZone4 = popupView.findViewById<SeekBar>(R.id.seekBarZone4)
+
+        val percentageZone0Bar = popupView.findViewById<TextView>(R.id.percentageZone0)
+        val percentageZone1Bar = popupView.findViewById<TextView>(R.id.percentageZone1)
+        val percentageZone2Bar = popupView.findViewById<TextView>(R.id.percentageZone2)
+        val percentageZone3Bar = popupView.findViewById<TextView>(R.id.percentageZone3)
+        val percentageZone4Bar = popupView.findViewById<TextView>(R.id.percentageZone4)
+
+
+        seekBarZone0.max = 10
+        seekBarZone1.max = 10
+        seekBarZone2.max = 10
+        seekBarZone3.max = 10
+        seekBarZone4.max = 10
+
+        seekBarZone0.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                // Map progress to values like 10, 20, 30, etc.
+                val mappedValue = progress * 10
+                percentageZone0Bar.text = "$mappedValue%"
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        seekBarZone1.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                val mappedValue = progress * 10
+                percentageZone1Bar.text =  "$mappedValue%"
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        seekBarZone2.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                val mappedValue = progress * 10
+                percentageZone2Bar.text =  "$mappedValue%"
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        seekBarZone3.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                val mappedValue = progress * 10
+                percentageZone3Bar.text =  "$mappedValue%"
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        seekBarZone4.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                val mappedValue = progress * 10
+                percentageZone4Bar.text =  "$mappedValue%"
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
