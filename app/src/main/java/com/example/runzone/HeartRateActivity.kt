@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -115,12 +114,17 @@ open class HeartRateActivity : AppCompatActivity() {
     private val blinkHandlers = mutableMapOf<View, Handler>() // Store handlers for blinking animations
 
 
-    var timeZone0 : Int = 0
-    var timeZone1 : Int = 0
-    var timeZone2 : Int = 0
-    var timeZone3 : Int = 0
-    var timeZone4 : Int = 0
+    var timeZone0Minutes : Int = 0
+    var timeZone1Minutes : Int = 0
+    var timeZone2Minutes : Int = 0
+    var timeZone3Minutes : Int = 0
+    var timeZone4Minutes : Int = 0
 
+    var timeZone0Seconds : Int = 0
+    var timeZone1Seconds : Int = 0
+    var timeZone2Seconds : Int = 0
+    var timeZone3Seconds : Int = 0
+    var timeZone4Seconds : Int = 0
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -233,6 +237,9 @@ open class HeartRateActivity : AppCompatActivity() {
         seekBarZone0.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val mappedValue = progress * 5
+                val time = calculateZoneTimeSeekBar(mappedValue)
+                val zone0Text = popupView.findViewById<TextView>(R.id.zone0TextView)
+                zone0Text.text = "Zone 0 : \n $time"
                 percentageZone0Bar.text = "$mappedValue%"
             }
 
@@ -243,6 +250,9 @@ open class HeartRateActivity : AppCompatActivity() {
         seekBarZone1.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val mappedValue = progress * 5
+                val time = calculateZoneTimeSeekBar(mappedValue)
+                val zone1Text = popupView.findViewById<TextView>(R.id.zone1TextView)
+                zone1Text.text = "Zone 1 : \n $time"
                 percentageZone1Bar.text =  "$mappedValue%"
             }
 
@@ -253,6 +263,9 @@ open class HeartRateActivity : AppCompatActivity() {
         seekBarZone2.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val mappedValue = progress * 5
+                val time = calculateZoneTimeSeekBar(mappedValue)
+                val zone2Text = popupView.findViewById<TextView>(R.id.zone2TextView)
+                zone2Text.text = "Zone 2 : \n $time"
                 percentageZone2Bar.text =  "$mappedValue%"
             }
 
@@ -263,6 +276,9 @@ open class HeartRateActivity : AppCompatActivity() {
         seekBarZone3.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val mappedValue = progress * 5
+                val time = calculateZoneTimeSeekBar(mappedValue)
+                val zone3Text = popupView.findViewById<TextView>(R.id.zone3TextView)
+                zone3Text.text = "Zone 3 : \n $time"
                 percentageZone3Bar.text =  "$mappedValue%"
             }
 
@@ -273,6 +289,9 @@ open class HeartRateActivity : AppCompatActivity() {
         seekBarZone4.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val mappedValue = progress * 5
+                val time = calculateZoneTimeSeekBar(mappedValue)
+                val zone4Text = popupView.findViewById<TextView>(R.id.zone4TextView)
+                zone4Text.text = "Zone 4 : \n $time"
                 percentageZone4Bar.text =  "$mappedValue%"
             }
 
@@ -294,17 +313,39 @@ open class HeartRateActivity : AppCompatActivity() {
         val percentageZone3Bar = popupView.findViewById<TextView>(R.id.percentageZone3)
         val percentageZone4Bar = popupView.findViewById<TextView>(R.id.percentageZone4)
 
-        val percentageZone0 = seekBarZone0.progress * 5
-        val percentageZone1 = seekBarZone1.progress * 5
-        val percentageZone2 = seekBarZone2.progress * 5
-        val percentageZone3 = seekBarZone3.progress * 5
-        val percentageZone4 = seekBarZone4.progress * 5
+        val percentageZone0 = seekBarZone0.progress * 10
+        val percentageZone1 = seekBarZone1.progress * 10
+        val percentageZone2 = seekBarZone2.progress * 10
+        val percentageZone3 = seekBarZone3.progress * 10
+        val percentageZone4 = seekBarZone4.progress * 10
 
         percentageZone0Bar.text = "$percentageZone0%"
         percentageZone1Bar.text = "$percentageZone1%"
         percentageZone2Bar.text = "$percentageZone2%"
         percentageZone3Bar.text = "$percentageZone3%"
         percentageZone4Bar.text = "$percentageZone4%"
+
+        val time0 = calculateZoneTimeSeekBar(percentageZone0)
+        val zone0Text = popupView.findViewById<TextView>(R.id.zone0TextView)
+        zone0Text.text = "Zone 0 : \n $time0"
+
+        val time1 = calculateZoneTimeSeekBar(percentageZone1)
+        val zone1Text = popupView.findViewById<TextView>(R.id.zone1TextView)
+        zone1Text.text = "Zone 1 : \n $time1"
+
+        val time2 = calculateZoneTimeSeekBar(percentageZone2)
+        val zone2Text = popupView.findViewById<TextView>(R.id.zone2TextView)
+        zone2Text.text = "Zone 2 : \n $time2"
+
+        val time3 = calculateZoneTimeSeekBar(percentageZone3)
+        val zone3Text = popupView.findViewById<TextView>(R.id.zone3TextView)
+        zone3Text.text = "Zone 3 : \n $time3"
+
+        val time4 = calculateZoneTimeSeekBar(percentageZone4)
+        val zone4Text = popupView.findViewById<TextView>(R.id.zone4TextView)
+        zone4Text.text = "Zone 4 : \n $time4"
+
+
     }
 
 
@@ -948,27 +989,27 @@ open class HeartRateActivity : AppCompatActivity() {
     }
 
     fun updateZone (minutes : Int, secs : Int) {
-        if (minutes == timeZone0) {
+        if (minutes == timeZone0Minutes) {
             zoneNumber = 1
             blinkSections(1)
             zone1Audio.start()
         }
-        if (minutes == timeZone1) {
+        if (minutes == timeZone1Minutes) {
             zoneNumber = 2
             blinkSections(2)
             zone2Audio.start()
         }
-        if (minutes == timeZone2) {
+        if (minutes == timeZone2Minutes) {
             zoneNumber = 3
             blinkSections(3)
             zone3Audio.start()
         }
-        if (minutes == timeZone3) {
+        if (minutes == timeZone3Minutes) {
             zoneNumber = 4
             blinkSections(4)
             zone4Audio.start()
         }
-        if (minutes == timeZone4 ) {
+        if (minutes == timeZone4Minutes ) {
             endAudio.start()
         }
 
@@ -988,11 +1029,36 @@ open class HeartRateActivity : AppCompatActivity() {
         val totalSessionTime = 30
 
         // Calculate the time for each zone
-         timeZone0 = ((percentageZone0 / 100.0) * totalSessionTime).toInt()
-         timeZone1 = ((percentageZone1 / 100.0) * totalSessionTime).toInt()
-         timeZone2 = ((percentageZone2 / 100.0) * totalSessionTime).toInt()
-         timeZone3 = ((percentageZone3 / 100.0) * totalSessionTime).toInt()
-         timeZone4 = ((percentageZone4 / 100.0) * totalSessionTime).toInt()
+         timeZone0Minutes = ((percentageZone0 / 100.0) * totalSessionTime).toInt()
+         timeZone1Minutes = ((percentageZone1 / 100.0) * totalSessionTime).toInt()
+         timeZone2Minutes = ((percentageZone2 / 100.0) * totalSessionTime).toInt()
+         timeZone3Minutes = ((percentageZone3 / 100.0) * totalSessionTime).toInt()
+         timeZone4Minutes = ((percentageZone4 / 100.0) * totalSessionTime).toInt()
+
+        // Calculate the remaining seconds for each zone
+         timeZone0Seconds = ((percentageZone0 / 100.0) * totalSessionTime * 60).toInt() % 60
+         timeZone1Seconds = ((percentageZone1 / 100.0) * totalSessionTime * 60).toInt() % 60
+         timeZone2Seconds = ((percentageZone2 / 100.0) * totalSessionTime * 60).toInt() % 60
+         timeZone3Seconds = ((percentageZone3 / 100.0) * totalSessionTime * 60).toInt() % 60
+         timeZone4Seconds = ((percentageZone4 / 100.0) * totalSessionTime * 60).toInt() % 60
+
+    }
+
+    fun calculateZoneTimeSeekBar(percentageZone:Int) : String {
+        // Total session time in minutes
+        val totalSessionTime = 30
+
+        // Calculate the time for each zone
+        val timeZoneMinutes = ((percentageZone / 100.0) * totalSessionTime).toInt()
+
+        // Calculate the remaining seconds for each zone
+        val timeZoneSeconds = ((percentageZone / 100.0) * totalSessionTime * 60).toInt() % 60
+
+        if (timeZoneSeconds == 0) {
+            return "$timeZoneMinutes Min"
+        } else {
+            return "$timeZoneMinutes Min, $timeZoneSeconds Sec"
+        }
 
     }
 
