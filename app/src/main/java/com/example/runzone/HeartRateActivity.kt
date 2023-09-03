@@ -179,20 +179,22 @@ open class HeartRateActivity : AppCompatActivity() {
                     val seekBarZone3 = popupView.findViewById<SeekBar>(R.id.seekBarZone3)
                     val seekBarZone4 = popupView.findViewById<SeekBar>(R.id.seekBarZone4)
 
-                    val percentageZone0 = seekBarZone0.progress * 10
-                    val percentageZone1 = seekBarZone1.progress * 10
-                    val percentageZone2 = seekBarZone2.progress * 10
-                    val percentageZone3 = seekBarZone3.progress * 10
-                    val percentageZone4 = seekBarZone4.progress * 10
+                    val percentageZone0 = seekBarZone0.progress * 5
+                    val percentageZone1 = seekBarZone1.progress * 5
+                    val percentageZone2 = seekBarZone2.progress * 5
+                    val percentageZone3 = seekBarZone3.progress * 5
+                    val percentageZone4 = seekBarZone4.progress * 5
 
 
                     val totalPercentage = percentageZone0 + percentageZone1 + percentageZone2 + percentageZone3 + percentageZone4
 
                     if (totalPercentage != 100) {
                         Toast.makeText(this, "Total percentage must be 100%", Toast.LENGTH_SHORT).show()
-                    } else if (percentageZone0 < 10 || percentageZone1 < 10 || percentageZone2 < 10 ||
-                        percentageZone3 < 10 || percentageZone4 < 10 ) {
-                        Toast.makeText(this, "A zone time must not be less than 10%", Toast.LENGTH_SHORT).show()
+                    } else if (percentageZone0 < 5 || percentageZone1 < 5 || percentageZone2 < 5 ||
+                        percentageZone3 < 5 || percentageZone4 < 5 ) {
+                        Toast.makeText(this, "A zone time must not be less than 5%", Toast.LENGTH_SHORT).show()
+                    }else if (percentageZone4 > 10) {
+                        Toast.makeText(this, "Time in Zone 4 must be less than or equal to 10%", Toast.LENGTH_SHORT).show()
                     } else {
                         calculateZonesTime(percentageZone0,percentageZone1,percentageZone2,percentageZone3,percentageZone4)
                         startMission()
@@ -222,16 +224,15 @@ open class HeartRateActivity : AppCompatActivity() {
         val percentageZone4Bar = popupView.findViewById<TextView>(R.id.percentageZone4)
 
 
-        seekBarZone0.max = 10
-        seekBarZone1.max = 10
-        seekBarZone2.max = 10
-        seekBarZone3.max = 10
-        seekBarZone4.max = 10
+        seekBarZone0.max = 20
+        seekBarZone1.max = 20
+        seekBarZone2.max = 20
+        seekBarZone3.max = 20
+        seekBarZone4.max = 20
 
         seekBarZone0.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                // Map progress to values like 10, 20, 30, etc.
-                val mappedValue = progress * 10
+                val mappedValue = progress * 5
                 percentageZone0Bar.text = "$mappedValue%"
             }
 
@@ -241,7 +242,7 @@ open class HeartRateActivity : AppCompatActivity() {
 
         seekBarZone1.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                val mappedValue = progress * 10
+                val mappedValue = progress * 5
                 percentageZone1Bar.text =  "$mappedValue%"
             }
 
@@ -251,7 +252,7 @@ open class HeartRateActivity : AppCompatActivity() {
 
         seekBarZone2.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                val mappedValue = progress * 10
+                val mappedValue = progress * 5
                 percentageZone2Bar.text =  "$mappedValue%"
             }
 
@@ -261,7 +262,7 @@ open class HeartRateActivity : AppCompatActivity() {
 
         seekBarZone3.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                val mappedValue = progress * 10
+                val mappedValue = progress * 5
                 percentageZone3Bar.text =  "$mappedValue%"
             }
 
@@ -271,7 +272,7 @@ open class HeartRateActivity : AppCompatActivity() {
 
         seekBarZone4.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                val mappedValue = progress * 10
+                val mappedValue = progress * 5
                 percentageZone4Bar.text =  "$mappedValue%"
             }
 
@@ -280,7 +281,7 @@ open class HeartRateActivity : AppCompatActivity() {
         })
     }
 
-    private fun setProgressBar (popupView: View) {
+    private fun setProgressBar(popupView: View) {
         val seekBarZone0 = popupView.findViewById<SeekBar>(R.id.seekBarZone0)
         val seekBarZone1 = popupView.findViewById<SeekBar>(R.id.seekBarZone1)
         val seekBarZone2 = popupView.findViewById<SeekBar>(R.id.seekBarZone2)
@@ -293,12 +294,17 @@ open class HeartRateActivity : AppCompatActivity() {
         val percentageZone3Bar = popupView.findViewById<TextView>(R.id.percentageZone3)
         val percentageZone4Bar = popupView.findViewById<TextView>(R.id.percentageZone4)
 
-        percentageZone0Bar.text = "${seekBarZone0.progress * 10}%"
-        percentageZone1Bar.text = "${seekBarZone1.progress * 10}%"
-        percentageZone2Bar.text = "${seekBarZone2.progress * 10}%"
-        percentageZone3Bar.text = "${seekBarZone3.progress * 10}%"
-        percentageZone4Bar.text = "${seekBarZone4.progress * 10}%"
+        val percentageZone0 = seekBarZone0.progress * 5
+        val percentageZone1 = seekBarZone1.progress * 5
+        val percentageZone2 = seekBarZone2.progress * 5
+        val percentageZone3 = seekBarZone3.progress * 5
+        val percentageZone4 = seekBarZone4.progress * 5
 
+        percentageZone0Bar.text = "$percentageZone0%"
+        percentageZone1Bar.text = "$percentageZone1%"
+        percentageZone2Bar.text = "$percentageZone2%"
+        percentageZone3Bar.text = "$percentageZone3%"
+        percentageZone4Bar.text = "$percentageZone4%"
     }
 
 
