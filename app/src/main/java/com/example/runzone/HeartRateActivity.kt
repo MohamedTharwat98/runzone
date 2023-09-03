@@ -183,11 +183,11 @@ open class HeartRateActivity : AppCompatActivity() {
                     val seekBarZone3 = popupView.findViewById<SeekBar>(R.id.seekBarZone3)
                     val seekBarZone4 = popupView.findViewById<SeekBar>(R.id.seekBarZone4)
 
-                    val percentageZone0 = seekBarZone0.progress * 5
-                    val percentageZone1 = seekBarZone1.progress * 5
-                    val percentageZone2 = seekBarZone2.progress * 5
-                    val percentageZone3 = seekBarZone3.progress * 5
-                    val percentageZone4 = seekBarZone4.progress * 5
+                    val percentageZone0 = seekBarZone0.progress * 10
+                    val percentageZone1 = seekBarZone1.progress * 10
+                    val percentageZone2 = seekBarZone2.progress * 10
+                    val percentageZone3 = seekBarZone3.progress * 10
+                    val percentageZone4 = seekBarZone4.progress * 10
 
 
                     val totalPercentage = percentageZone0 + percentageZone1 + percentageZone2 + percentageZone3 + percentageZone4
