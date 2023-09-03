@@ -150,6 +150,8 @@ open class HeartRateActivity : AppCompatActivity() {
         val popupView = layoutInflater.inflate(R.layout.age_box, null)
         val editTextAge = popupView.findViewById<EditText>(R.id.editTextAge)
 
+        setProgressBar(popupView)
+
         seekBarOnClick(popupView)
 
         val alertDialogBuilder = AlertDialog.Builder(this)
@@ -277,6 +279,30 @@ open class HeartRateActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
     }
+
+    private fun setProgressBar (popupView: View) {
+        val seekBarZone0 = popupView.findViewById<SeekBar>(R.id.seekBarZone0)
+        val seekBarZone1 = popupView.findViewById<SeekBar>(R.id.seekBarZone1)
+        val seekBarZone2 = popupView.findViewById<SeekBar>(R.id.seekBarZone2)
+        val seekBarZone3 = popupView.findViewById<SeekBar>(R.id.seekBarZone3)
+        val seekBarZone4 = popupView.findViewById<SeekBar>(R.id.seekBarZone4)
+
+        val percentageZone0Bar = popupView.findViewById<TextView>(R.id.percentageZone0)
+        val percentageZone1Bar = popupView.findViewById<TextView>(R.id.percentageZone1)
+        val percentageZone2Bar = popupView.findViewById<TextView>(R.id.percentageZone2)
+        val percentageZone3Bar = popupView.findViewById<TextView>(R.id.percentageZone3)
+        val percentageZone4Bar = popupView.findViewById<TextView>(R.id.percentageZone4)
+
+        percentageZone0Bar.text = "${seekBarZone0.progress * 10}%"
+        percentageZone1Bar.text = "${seekBarZone1.progress * 10}%"
+        percentageZone2Bar.text = "${seekBarZone2.progress * 10}%"
+        percentageZone3Bar.text = "${seekBarZone3.progress * 10}%"
+        percentageZone4Bar.text = "${seekBarZone4.progress * 10}%"
+
+    }
+
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun startMission () {
