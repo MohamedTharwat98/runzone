@@ -48,7 +48,7 @@
             android:layout_weight="2"
             android:layout_height="wrap_content"
             android:max="20"
-            android:progress="1" />
+            android:progress="0" />
 
         <TextView
             android:id="@+id/percentageZone0"
@@ -82,7 +82,7 @@
             android:layout_weight="2"
             android:layout_height="wrap_content"
             android:max="20"
-            android:progress="2" />
+            android:progress="0" />
 
         <TextView
             android:id="@+id/percentageZone1"
@@ -117,7 +117,7 @@
             android:layout_weight="2"
             android:layout_height="wrap_content"
             android:max="20"
-            android:progress="5" />
+            android:progress="0" />
 
         <TextView
             android:id="@+id/percentageZone2"
@@ -151,7 +151,7 @@
             android:layout_weight="2"
             android:layout_height="wrap_content"
             android:max="20"
-            android:progress="1" />
+            android:progress="0" />
 
         <TextView
             android:id="@+id/percentageZone3"
@@ -186,7 +186,7 @@
             android:layout_weight="2"
             android:layout_height="wrap_content"
             android:max="20"
-            android:progress="1" />
+            android:progress="0" />
 
         <TextView
             android:id="@+id/percentageZone4"

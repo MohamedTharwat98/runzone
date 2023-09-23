@@ -184,24 +184,17 @@ open class HeartRateActivity : AppCompatActivity() {
                     val seekBarZone3 = popupView.findViewById<SeekBar>(R.id.seekBarZone3)
                     val seekBarZone4 = popupView.findViewById<SeekBar>(R.id.seekBarZone4)
 
+
                     val percentageZone0 = (seekBarZone0.progress  * 10) / 2
                     val percentageZone1 = (seekBarZone1.progress  * 10) / 2
                     val percentageZone2 = (seekBarZone2.progress  * 10) / 2
                     val percentageZone3 = (seekBarZone3.progress  * 10) / 2
                     val percentageZone4 = (seekBarZone4.progress  * 10) / 2
 
-                    Log.d("zones", "zone0 $percentageZone0")
-                    Log.d("zones", "zone1 $percentageZone1")
-                    Log.d("zones", "zone2 $percentageZone2")
-                    Log.d("zones", "zone3 $percentageZone3")
-                    Log.d("zones", "zone4 $percentageZone4")
-
-
 
                     val totalPercentage = percentageZone0 + percentageZone1 + percentageZone2 + percentageZone3 + percentageZone4
 
                     if (totalPercentage != 100) {
-                        Toast.makeText(this, "Total percentage = ${totalPercentage}", Toast.LENGTH_SHORT).show()
                         Toast.makeText(this, "Total percentage must be 100%", Toast.LENGTH_SHORT).show()
                     } else if (percentageZone0 < 5 || percentageZone1 < 5 || percentageZone2 < 5 ||
                         percentageZone3 < 5 || percentageZone4 < 5 ) {
