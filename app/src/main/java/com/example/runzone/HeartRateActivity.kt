@@ -41,7 +41,6 @@ import java.util.Date
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
-import kotlin.math.log
 
 
 const val TAG = "HeartRateActivity"
@@ -116,17 +115,17 @@ open class HeartRateActivity : AppCompatActivity() {
     private val blinkHandlers = mutableMapOf<View, Handler>() // Store handlers for blinking animations
 
 
-    var timeZone0Minutes : Int = 0
-    var timeZone1Minutes : Int = 0
-    var timeZone2Minutes : Int = 0
-    var timeZone3Minutes : Int = 0
-    var timeZone4Minutes : Int = 0
+    var zone0StartMinutes : Int = 0
+    var zone1StartMinutes : Int = 0
+    var zone2StartMinutes : Int = 0
+    var zone3StartMinutes : Int = 0
+    var zone4StartMinutes : Int = 0
 
-    var timeZone0Seconds : Int = 0
-    var timeZone1Seconds : Int = 0
-    var timeZone2Seconds : Int = 0
-    var timeZone3Seconds : Int = 0
-    var timeZone4Seconds : Int = 0
+    var zone0StartSeconds : Int = 0
+    var zone1StartSeconds : Int = 0
+    var zone2StartSeconds : Int = 0
+    var zone3StartSeconds : Int = 0
+    var zone4StartSeconds : Int = 0
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -1022,27 +1021,32 @@ open class HeartRateActivity : AppCompatActivity() {
     }
 
     fun updateZone (minutes : Int, secs : Int) {
-        if (minutes == timeZone0Minutes) {
+        Log.d("zonesTime","0: minutes : ${zone0StartMinutes}, seconds : ${zone0StartSeconds}")
+        Log.d("zonesTime","1: minutes : ${zone1StartMinutes}, seconds : ${zone1StartSeconds}")
+        Log.d("zonesTime","2: minutes : ${zone2StartMinutes}, seconds : ${zone2StartSeconds}")
+        Log.d("zonesTime","3: minutes : ${zone3StartMinutes}, seconds : ${zone3StartSeconds}")
+        Log.d("zonesTime","4: minutes : ${zone4StartMinutes}, seconds : ${zone4StartSeconds}")
+        if (minutes == zone1StartMinutes && secs == zone1StartSeconds) {
             zoneNumber = 1
             blinkSections(1)
             zone1Audio.start()
         }
-        if (minutes == timeZone1Minutes) {
+        if (minutes == zone2StartMinutes && secs == zone2StartSeconds) {
             zoneNumber = 2
             blinkSections(2)
             zone2Audio.start()
         }
-        if (minutes == timeZone2Minutes) {
+        if (minutes == zone3StartMinutes && secs == zone3StartSeconds) {
             zoneNumber = 3
             blinkSections(3)
             zone3Audio.start()
         }
-        if (minutes == timeZone3Minutes) {
+        if (minutes == zone4StartMinutes && secs == zone4StartSeconds) {
             zoneNumber = 4
             blinkSections(4)
             zone4Audio.start()
         }
-        if (minutes == timeZone4Minutes ) {
+        if (minutes == 30 ) {
             endAudio.start()
         }
 
@@ -1057,25 +1061,43 @@ open class HeartRateActivity : AppCompatActivity() {
         return false
     }
 
-    fun calculateZonesTime(percentageZone0:Int,percentageZone1:Int,percentageZone2:Int,percentageZone3:Int,percentageZone4:Int) {
-        // Total session time in minutes
-        val totalSessionTime = 30
+    fun calculateZonesTime(
+        percentageZone0: Int,
+        percentageZone1: Int,
+        percentageZone2: Int,
+        percentageZone3: Int,
+        percentageZone4: Int
+    ) {
+        // Total session time in seconds
+        val totalSessionTimeSeconds = 30 * 60 // 30 minutes converted to seconds
 
-        // Calculate the time for each zone
-         timeZone0Minutes = ((percentageZone0 / 100.0) * totalSessionTime).toInt()
-         timeZone1Minutes = ((percentageZone1 / 100.0) * totalSessionTime).toInt()
-         timeZone2Minutes = ((percentageZone2 / 100.0) * totalSessionTime).toInt()
-         timeZone3Minutes = ((percentageZone3 / 100.0) * totalSessionTime).toInt()
-         timeZone4Minutes = ((percentageZone4 / 100.0) * totalSessionTime).toInt()
+        // Calculate start times for each zone in seconds
+        zone0StartSeconds = 0
+        zone1StartSeconds = (percentageZone0 * totalSessionTimeSeconds / 100)
+        zone2StartSeconds = zone1StartSeconds + (percentageZone1 * totalSessionTimeSeconds / 100)
+        zone3StartSeconds = zone2StartSeconds + (percentageZone2 * totalSessionTimeSeconds / 100)
+        zone4StartSeconds = zone3StartSeconds + (percentageZone3 * totalSessionTimeSeconds / 100)
 
-        // Calculate the remaining seconds for each zone
-         timeZone0Seconds = ((percentageZone0 / 100.0) * totalSessionTime * 60).toInt() % 60
-         timeZone1Seconds = ((percentageZone1 / 100.0) * totalSessionTime * 60).toInt() % 60
-         timeZone2Seconds = ((percentageZone2 / 100.0) * totalSessionTime * 60).toInt() % 60
-         timeZone3Seconds = ((percentageZone3 / 100.0) * totalSessionTime * 60).toInt() % 60
-         timeZone4Seconds = ((percentageZone4 / 100.0) * totalSessionTime * 60).toInt() % 60
+        // Convert start times to minutes and remaining seconds
+        zone0StartMinutes = zone0StartSeconds / 60
+        val zone0StartRemainingSeconds = zone0StartSeconds % 60
+        zone1StartMinutes = zone1StartSeconds / 60
+        val zone1StartRemainingSeconds = zone1StartSeconds % 60
+        zone2StartMinutes = zone2StartSeconds / 60
+        val zone2StartRemainingSeconds = zone2StartSeconds % 60
+        zone3StartMinutes = zone3StartSeconds / 60
+        val zone3StartRemainingSeconds = zone3StartSeconds % 60
+        zone4StartMinutes = zone4StartSeconds / 60
+        val zone4StartRemainingSeconds = zone4StartSeconds % 60
+
+        zone0StartSeconds = zone0StartRemainingSeconds
+        zone1StartSeconds = zone1StartRemainingSeconds
+        zone2StartSeconds = zone2StartRemainingSeconds
+        zone3StartSeconds = zone3StartRemainingSeconds
+        zone4StartSeconds = zone4StartRemainingSeconds
 
     }
+
 
     fun calculateZoneTimeSeekBar(percentageZone:Int) : String {
         // Total session time in minutes
