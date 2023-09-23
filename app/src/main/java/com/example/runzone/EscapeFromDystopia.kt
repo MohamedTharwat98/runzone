@@ -19,6 +19,7 @@ class EscapeFromDystopia : HeartRateActivity (){
         zone3Audio = MediaPlayer.create(this, R.raw.escapefromdystopiazone3)
         zone4Audio = MediaPlayer.create(this, R.raw.escapefromdystopiazone4)
         endAudio = MediaPlayer.create(this, R.raw.escapefromdystopiaend)
+        pausedAudio= MediaPlayer()
 
     }
 

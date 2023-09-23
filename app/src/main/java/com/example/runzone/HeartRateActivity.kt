@@ -108,6 +108,8 @@ open class HeartRateActivity : AppCompatActivity() {
 
     lateinit var endAudio : MediaPlayer
 
+    lateinit var pausedAudio : MediaPlayer
+
     private lateinit var heartRateChart: BarChart
     private lateinit var dataSet: BarDataSet
     private val entries = ArrayList<BarEntry>()
@@ -367,6 +369,8 @@ open class HeartRateActivity : AppCompatActivity() {
 
         startButton.isChecked = true
 
+        setCompletionListenerAudio()
+
         startTimer()
 
         zone0Audio.start()
@@ -438,13 +442,71 @@ open class HeartRateActivity : AppCompatActivity() {
             if (!isRunning) {
                 startTimer()
                 startButton.isChecked = true
+                checkAudio()
             } else {
-                if (warningSlowDown.isPlaying) {
-                    warningSlowDown.pause()
-                }
                 stopTimer()
                 startButton.isChecked = false
+                checkAudio()
             }
+        }
+    }
+
+    fun setCompletionListenerAudio () {
+        setCompletionListener(warningSlowDown)
+        setCompletionListener(warningSpeedUp)
+        setCompletionListener(zone0Audio)
+        setCompletionListener(zone1Audio)
+        setCompletionListener(zone2Audio)
+        setCompletionListener(zone3Audio)
+        setCompletionListener(zone4Audio)
+        setCompletionListener(endAudio)
+        setCompletionListener(pausedAudio)
+    }
+
+    fun setCompletionListener (mediaPlayer: MediaPlayer){
+        // Set a completion listener to detect when playback is finished
+        mediaPlayer.setOnCompletionListener { mp ->
+            // This callback will be called when the MediaPlayer has finished playing
+            // You can perform actions here, such as updating UI or handling the completion event
+            // You can also release the MediaPlayer if you're done with it
+            mp.stop()
+            if (mediaPlayer==pausedAudio) {
+                pausedAudio= MediaPlayer()
+            }
+        }
+    }
+
+    fun checkAudio () {
+        if (!isRunning) { //pause
+            if (warningSlowDown.isPlaying) {
+                warningSlowDown.pause()
+                pausedAudio = warningSlowDown
+            } else if (warningSpeedUp.isPlaying) {
+                warningSpeedUp.pause()
+                pausedAudio = warningSpeedUp
+            } else if (zone0Audio.isPlaying) {
+                zone0Audio.pause()
+                pausedAudio=zone0Audio
+            } else if (zone1Audio.isPlaying) {
+                zone1Audio.pause()
+                pausedAudio=zone1Audio
+            } else if (zone2Audio.isPlaying) {
+                zone2Audio.pause()
+                pausedAudio=zone2Audio
+            } else if (zone3Audio.isPlaying) {
+                zone3Audio.pause()
+                pausedAudio=zone3Audio
+            } else if (zone4Audio.isPlaying) {
+                zone4Audio.pause()
+                pausedAudio=zone4Audio
+            } else if (endAudio.isPlaying) {
+                endAudio.pause()
+                pausedAudio=endAudio
+            }   /* else {
+                pausedAudio.pause()
+            }*/
+        } else { //continue
+                pausedAudio.start()
         }
     }
 
@@ -483,6 +545,9 @@ open class HeartRateActivity : AppCompatActivity() {
         } else if (endAudio.isPlaying) {
             endAudio.stop()
             endAudio.release()
+        } else if (pausedAudio.isPlaying) {
+            pausedAudio.stop()
+            pausedAudio.release()
         }
     }
     private val timerRunnable = Runnable { }
@@ -1055,7 +1120,7 @@ open class HeartRateActivity : AppCompatActivity() {
      fun otherMissionAudiosAreOn () : Boolean {
          if(zone0Audio.isPlaying || zone1Audio.isPlaying || zone2Audio.isPlaying ||
 
-         zone3Audio.isPlaying || zone4Audio.isPlaying || endAudio.isPlaying ) {
+         zone3Audio.isPlaying || zone4Audio.isPlaying || endAudio.isPlaying || pausedAudio.isPlaying ) {
              return true
          }
         return false
