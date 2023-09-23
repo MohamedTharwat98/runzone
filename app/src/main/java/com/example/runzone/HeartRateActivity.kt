@@ -1,6 +1,7 @@
 package com.example.runzone
 
 import android.Manifest
+import android.content.Intent
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Build
@@ -198,7 +199,7 @@ open class HeartRateActivity : AppCompatActivity() {
                         Toast.makeText(this, "Total percentage must be 100%", Toast.LENGTH_SHORT).show()
                     } else if (percentageZone0 < 5 || percentageZone1 < 5 || percentageZone2 < 5 ||
                         percentageZone3 < 5 || percentageZone4 < 5 ) {
-                        Toast.makeText(this, "A zone time must not be less than 5%", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "A zone time can not be less than 5%", Toast.LENGTH_SHORT).show()
                     }else if (percentageZone4 > 10) {
                         Toast.makeText(this, "Time in Zone 4 must be less than or equal to 10%", Toast.LENGTH_SHORT).show()
                     } else {
@@ -404,6 +405,7 @@ open class HeartRateActivity : AppCompatActivity() {
 
 
         stopButton.setOnClickListener {
+            stopAllMedia()
             session.zone0 = entries.get(0).y
             session.zone1 = entries.get(1).y
             session.zone2 = entries.get(2).y
@@ -427,7 +429,9 @@ open class HeartRateActivity : AppCompatActivity() {
                         Toast.makeText(this, "Error saving session data: ${it.message}", Toast.LENGTH_SHORT).show()
                     }
             }
-
+            finish()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
 
 
@@ -455,6 +459,33 @@ open class HeartRateActivity : AppCompatActivity() {
         handler.removeCallbacks(timerRunnable)
     }
 
+    private fun stopAllMedia() {
+        if (warningSlowDown.isPlaying) {
+            warningSlowDown.stop()
+            warningSlowDown.release()
+        } else if (warningSpeedUp.isPlaying) {
+            warningSpeedUp.stop()
+            warningSpeedUp.release()
+        } else if (zone0Audio.isPlaying) {
+            zone0Audio.stop()
+            zone0Audio.release()
+        } else if (zone1Audio.isPlaying) {
+            zone1Audio.stop()
+            zone1Audio.release()
+        } else if (zone2Audio.isPlaying) {
+            zone2Audio.stop()
+            zone2Audio.release()
+        } else if (zone3Audio.isPlaying) {
+            zone3Audio.stop()
+            zone3Audio.release()
+        } else if (zone4Audio.isPlaying) {
+            zone4Audio.stop()
+            zone4Audio.release()
+        } else if (endAudio.isPlaying) {
+            endAudio.stop()
+            endAudio.release()
+        }
+    }
     private val timerRunnable = Runnable { }
 
 
