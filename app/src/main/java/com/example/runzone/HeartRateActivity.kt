@@ -392,49 +392,8 @@ open class HeartRateActivity : AppCompatActivity() {
 
         blinkSections(0)
 
-        val session = Session(
-            duration = "",
-            date = Date().toString(),
-            maxHR = maxHR.toFloat(),
-            missionType = missionType,
-            age = runnersAge,
-            zone0 = 0F,
-            zone1 = 0F,
-            zone2 = 0F,
-            zone3 = 0F,
-            zone4 = 0F
-        )
-
-
-
         stopButton.setOnClickListener {
-            stopAllMedia()
-            session.zone0 = entries.get(0).y
-            session.zone1 = entries.get(1).y
-            session.zone2 = entries.get(2).y
-            session.zone3 = entries.get(3).y
-            session.zone4 = entries.get(4).y
-            val hours = seconds / 3600
-            val minutes = (seconds % 3600) / 60
-            val secs = seconds % 60
-            val timer = String.format("%02d:%02d:%02d", hours, minutes, secs)
-            session.duration = timer
-
-            val databaseRef: DatabaseReference = FirebaseDatabase.getInstance("https://plucky-balm-389709-default-rtdb.europe-west1.firebasedatabase.app/").getReference("sessions")
-            val sessionKey: String? = databaseRef.push().key
-
-            if (sessionKey != null) {
-                databaseRef.child(sessionKey).setValue(session)
-                    .addOnSuccessListener {
-                        Toast.makeText(this, "Session data saved successfully", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(this, "Error saving session data: ${it.message}", Toast.LENGTH_SHORT).show()
-                    }
-            }
-            finish()
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            stopMission()
         }
 
 
@@ -450,7 +409,47 @@ open class HeartRateActivity : AppCompatActivity() {
             }
         }
     }
+    fun stopMission () {
+        val session = Session(
+            duration = "",
+            date = Date().toString(),
+            maxHR = maxHR.toFloat(),
+            missionType = missionType,
+            age = runnersAge,
+            zone0 = 0F,
+            zone1 = 0F,
+            zone2 = 0F,
+            zone3 = 0F,
+            zone4 = 0F
+        )
+        stopAllMedia()
+        session.zone0 = entries.get(0).y
+        session.zone1 = entries.get(1).y
+        session.zone2 = entries.get(2).y
+        session.zone3 = entries.get(3).y
+        session.zone4 = entries.get(4).y
+        val hours = seconds / 3600
+        val minutes = (seconds % 3600) / 60
+        val secs = seconds % 60
+        val timer = String.format("%02d:%02d:%02d", hours, minutes, secs)
+        session.duration = timer
 
+        val databaseRef: DatabaseReference = FirebaseDatabase.getInstance("https://plucky-balm-389709-default-rtdb.europe-west1.firebasedatabase.app/").getReference("sessions")
+        val sessionKey: String? = databaseRef.push().key
+
+        if (sessionKey != null) {
+            databaseRef.child(sessionKey).setValue(session)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Session data saved successfully", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Error saving session data: ${it.message}", Toast.LENGTH_SHORT).show()
+                }
+        }
+        finish()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
     fun setCompletionListenerAudio () {
         setCompletionListener(warningSlowDown)
         setCompletionListener(warningSpeedUp)
@@ -472,6 +471,9 @@ open class HeartRateActivity : AppCompatActivity() {
             mp.stop()
             if (mediaPlayer==pausedAudio) {
                 pausedAudio= MediaPlayer()
+            }
+            if (mediaPlayer==endAudio){
+                stopMission()
             }
         }
     }
@@ -502,9 +504,7 @@ open class HeartRateActivity : AppCompatActivity() {
             } else if (endAudio.isPlaying) {
                 endAudio.pause()
                 pausedAudio=endAudio
-            }   /* else {
-                pausedAudio.pause()
-            }*/
+            }
         } else { //continue
                 pausedAudio.start()
         }
