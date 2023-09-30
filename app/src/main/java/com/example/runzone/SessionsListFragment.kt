@@ -111,11 +111,11 @@ class SessionsListFragment : Fragment() {
              maxHRTextView.text= "Max Heart Rate : " + session?.maxHR.toString()
              ageTextView.text= "Age : " + session?.age.toString()
              missionTypeTextView.text = "Mission Type : " + session?.missionType.toString()
-             zone0TextView.text = "Zone 0 = " + session?.zone0.toString()+ " seconds"
-             zone1TextView.text = "Zone 1 = " + session?.zone1.toString()+ " seconds"
-             zone2TextView.text = "Zone 2 = " + session?.zone2.toString()+ " seconds"
-             zone3TextView.text = "Zone 3 = " + session?.zone3.toString()+ " seconds"
-             zone4TextView.text = "Zone 4 = " + session?.zone4.toString()+ " seconds"
+             zone0TextView.text = "Zone 1 = " + session?.zone0.toString()+ " seconds"
+             zone1TextView.text = "Zone 2 = " + session?.zone1.toString()+ " seconds"
+             zone2TextView.text = "Zone 3 = " + session?.zone2.toString()+ " seconds"
+             zone3TextView.text = "Zone 4 = " + session?.zone3.toString()+ " seconds"
+             zone4TextView.text = "Zone 5 = " + session?.zone4.toString()+ " seconds"
 
             return view
         }

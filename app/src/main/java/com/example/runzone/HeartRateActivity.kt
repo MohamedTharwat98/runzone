@@ -3,6 +3,7 @@ package com.example.runzone
 import android.Manifest
 import android.content.Intent
 import android.graphics.Color
+import android.location.Location
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
@@ -27,6 +28,9 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.polar.sdk.api.PolarBleApi
@@ -41,15 +45,11 @@ import java.util.Date
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
-
+import kotlin.math.*
+import kotlin.properties.Delegates
 
 const val TAG = "HeartRateActivity"
 
-/**
- * This sample demonstrates the Recording API of the Google Fit platform. It allows users to start
- * and stop a subscription to a given data type, as well as read the current daily step total.
- *
- */
 open class HeartRateActivity : AppCompatActivity() {
 
     lateinit var api: PolarBleApi
@@ -88,10 +88,6 @@ open class HeartRateActivity : AppCompatActivity() {
 
     var inZone = false
 
-    var zoneTimeSeconds = 0
-
-    var zoneTimeMinutes = 0
-
     lateinit var warningSlowDown : MediaPlayer
 
     lateinit var warningSpeedUp : MediaPlayer
@@ -128,7 +124,6 @@ open class HeartRateActivity : AppCompatActivity() {
     var zone2StartSeconds : Int = 0
     var zone3StartSeconds : Int = 0
     var zone4StartSeconds : Int = 0
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -243,7 +238,7 @@ open class HeartRateActivity : AppCompatActivity() {
                 val mappedValue = progress * 5
                 val time = calculateZoneTimeSeekBar(mappedValue)
                 val zone0Text = popupView.findViewById<TextView>(R.id.zone0TextView)
-                zone0Text.text = "Zone 0 : \n $time"
+                zone0Text.text = "Zone 1 : \n $time"
                 percentageZone0Bar.text = "$mappedValue%"
             }
 
@@ -256,7 +251,7 @@ open class HeartRateActivity : AppCompatActivity() {
                 val mappedValue = progress * 5
                 val time = calculateZoneTimeSeekBar(mappedValue)
                 val zone1Text = popupView.findViewById<TextView>(R.id.zone1TextView)
-                zone1Text.text = "Zone 1 : \n $time"
+                zone1Text.text = "Zone 2 : \n $time"
                 percentageZone1Bar.text =  "$mappedValue%"
             }
 
@@ -269,7 +264,7 @@ open class HeartRateActivity : AppCompatActivity() {
                 val mappedValue = progress * 5
                 val time = calculateZoneTimeSeekBar(mappedValue)
                 val zone2Text = popupView.findViewById<TextView>(R.id.zone2TextView)
-                zone2Text.text = "Zone 2 : \n $time"
+                zone2Text.text = "Zone 3 : \n $time"
                 percentageZone2Bar.text =  "$mappedValue%"
             }
 
@@ -282,7 +277,7 @@ open class HeartRateActivity : AppCompatActivity() {
                 val mappedValue = progress * 5
                 val time = calculateZoneTimeSeekBar(mappedValue)
                 val zone3Text = popupView.findViewById<TextView>(R.id.zone3TextView)
-                zone3Text.text = "Zone 3 : \n $time"
+                zone3Text.text = "Zone 4 : \n $time"
                 percentageZone3Bar.text =  "$mappedValue%"
             }
 
@@ -295,7 +290,7 @@ open class HeartRateActivity : AppCompatActivity() {
                 val mappedValue = progress * 5
                 val time = calculateZoneTimeSeekBar(mappedValue)
                 val zone4Text = popupView.findViewById<TextView>(R.id.zone4TextView)
-                zone4Text.text = "Zone 4 : \n $time"
+                zone4Text.text = "Zone 5 : \n $time"
                 percentageZone4Bar.text =  "$mappedValue%"
             }
 
@@ -331,23 +326,23 @@ open class HeartRateActivity : AppCompatActivity() {
 
         val time0 = calculateZoneTimeSeekBar(percentageZone0)
         val zone0Text = popupView.findViewById<TextView>(R.id.zone0TextView)
-        zone0Text.text = "Zone 0 : \n $time0"
+        zone0Text.text = "Zone 1 : \n $time0"
 
         val time1 = calculateZoneTimeSeekBar(percentageZone1)
         val zone1Text = popupView.findViewById<TextView>(R.id.zone1TextView)
-        zone1Text.text = "Zone 1 : \n $time1"
+        zone1Text.text = "Zone 2 : \n $time1"
 
         val time2 = calculateZoneTimeSeekBar(percentageZone2)
         val zone2Text = popupView.findViewById<TextView>(R.id.zone2TextView)
-        zone2Text.text = "Zone 2 : \n $time2"
+        zone2Text.text = "Zone 3 : \n $time2"
 
         val time3 = calculateZoneTimeSeekBar(percentageZone3)
         val zone3Text = popupView.findViewById<TextView>(R.id.zone3TextView)
-        zone3Text.text = "Zone 3 : \n $time3"
+        zone3Text.text = "Zone 4 : \n $time3"
 
         val time4 = calculateZoneTimeSeekBar(percentageZone4)
         val zone4Text = popupView.findViewById<TextView>(R.id.zone4TextView)
-        zone4Text.text = "Zone 4 : \n $time4"
+        zone4Text.text = "Zone 5 : \n $time4"
 
 
     }
@@ -373,6 +368,8 @@ open class HeartRateActivity : AppCompatActivity() {
 
         startTimer()
 
+
+
         zone0Audio.start()
 
 
@@ -392,6 +389,9 @@ open class HeartRateActivity : AppCompatActivity() {
 
         blinkSections(0)
 
+        val targetZoneText = findViewById<TextView>(R.id.targetZoneTextView)
+        targetZoneText.text = "Current Target Zone: 1 \n Intenisty < 57% "
+
         stopButton.setOnClickListener {
             stopMission()
         }
@@ -409,6 +409,8 @@ open class HeartRateActivity : AppCompatActivity() {
             }
         }
     }
+
+
     fun stopMission () {
         val session = Session(
             duration = "",
@@ -966,7 +968,7 @@ open class HeartRateActivity : AppCompatActivity() {
         }
 
         val hrIntensityText = findViewById<TextView>(R.id.hrIntensityTextView)
-        hrIntensityText.text = "${heartRateIntensity.toInt()} % \n HR-INTENSITY"
+        hrIntensityText.text = "${heartRateIntensity.toInt()} % \n INTENSITY"
 
 
         if (zoneNumber == 0) {
@@ -1091,23 +1093,29 @@ open class HeartRateActivity : AppCompatActivity() {
         Log.d("zonesTime","2: minutes : ${zone2StartMinutes}, seconds : ${zone2StartSeconds}")
         Log.d("zonesTime","3: minutes : ${zone3StartMinutes}, seconds : ${zone3StartSeconds}")
         Log.d("zonesTime","4: minutes : ${zone4StartMinutes}, seconds : ${zone4StartSeconds}")
+        val targetZoneText = findViewById<TextView>(R.id.targetZoneTextView)
+
         if (minutes == zone1StartMinutes && secs == zone1StartSeconds) {
             zoneNumber = 1
+            targetZoneText.text = "Current Target Zone: 2 \n 57% < Intenisty < 63%  "
             blinkSections(1)
             zone1Audio.start()
         }
         if (minutes == zone2StartMinutes && secs == zone2StartSeconds) {
             zoneNumber = 2
+            targetZoneText.text = "Current Target Zone: 3 \n 64% < Intenisty < 76%  "
             blinkSections(2)
             zone2Audio.start()
         }
         if (minutes == zone3StartMinutes && secs == zone3StartSeconds) {
             zoneNumber = 3
+            targetZoneText.text = "Current Target Zone: 4 \n 77% < Intenisty < 95%  "
             blinkSections(3)
             zone3Audio.start()
         }
         if (minutes == zone4StartMinutes && secs == zone4StartSeconds) {
             zoneNumber = 4
+            targetZoneText.text = "Current Target Zone: 5 \n 95% < Intenisty < 100%  "
             blinkSections(4)
             zone4Audio.start()
         }

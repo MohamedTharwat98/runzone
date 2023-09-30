@@ -37,7 +37,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Zone 0 :"
+            android:text="Zone 1 :"
             android:gravity="end"
             android:paddingEnd="8dp"
             android:layout_gravity="center_vertical"/>
@@ -71,7 +71,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Zone 1 :"
+            android:text="Zone 2 :"
             android:gravity="end"
             android:paddingEnd="8dp"
             android:layout_gravity="center_vertical"/>
@@ -106,7 +106,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Zone 2 :"
+            android:text="Zone 3 :"
             android:gravity="end"
             android:paddingEnd="8dp"
             android:layout_gravity="center_vertical"/>
@@ -140,7 +140,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Zone 3 :"
+            android:text="Zone 4 :"
             android:gravity="end"
             android:paddingEnd="8dp"
             android:layout_gravity="center_vertical"/>
@@ -175,7 +175,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Zone 4 :"
+            android:text="Zone 5 :"
             android:gravity="end"
             android:paddingEnd="8dp"
             android:layout_gravity="center_vertical"/>
