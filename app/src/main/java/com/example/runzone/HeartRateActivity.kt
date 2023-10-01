@@ -136,6 +136,7 @@ open class HeartRateActivity : AppCompatActivity() {
 
     private var lastLocation: Location? = null
     private var totalDistance: Float = 0.0f
+    private var missionStoped: Boolean = false
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -479,49 +480,59 @@ open class HeartRateActivity : AppCompatActivity() {
 
 
     fun stopMission () {
-        val distanceInKilometers = totalDistance / 1000.0 // Convert to kilometers
-        val decimalFormat = DecimalFormat("#.###")
-        val roundedNumber = decimalFormat.format(distanceInKilometers).toDouble()
-        val session = Session(
-            duration = "",
-            date = Date().toString(),
-            maxHR = maxHR.toFloat(),
-            distance = "$roundedNumber km ",
-            missionType = missionType,
-            age = runnersAge,
-            zone0 = 0F,
-            zone1 = 0F,
-            zone2 = 0F,
-            zone3 = 0F,
-            zone4 = 0F
-        )
-        stopAllMedia()
-        session.zone0 = entries.get(0).y
-        session.zone1 = entries.get(1).y
-        session.zone2 = entries.get(2).y
-        session.zone3 = entries.get(3).y
-        session.zone4 = entries.get(4).y
-        val hours = seconds / 3600
-        val minutes = (seconds % 3600) / 60
-        val secs = seconds % 60
-        val timer = String.format("%02d:%02d:%02d", hours, minutes, secs)
-        session.duration = timer
+        if (!missionStoped) {
+            val distanceInKilometers = totalDistance / 1000.0 // Convert to kilometers
+            val decimalFormat = DecimalFormat("#.###")
+            val roundedNumber = decimalFormat.format(distanceInKilometers).toDouble()
+            val session = Session(
+                duration = "",
+                date = Date().toString(),
+                maxHR = maxHR.toFloat(),
+                distance = "$roundedNumber km ",
+                missionType = missionType,
+                age = runnersAge,
+                zone0 = 0F,
+                zone1 = 0F,
+                zone2 = 0F,
+                zone3 = 0F,
+                zone4 = 0F
+            )
+            stopAllMedia()
+            session.zone0 = entries.get(0).y
+            session.zone1 = entries.get(1).y
+            session.zone2 = entries.get(2).y
+            session.zone3 = entries.get(3).y
+            session.zone4 = entries.get(4).y
+            val hours = seconds / 3600
+            val minutes = (seconds % 3600) / 60
+            val secs = seconds % 60
+            val timer = String.format("%02d:%02d:%02d", hours, minutes, secs)
+            session.duration = timer
 
-        val databaseRef: DatabaseReference = FirebaseDatabase.getInstance("https://plucky-balm-389709-default-rtdb.europe-west1.firebasedatabase.app/").getReference("sessions")
-        val sessionKey: String? = databaseRef.push().key
+            val databaseRef: DatabaseReference =
+                FirebaseDatabase.getInstance("https://plucky-balm-389709-default-rtdb.europe-west1.firebasedatabase.app/")
+                    .getReference("sessions")
+            val sessionKey: String? = databaseRef.push().key
 
-        if (sessionKey != null) {
-            databaseRef.child(sessionKey).setValue(session)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Session data saved successfully", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Error saving session data: ${it.message}", Toast.LENGTH_SHORT).show()
-                }
+            if (sessionKey != null) {
+                databaseRef.child(sessionKey).setValue(session)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Session data saved successfully", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(
+                            this,
+                            "Error saving session data: ${it.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+            }
+            finish()
+            missionStoped=true
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
-        finish()
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
     }
     fun setCompletionListenerAudio () {
         setCompletionListener(warningSlowDown)
