@@ -18,7 +18,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Heart Rate Zones (Percentage of Total Time - 30 Min)"
+        android:text="Heart Rate Zones (Percentage of Total Time - 20 Min)"
         android:textSize="16sp"
         android:textStyle="bold"
         android:paddingTop="16dp"

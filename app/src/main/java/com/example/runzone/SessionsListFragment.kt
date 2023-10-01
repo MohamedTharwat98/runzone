@@ -42,7 +42,7 @@ class SessionsListFragment : Fragment() {
                 for (snapshot in dataSnapshot.children) {
                     val duration = snapshot.child("duration").getValue(String::class.java)
                     val date = snapshot.child("date").getValue(String::class.java)
-                    val avgHR = snapshot.child("avgHR").getValue(Float::class.java) ?: 0F
+                    val distanceCovered = snapshot.child("distance").getValue(String::class.java)
                     val maxHR = snapshot.child("maxHR").getValue(Float::class.java) ?: 0F
                     val age = snapshot.child("age").getValue(Int::class.java) ?: 0
                     val missionType = snapshot.child("missionType").getValue(String::class.java)
@@ -55,7 +55,7 @@ class SessionsListFragment : Fragment() {
                     val session = Session(
                         duration ?: "",
                         date ?: "",
-                        avgHR,
+                        distanceCovered?:"",
                         maxHR,
                         age,
                         missionType ?: "",
@@ -93,7 +93,7 @@ class SessionsListFragment : Fragment() {
 
             val durationTextView: TextView = view.findViewById(R.id.durationTextView)
             val dateTextView: TextView = view.findViewById(R.id.dateTextView)
-            val avgHRTextView: TextView = view.findViewById(R.id.avgHRTextView)
+            val distanceTextView: TextView = view.findViewById(R.id.distanceCoveredTextView)
             val maxHRTextView: TextView = view.findViewById(R.id.maxHRTextView)
             val ageTextView: TextView = view.findViewById(R.id.ageTextView)
             val missionTypeTextView: TextView = view.findViewById(R.id.missionTypeTextView)
@@ -107,7 +107,7 @@ class SessionsListFragment : Fragment() {
             // Set data for each property
             durationTextView.text = "Duration : "+ session?.duration
             dateTextView.text = "Date : "+ session?.date
-            avgHRTextView.text = "Average Heart Rate : "+ session?.avgHR.toString()
+            distanceTextView.text = "Distance covered : "+ session?.distance
              maxHRTextView.text= "Max Heart Rate : " + session?.maxHR.toString()
              ageTextView.text= "Age : " + session?.age.toString()
              missionTypeTextView.text = "Mission Type : " + session?.missionType.toString()

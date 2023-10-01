@@ -6,7 +6,7 @@ import java.util.Date
 class Session(
     var duration: String,
     var date: String,
-    var avgHR: Float = 0F,
+    var distance: String,
     var maxHR: Float = 0F,
     var age: Int = 0,
     var missionType: String,

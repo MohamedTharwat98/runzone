@@ -43,7 +43,7 @@
 
     <uses-permission
         android:name="android.permission.ACCESS_FINE_LOCATION"
-        android:maxSdkVersion="30" />
+        />
 
 
 
@@ -53,7 +53,7 @@
      needs location for other purposes than bluetooth then remove android:maxSdkVersion="30" -->
     <uses-permission
         android:name="android.permission.ACCESS_COARSE_LOCATION"
-        android:maxSdkVersion="30" />
+         />
 
 
 

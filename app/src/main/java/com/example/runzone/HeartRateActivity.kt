@@ -2,6 +2,7 @@ package com.example.runzone
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
 import android.media.MediaPlayer
@@ -22,6 +23,8 @@ import android.widget.ToggleButton
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -29,7 +32,9 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -41,6 +46,7 @@ import com.polar.sdk.api.model.PolarDeviceInfo
 import com.polar.sdk.api.model.PolarHrData
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
+import java.text.DecimalFormat
 import java.util.Date
 import java.util.Timer
 import java.util.TimerTask
@@ -124,6 +130,12 @@ open class HeartRateActivity : AppCompatActivity() {
     var zone2StartSeconds : Int = 0
     var zone3StartSeconds : Int = 0
     var zone4StartSeconds : Int = 0
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var distanceTextView: TextView
+
+    private var lastLocation: Location? = null
+    private var totalDistance: Float = 0.0f
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -390,7 +402,13 @@ open class HeartRateActivity : AppCompatActivity() {
         blinkSections(0)
 
         val targetZoneText = findViewById<TextView>(R.id.targetZoneTextView)
-        targetZoneText.text = "Current Target Zone: 1 \n Intenisty < 57% "
+        targetZoneText.text = "CURRENT TARGET ZONE: 1 \n INTENSITY < 57% "
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        distanceTextView = findViewById(R.id.distanceTextView)
+
+        // Start tracking location updates
+        startLocationUpdates()
 
         stopButton.setOnClickListener {
             stopMission()
@@ -411,11 +429,64 @@ open class HeartRateActivity : AppCompatActivity() {
     }
 
 
+    private fun startLocationUpdates() {
+        val locationRequest = LocationRequest.create()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.interval = 1000 // Update every 1 second
+
+        // Check and request location permissions if not granted
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        }
+
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            null
+        )
+    }
+
+    private val MIN_DISTANCE_THRESHOLD = 5 // Adjust as needed
+
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            super.onLocationResult(locationResult)
+            for (location in locationResult.locations) {
+                if (lastLocation != null) {
+                    val distance = lastLocation!!.distanceTo(location)
+                    if (distance >= MIN_DISTANCE_THRESHOLD && inZone && isRunning) {
+                        totalDistance += distance
+                        val distanceInKilometers = totalDistance / 1000.0 // Convert to kilometers
+                        distanceTextView.text = String.format("%.2f km \n DISTANCE COVERED", distanceInKilometers)
+                    }
+                }
+                lastLocation = location
+            }
+        }
+    }
+
+
+    companion object {
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 123
+    }
+
+
+
     fun stopMission () {
+        val distanceInKilometers = totalDistance / 1000.0 // Convert to kilometers
+        val decimalFormat = DecimalFormat("#.###")
+        val roundedNumber = decimalFormat.format(distanceInKilometers).toDouble()
         val session = Session(
             duration = "",
             date = Date().toString(),
             maxHR = maxHR.toFloat(),
+            distance = "$roundedNumber km ",
             missionType = missionType,
             age = runnersAge,
             zone0 = 0F,
@@ -1097,29 +1168,29 @@ open class HeartRateActivity : AppCompatActivity() {
 
         if (minutes == zone1StartMinutes && secs == zone1StartSeconds) {
             zoneNumber = 1
-            targetZoneText.text = "Current Target Zone: 2 \n 57% < Intenisty < 63%  "
+            targetZoneText.text = "CURRENT TARGET ZONE: 2 \n 57% < INTENSITY < 63%  "
             blinkSections(1)
             zone1Audio.start()
         }
         if (minutes == zone2StartMinutes && secs == zone2StartSeconds) {
             zoneNumber = 2
-            targetZoneText.text = "Current Target Zone: 3 \n 64% < Intenisty < 76%  "
+            targetZoneText.text = "CURRENT TARGET ZONE: 3 \n 64% < INTENSITY < 76%  "
             blinkSections(2)
             zone2Audio.start()
         }
         if (minutes == zone3StartMinutes && secs == zone3StartSeconds) {
             zoneNumber = 3
-            targetZoneText.text = "Current Target Zone: 4 \n 77% < Intenisty < 95%  "
+            targetZoneText.text = "CURRENT TARGET ZONE: 4 \n 77% < INTENSITY < 95%  "
             blinkSections(3)
             zone3Audio.start()
         }
         if (minutes == zone4StartMinutes && secs == zone4StartSeconds) {
             zoneNumber = 4
-            targetZoneText.text = "Current Target Zone: 5 \n 95% < Intenisty < 100%  "
+            targetZoneText.text = "CURRENT TARGET ZONE: 5 \n 95% < INTENSITY < 100%  "
             blinkSections(4)
             zone4Audio.start()
         }
-        if (minutes == 30 ) {
+        if (minutes == 20 ) {
             endAudio.start()
         }
 
@@ -1142,7 +1213,7 @@ open class HeartRateActivity : AppCompatActivity() {
         percentageZone4: Int
     ) {
         // Total session time in seconds
-        val totalSessionTimeSeconds = 30 * 60 // 30 minutes converted to seconds
+        val totalSessionTimeSeconds = 20 * 60 // 20 minutes converted to seconds
 
         // Calculate start times for each zone in seconds
         zone0StartSeconds = 0
@@ -1174,7 +1245,7 @@ open class HeartRateActivity : AppCompatActivity() {
 
     fun calculateZoneTimeSeekBar(percentageZone:Int) : String {
         // Total session time in minutes
-        val totalSessionTime = 30
+        val totalSessionTime = 20
 
         // Calculate the time for each zone
         val timeZoneMinutes = ((percentageZone / 100.0) * totalSessionTime).toInt()
