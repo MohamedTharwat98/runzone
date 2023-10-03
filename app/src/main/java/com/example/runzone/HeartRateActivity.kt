@@ -1170,11 +1170,6 @@ open class HeartRateActivity : AppCompatActivity() {
     }
 
     fun updateZone (minutes : Int, secs : Int) {
-        Log.d("zonesTime","0: minutes : ${zone0StartMinutes}, seconds : ${zone0StartSeconds}")
-        Log.d("zonesTime","1: minutes : ${zone1StartMinutes}, seconds : ${zone1StartSeconds}")
-        Log.d("zonesTime","2: minutes : ${zone2StartMinutes}, seconds : ${zone2StartSeconds}")
-        Log.d("zonesTime","3: minutes : ${zone3StartMinutes}, seconds : ${zone3StartSeconds}")
-        Log.d("zonesTime","4: minutes : ${zone4StartMinutes}, seconds : ${zone4StartSeconds}")
         val targetZoneText = findViewById<TextView>(R.id.targetZoneTextView)
 
         if (minutes == zone1StartMinutes && secs == zone1StartSeconds) {

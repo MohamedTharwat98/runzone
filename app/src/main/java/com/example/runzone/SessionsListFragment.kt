@@ -14,6 +14,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.text.DecimalFormat
 
 class SessionsListFragment : Fragment() {
 
@@ -111,13 +112,18 @@ class SessionsListFragment : Fragment() {
              maxHRTextView.text= "Max Heart Rate : " + session?.maxHR.toString()
              ageTextView.text= "Age : " + session?.age.toString()
              missionTypeTextView.text = "Mission Type : " + session?.missionType.toString()
-             zone0TextView.text = "Zone 1 = " + session?.zone0.toString()+ " seconds"
-             zone1TextView.text = "Zone 2 = " + session?.zone1.toString()+ " seconds"
-             zone2TextView.text = "Zone 3 = " + session?.zone2.toString()+ " seconds"
-             zone3TextView.text = "Zone 4 = " + session?.zone3.toString()+ " seconds"
-             zone4TextView.text = "Zone 5 = " + session?.zone4.toString()+ " seconds"
+             zone0TextView.text = "Zone 1 = " + (roundToTwoDecimalPlaces(session?.zone0?.toDouble()?.div(60) ?: 0.0)).toString()+ " minutes"
+             zone1TextView.text = "Zone 2 = " + (roundToTwoDecimalPlaces(session?.zone1?.toDouble()?.div(60) ?: 0.0)).toString()+ " minutes"
+             zone2TextView.text = "Zone 3 = " + (roundToTwoDecimalPlaces(session?.zone2?.toDouble()?.div(60) ?: 0.0)).toString()+ " minutes"
+             zone3TextView.text = "Zone 4 = " + (roundToTwoDecimalPlaces(session?.zone3?.toDouble()?.div(60) ?: 0.0)).toString()+ " minutes"
+             zone4TextView.text = "Zone 5 = " + (roundToTwoDecimalPlaces(session?.zone4?.toDouble()?.div(60) ?: 0.0)).toString()+ " minutes"
 
             return view
         }
+    }
+
+    fun roundToTwoDecimalPlaces(number: Double): Double {
+        val decimalFormat = DecimalFormat("#.##")
+        return decimalFormat.format(number).toDouble()
     }
 }
