@@ -47,7 +47,6 @@ class SessionsListFragment : Fragment() {
                     val maxHR = snapshot.child("maxHR").getValue(Float::class.java) ?: 0F
                     val age = snapshot.child("age").getValue(Int::class.java) ?: 0
                     val missionType = snapshot.child("missionType").getValue(String::class.java)
-                    val zone0 = snapshot.child("zone0").getValue(Float::class.java) ?: 0F
                     val zone1 = snapshot.child("zone1").getValue(Float::class.java) ?: 0F
                     val zone2 = snapshot.child("zone2").getValue(Float::class.java) ?: 0F
                     val zone3 = snapshot.child("zone3").getValue(Float::class.java) ?: 0F
@@ -60,7 +59,6 @@ class SessionsListFragment : Fragment() {
                         maxHR,
                         age,
                         missionType ?: "",
-                        zone0,
                         zone1,
                         zone2,
                         zone3,
@@ -98,7 +96,6 @@ class SessionsListFragment : Fragment() {
             val maxHRTextView: TextView = view.findViewById(R.id.maxHRTextView)
             val ageTextView: TextView = view.findViewById(R.id.ageTextView)
             val missionTypeTextView: TextView = view.findViewById(R.id.missionTypeTextView)
-            val zone0TextView: TextView = view.findViewById(R.id.zone0TextView)
             val zone1TextView: TextView = view.findViewById(R.id.zone1TextView)
             val zone2TextView: TextView = view.findViewById(R.id.zone2TextView)
             val zone3TextView: TextView = view.findViewById(R.id.zone3TextView)
@@ -112,11 +109,10 @@ class SessionsListFragment : Fragment() {
              maxHRTextView.text= "Max Heart Rate : " + session?.maxHR.toString()
              ageTextView.text= "Age : " + session?.age.toString()
              missionTypeTextView.text = "Mission Type : " + session?.missionType.toString()
-             zone0TextView.text = "Zone 1 = " + (roundToTwoDecimalPlaces(session?.zone0?.toDouble()?.div(60) ?: 0.0)).toString()+ " minutes"
-             zone1TextView.text = "Zone 2 = " + (roundToTwoDecimalPlaces(session?.zone1?.toDouble()?.div(60) ?: 0.0)).toString()+ " minutes"
-             zone2TextView.text = "Zone 3 = " + (roundToTwoDecimalPlaces(session?.zone2?.toDouble()?.div(60) ?: 0.0)).toString()+ " minutes"
-             zone3TextView.text = "Zone 4 = " + (roundToTwoDecimalPlaces(session?.zone3?.toDouble()?.div(60) ?: 0.0)).toString()+ " minutes"
-             zone4TextView.text = "Zone 5 = " + (roundToTwoDecimalPlaces(session?.zone4?.toDouble()?.div(60) ?: 0.0)).toString()+ " minutes"
+             zone1TextView.text = "Zone 1 = " + (roundToTwoDecimalPlaces(session?.zone1?.toDouble()?.div(60) ?: 0.0)).toString()+ " minutes"
+             zone2TextView.text = "Zone 2 = " + (roundToTwoDecimalPlaces(session?.zone2?.toDouble()?.div(60) ?: 0.0)).toString()+ " minutes"
+             zone3TextView.text = "Zone 3 = " + (roundToTwoDecimalPlaces(session?.zone3?.toDouble()?.div(60) ?: 0.0)).toString()+ " minutes"
+             zone4TextView.text = "Zone 4 = " + (roundToTwoDecimalPlaces(session?.zone4?.toDouble()?.div(60) ?: 0.0)).toString()+ " minutes"
 
             return view
         }

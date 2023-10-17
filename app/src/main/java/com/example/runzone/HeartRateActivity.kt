@@ -52,7 +52,6 @@ import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
 import kotlin.math.*
-import kotlin.properties.Delegates
 
 const val TAG = "HeartRateActivity"
 
@@ -90,7 +89,7 @@ open class HeartRateActivity : AppCompatActivity() {
 
     var runnersAge = 0
 
-    var zoneNumber = 0
+    var zoneNumber = 1
 
     var inZone = false
 
@@ -98,15 +97,17 @@ open class HeartRateActivity : AppCompatActivity() {
 
     lateinit var warningSpeedUp : MediaPlayer
 
-    lateinit var zone0Audio : MediaPlayer
-
     lateinit var zone1Audio : MediaPlayer
 
     lateinit var zone2Audio : MediaPlayer
 
-    lateinit var zone3Audio : MediaPlayer
+    lateinit var zone3Part1Audio : MediaPlayer
 
-    lateinit var zone4Audio : MediaPlayer
+    lateinit var zone3Part2Audio : MediaPlayer
+
+    lateinit var zone4Part1Audio : MediaPlayer
+
+    lateinit var zone4Part2Audio : MediaPlayer
 
     lateinit var endAudio : MediaPlayer
 
@@ -119,17 +120,19 @@ open class HeartRateActivity : AppCompatActivity() {
     private val blinkHandlers = mutableMapOf<View, Handler>() // Store handlers for blinking animations
 
 
-    var zone0StartMinutes : Int = 0
     var zone1StartMinutes : Int = 0
     var zone2StartMinutes : Int = 0
-    var zone3StartMinutes : Int = 0
-    var zone4StartMinutes : Int = 0
+    var zone3Part1StartMinutes : Int = 0
+    var zone3Part2StartMinutes : Int = 0
+    var zone4Part1StartMinutes : Int = 0
+    var zone4Part2StartMinutes : Int = 0
 
-    var zone0StartSeconds : Int = 0
     var zone1StartSeconds : Int = 0
     var zone2StartSeconds : Int = 0
-    var zone3StartSeconds : Int = 0
-    var zone4StartSeconds : Int = 0
+    var zone3Part1StartSeconds : Int = 0
+    var zone3Part2StartSeconds : Int = 0
+    var zone4Part1StartSeconds : Int = 0
+    var zone4Part2StartSeconds : Int = 0
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var distanceTextView: TextView
@@ -160,6 +163,43 @@ open class HeartRateActivity : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun showAgeInputDialog() {
+        val popupView = layoutInflater.inflate(R.layout.new_age_box, null)
+        val editTextAge = popupView.findViewById<EditText>(R.id.editTextAge)
+
+        val alertDialogBuilder = AlertDialog.Builder(this)
+            .setView(popupView)
+            .setTitle("Pyramidal Heart Rate Zone Training")
+            .setPositiveButton("Start Mission", null) // Set the positive button, but don't provide a click listener here
+            .setNegativeButton("Cancel", null)
+
+
+        val alertDialog = alertDialogBuilder.create()
+
+        alertDialog.setOnShowListener { dialog ->
+            val startButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            startButton.setOnClickListener {
+                val age = editTextAge.text.toString()
+                val ageInt = age.toInt()
+                runnersAge = ageInt
+                maxHR = 220 - ageInt
+                // 5% = 1 min
+                calculateZonesTime()
+                startMission()
+                alertDialog.dismiss() // Close the dialog after successful validation
+
+            }
+        }
+
+        alertDialog.show()
+
+    }
+
+
+
+
+    /*
     @RequiresApi(Build.VERSION_CODES.O)
     private fun showAgeInputDialog() {
         val popupView = layoutInflater.inflate(R.layout.age_box, null)
@@ -223,7 +263,7 @@ open class HeartRateActivity : AppCompatActivity() {
         }
 
         alertDialog.show()
-    }
+    }*/
 
 
     fun seekBarOnClick (popupView: View) {
@@ -383,7 +423,7 @@ open class HeartRateActivity : AppCompatActivity() {
 
 
 
-        zone0Audio.start()
+        zone1Audio.start()
 
 
         // This method sets up our custom logger, which will print all log messages to the device
@@ -403,7 +443,7 @@ open class HeartRateActivity : AppCompatActivity() {
         blinkSections(0)
 
         val targetZoneText = findViewById<TextView>(R.id.targetZoneTextView)
-        targetZoneText.text = "CURRENT TARGET ZONE: 1 \n INTENSITY < 57% "
+        targetZoneText.text = "CURRENT TARGET ZONE: 1 \n 50% < INTENSITY < 60% "
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         distanceTextView = findViewById(R.id.distanceTextView)
@@ -427,6 +467,14 @@ open class HeartRateActivity : AppCompatActivity() {
                 checkAudio()
             }
         }
+
+        Log.d("zonesTime", "Zone 1 =  ${zone1StartMinutes}, ${zone1StartSeconds}")
+        Log.d("zonesTime", "Zone 2 =  ${zone2StartMinutes}, ${zone2StartSeconds}")
+        Log.d("zonesTime", "Zone 3 part 1 =  ${zone3Part1StartMinutes}, ${zone3Part1StartSeconds}")
+        Log.d("zonesTime", "Zone 4 part 1 =  ${zone4Part1StartMinutes}, ${zone4Part1StartSeconds}")
+        Log.d("zonesTime", "Zone 3 part 2 =  ${zone3Part2StartMinutes}, ${zone3Part2StartSeconds}")
+        Log.d("zonesTime", "Zone 4 part 2 =  ${zone4Part2StartMinutes}, ${zone4Part2StartSeconds}")
+
     }
 
 
@@ -478,7 +526,6 @@ open class HeartRateActivity : AppCompatActivity() {
     }
 
 
-
     fun stopMission () {
         if (!missionStoped) {
             val distanceInKilometers = totalDistance / 1000.0 // Convert to kilometers
@@ -491,18 +538,16 @@ open class HeartRateActivity : AppCompatActivity() {
                 distance = "$roundedNumber km ",
                 missionType = missionType,
                 age = runnersAge,
-                zone0 = 0F,
                 zone1 = 0F,
                 zone2 = 0F,
                 zone3 = 0F,
                 zone4 = 0F
             )
             stopAllMedia()
-            session.zone0 = entries.get(0).y
-            session.zone1 = entries.get(1).y
-            session.zone2 = entries.get(2).y
-            session.zone3 = entries.get(3).y
-            session.zone4 = entries.get(4).y
+            session.zone1 = entries.get(0).y
+            session.zone2 = entries.get(1).y
+            session.zone3 = entries.get(2).y
+            session.zone4 = entries.get(3).y
             val hours = seconds / 3600
             val minutes = (seconds % 3600) / 60
             val secs = seconds % 60
@@ -534,14 +579,16 @@ open class HeartRateActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
     fun setCompletionListenerAudio () {
         setCompletionListener(warningSlowDown)
         setCompletionListener(warningSpeedUp)
-        setCompletionListener(zone0Audio)
         setCompletionListener(zone1Audio)
         setCompletionListener(zone2Audio)
-        setCompletionListener(zone3Audio)
-        setCompletionListener(zone4Audio)
+        setCompletionListener(zone3Part1Audio)
+        setCompletionListener(zone4Part1Audio)
+        setCompletionListener(zone3Part2Audio)
+        setCompletionListener(zone4Part2Audio)
         setCompletionListener(endAudio)
         setCompletionListener(pausedAudio)
     }
@@ -570,22 +617,26 @@ open class HeartRateActivity : AppCompatActivity() {
             } else if (warningSpeedUp.isPlaying) {
                 warningSpeedUp.pause()
                 pausedAudio = warningSpeedUp
-            } else if (zone0Audio.isPlaying) {
-                zone0Audio.pause()
-                pausedAudio=zone0Audio
             } else if (zone1Audio.isPlaying) {
                 zone1Audio.pause()
                 pausedAudio=zone1Audio
             } else if (zone2Audio.isPlaying) {
                 zone2Audio.pause()
                 pausedAudio=zone2Audio
-            } else if (zone3Audio.isPlaying) {
-                zone3Audio.pause()
-                pausedAudio=zone3Audio
-            } else if (zone4Audio.isPlaying) {
-                zone4Audio.pause()
-                pausedAudio=zone4Audio
-            } else if (endAudio.isPlaying) {
+            } else if (zone3Part1Audio.isPlaying) {
+                zone3Part1Audio.pause()
+                pausedAudio=zone3Part1Audio
+            } else if (zone4Part1Audio.isPlaying) {
+                zone4Part1Audio.pause()
+                pausedAudio=zone4Part1Audio
+            } else if (zone3Part2Audio.isPlaying) {
+                zone3Part2Audio.pause()
+                pausedAudio=zone3Part2Audio
+            } else if (zone4Part2Audio.isPlaying) {
+                zone4Part2Audio.pause()
+                pausedAudio=zone4Part2Audio
+            }
+            else if (endAudio.isPlaying) {
                 endAudio.pause()
                 pausedAudio=endAudio
             }
@@ -611,21 +662,24 @@ open class HeartRateActivity : AppCompatActivity() {
         } else if (warningSpeedUp.isPlaying) {
             warningSpeedUp.stop()
             warningSpeedUp.release()
-        } else if (zone0Audio.isPlaying) {
-            zone0Audio.stop()
-            zone0Audio.release()
         } else if (zone1Audio.isPlaying) {
             zone1Audio.stop()
             zone1Audio.release()
         } else if (zone2Audio.isPlaying) {
             zone2Audio.stop()
             zone2Audio.release()
-        } else if (zone3Audio.isPlaying) {
-            zone3Audio.stop()
-            zone3Audio.release()
-        } else if (zone4Audio.isPlaying) {
-            zone4Audio.stop()
-            zone4Audio.release()
+        } else if (zone3Part1Audio.isPlaying) {
+            zone3Part1Audio.stop()
+            zone3Part1Audio.release()
+        } else if (zone4Part1Audio.isPlaying) {
+            zone4Part1Audio.stop()
+            zone4Part1Audio.release()
+        } else if (zone3Part2Audio.isPlaying) {
+            zone3Part2Audio.stop()
+            zone3Part2Audio.release()
+        } else if (zone4Part2Audio.isPlaying) {
+            zone4Part2Audio.stop()
+            zone4Part2Audio.release()
         } else if (endAudio.isPlaying) {
             endAudio.stop()
             endAudio.release()
@@ -873,7 +927,7 @@ open class HeartRateActivity : AppCompatActivity() {
 
                        val barIndex: Float
                        val newBarEntry: BarEntry
-                       if (heartRateIntensity.toFloat() <= 57) {
+                       if (heartRateIntensity.toFloat() in 50.0..60.0) {
                            // Update the first bar's value (index 0)
                            barData.getDataSetByIndex(0).apply {
                                barIndex = 0F
@@ -882,7 +936,7 @@ open class HeartRateActivity : AppCompatActivity() {
                                newBarEntry = BarEntry(barIndex, updatedBarValue)
                                entries[barIndex.toInt()] = newBarEntry
                            }
-                       } else if (heartRateIntensity.toFloat() > 57 && heartRateIntensity.toFloat() < 63) {
+                       } else if (heartRateIntensity.toFloat() in 60.0..70.0) {
                            barData.getDataSetByIndex(1).apply {
                                barIndex = 1F
                                val currentBarValue = entries[barIndex.toInt()].y
@@ -890,7 +944,7 @@ open class HeartRateActivity : AppCompatActivity() {
                                newBarEntry = BarEntry(barIndex, updatedBarValue)
                                entries[barIndex.toInt()] = newBarEntry
                            }
-                       } else if (heartRateIntensity.toFloat() > 64 && heartRateIntensity.toFloat() < 76) {
+                       } else  if (heartRateIntensity.toFloat() in 70.0..80.0) {
                            barData.getDataSetByIndex(2).apply {
                                barIndex = 2F
                                val currentBarValue = entries[barIndex.toInt()].y
@@ -898,7 +952,7 @@ open class HeartRateActivity : AppCompatActivity() {
                                newBarEntry = BarEntry(barIndex, updatedBarValue)
                                entries[barIndex.toInt()] = newBarEntry
                            }
-                       } else if (heartRateIntensity.toFloat() > 76 && heartRateIntensity.toFloat() < 95) {
+                       } else  if (heartRateIntensity.toFloat() in 80.0..90.0) {
                            barData.getDataSetByIndex(3).apply {
                                barIndex = 3F
                                val currentBarValue = entries[barIndex.toInt()].y
@@ -906,7 +960,7 @@ open class HeartRateActivity : AppCompatActivity() {
                                newBarEntry = BarEntry(barIndex, updatedBarValue)
                                entries[barIndex.toInt()] = newBarEntry
                            }
-                       } else if (heartRateIntensity.toFloat() > 95 && heartRateIntensity.toFloat() < 100) {
+                       } else  if (heartRateIntensity.toFloat() in 90.0..100.0) {
                            barData.getDataSetByIndex(4).apply {
                                barIndex = 4F
                                val currentBarValue = entries[barIndex.toInt()].y
@@ -1053,26 +1107,12 @@ open class HeartRateActivity : AppCompatActivity() {
         hrIntensityText.text = "${heartRateIntensity.toInt()} % \n INTENSITY"
 
 
-        if (zoneNumber == 0) {
-            if (heartRateIntensity.toFloat() <= 57 && !inZone) {
-                inZone = true
-                startTimer()
-                Toast.makeText(this,"Right Zone Again !",Toast.LENGTH_SHORT).show()
-            } else if (heartRateIntensity.toFloat() >= 57 && inZone)
-            {
-                inZone = false
-                stopTimer()
-                Toast.makeText(this,"Wrong Zone !",Toast.LENGTH_SHORT).show()
-                playWarning(heartRateIntensity.toInt())
-            }
-        }
-
         if (zoneNumber == 1) {
-            if (heartRateIntensity.toFloat() in 58.0..63.0 && !inZone) {
+            if (heartRateIntensity.toFloat() in 50.0..60.0 && !inZone) {
                 inZone = true
                 startTimer()
                 Toast.makeText(this,"Right Zone Again !",Toast.LENGTH_SHORT).show()
-            } else if (heartRateIntensity.toFloat() !in 58.0..63.0 && inZone)
+            } else if (heartRateIntensity.toFloat() !in 50.0..60.0 && inZone)
             {
                 inZone = false
                 stopTimer()
@@ -1082,11 +1122,11 @@ open class HeartRateActivity : AppCompatActivity() {
         }
 
         if (zoneNumber == 2) {
-            if (heartRateIntensity.toFloat() in 64.0..76.0 && !inZone) {
+            if (heartRateIntensity.toFloat() in 60.0..70.0 && !inZone) {
                 inZone = true
                 startTimer()
                 Toast.makeText(this,"Right Zone Again !",Toast.LENGTH_SHORT).show()
-            } else if (heartRateIntensity.toFloat() !in 64.0..76.0 && inZone)
+            } else if (heartRateIntensity.toFloat() !in 60.0..70.0 && inZone)
             {
                 inZone = false
                 stopTimer()
@@ -1096,11 +1136,11 @@ open class HeartRateActivity : AppCompatActivity() {
         }
 
         if (zoneNumber == 3) {
-            if (heartRateIntensity.toFloat() in 77.0..95.0 && !inZone) {
+            if (heartRateIntensity.toFloat() in 70.0..80.0 && !inZone) {
                 inZone = true
                 startTimer()
                 Toast.makeText(this,"Right Zone Again !",Toast.LENGTH_SHORT).show()
-            } else if (heartRateIntensity.toFloat() !in 77.0..95.0 && inZone)
+            } else if (heartRateIntensity.toFloat() !in 70.0..80.0 && inZone)
             {
                 inZone = false
                 stopTimer()
@@ -1110,11 +1150,11 @@ open class HeartRateActivity : AppCompatActivity() {
         }
 
         if (zoneNumber == 4) {
-            if (heartRateIntensity.toFloat() in 96.0..100.0 && !inZone) {
+            if (heartRateIntensity.toFloat() in 80.0..90.0 && !inZone) {
                 inZone = true
                 startTimer()
                 Toast.makeText(this,"Right Zone Again !",Toast.LENGTH_SHORT).show()
-            } else if (heartRateIntensity.toFloat() !in 96.0..100.0 && inZone)
+            } else if (heartRateIntensity.toFloat() !in 80.0..90.0 && inZone)
             {
                 inZone = false
                 stopTimer()
@@ -1127,74 +1167,77 @@ open class HeartRateActivity : AppCompatActivity() {
 
     open fun playWarning (hrIntensity: Int) {
         if (!otherMissionAudiosAreOn()) {
-            if (zoneNumber == 0 && hrIntensity > 57) {
+            if (zoneNumber == 1 && hrIntensity > 60) {
                 Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
                 warningSlowDown.start()
             }
-            if (zoneNumber == 1) {
-                if (hrIntensity > 63) {
-                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
-                    warningSlowDown.start()
-                } else if (hrIntensity < 58) {
-                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
-                    warningSpeedUp.start()
-                }
-            }
             if (zoneNumber == 2) {
-                if (hrIntensity > 76) {
+                if (hrIntensity > 70) {
                     Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
                     warningSlowDown.start()
-                } else if (hrIntensity < 64) {
+                } else if (hrIntensity < 60) {
                     Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
                     warningSpeedUp.start()
                 }
             }
-
             if (zoneNumber == 3) {
-                if (hrIntensity > 95) {
+                if (hrIntensity > 80) {
                     Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
                     warningSlowDown.start()
-                } else if (hrIntensity < 77) {
+                } else if (hrIntensity < 70) {
                     Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
                     warningSpeedUp.start()
                 }
             }
 
             if (zoneNumber == 4) {
-                if (hrIntensity < 96) {
+                if (hrIntensity > 90) {
+                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                    warningSlowDown.start()
+                } else if (hrIntensity < 80) {
                     Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
                     warningSpeedUp.start()
                 }
             }
+
         }
     }
 
     fun updateZone (minutes : Int, secs : Int) {
         val targetZoneText = findViewById<TextView>(R.id.targetZoneTextView)
 
-        if (minutes == zone1StartMinutes && secs == zone1StartSeconds) {
-            zoneNumber = 1
-            targetZoneText.text = "CURRENT TARGET ZONE: 2 \n 57% < INTENSITY < 63%  "
-            blinkSections(1)
-            zone1Audio.start()
-        }
         if (minutes == zone2StartMinutes && secs == zone2StartSeconds) {
             zoneNumber = 2
-            targetZoneText.text = "CURRENT TARGET ZONE: 3 \n 64% < INTENSITY < 76%  "
-            blinkSections(2)
+            targetZoneText.text = "CURRENT TARGET ZONE: 2 \n 60% < INTENSITY < 70%  "
+            blinkSections(1)
             zone2Audio.start()
         }
-        if (minutes == zone3StartMinutes && secs == zone3StartSeconds) {
+        if (minutes == zone3Part1StartMinutes && secs == zone3Part1StartSeconds) {
             zoneNumber = 3
-            targetZoneText.text = "CURRENT TARGET ZONE: 4 \n 77% < INTENSITY < 95%  "
-            blinkSections(3)
-            zone3Audio.start()
+            targetZoneText.text = "CURRENT TARGET ZONE: 3 \n 70% < INTENSITY < 80%  "
+            blinkSections(2)
+            zone3Part1Audio.start()
         }
-        if (minutes == zone4StartMinutes && secs == zone4StartSeconds) {
+
+        if (minutes == zone4Part1StartMinutes && secs == zone4Part1StartSeconds) {
             zoneNumber = 4
-            targetZoneText.text = "CURRENT TARGET ZONE: 5 \n 95% < INTENSITY < 100%  "
-            blinkSections(4)
-            zone4Audio.start()
+            targetZoneText.text = "CURRENT TARGET ZONE: 4 \n 80% < INTENSITY < 90%  "
+            blinkSections(3)
+            zone4Part1Audio.start()
+        }
+
+        if (minutes == zone3Part2StartMinutes && secs == zone3Part2StartSeconds) {
+            zoneNumber = 3
+            targetZoneText.text = "CURRENT TARGET ZONE: 3 \n 70% < INTENSITY < 80%  "
+            blinkSections(2)
+            zone3Part2Audio.start()
+        }
+
+        if (minutes == zone4Part2StartMinutes && secs == zone4Part2StartSeconds) {
+            zoneNumber = 4
+            targetZoneText.text = "CURRENT TARGET ZONE: 4 \n 80% < INTENSITY < 90%  "
+            blinkSections(3)
+            zone4Part2Audio.start()
         }
         if (minutes == 20 ) {
             endAudio.start()
@@ -1203,16 +1246,17 @@ open class HeartRateActivity : AppCompatActivity() {
     }
 
      fun otherMissionAudiosAreOn () : Boolean {
-         if(zone0Audio.isPlaying || zone1Audio.isPlaying || zone2Audio.isPlaying ||
+         if(zone1Audio.isPlaying || zone2Audio.isPlaying || zone3Part1Audio.isPlaying ||
 
-         zone3Audio.isPlaying || zone4Audio.isPlaying || endAudio.isPlaying || pausedAudio.isPlaying ) {
+         zone4Part1Audio.isPlaying || zone3Part2Audio.isPlaying || zone4Part2Audio.isPlaying  || endAudio.isPlaying || pausedAudio.isPlaying ) {
              return true
          }
         return false
     }
 
+
+    /*
     fun calculateZonesTime(
-        percentageZone0: Int,
         percentageZone1: Int,
         percentageZone2: Int,
         percentageZone3: Int,
@@ -1221,32 +1265,62 @@ open class HeartRateActivity : AppCompatActivity() {
         // Total session time in seconds
         val totalSessionTimeSeconds = 20 * 60 // 20 minutes converted to seconds
 
+
         // Calculate start times for each zone in seconds
-        zone0StartSeconds = 0
-        zone1StartSeconds = (percentageZone0 * totalSessionTimeSeconds / 100)
-        zone2StartSeconds = zone1StartSeconds + (percentageZone1 * totalSessionTimeSeconds / 100)
-        zone3StartSeconds = zone2StartSeconds + (percentageZone2 * totalSessionTimeSeconds / 100)
-        zone4StartSeconds = zone3StartSeconds + (percentageZone3 * totalSessionTimeSeconds / 100)
+        zone1StartSeconds = 0
+        zone2StartSeconds = (percentageZone1 * totalSessionTimeSeconds / 100)
+        zone3Part1StartSeconds = zone2StartSeconds + (percentageZone2 * totalSessionTimeSeconds / 100)
+        zone4Part1StartSeconds = zone3Part1StartSeconds + ((percentageZone3/2) * totalSessionTimeSeconds / 100)
+        zone3Part2StartSeconds = zone4Part1StartSeconds + ((percentageZone4/2) * totalSessionTimeSeconds / 100)
+        zone4Part2StartSeconds = zone3Part2StartSeconds + ((percentageZone3/2) * totalSessionTimeSeconds / 100)
 
         // Convert start times to minutes and remaining seconds
-        zone0StartMinutes = zone0StartSeconds / 60
-        val zone0StartRemainingSeconds = zone0StartSeconds % 60
         zone1StartMinutes = zone1StartSeconds / 60
         val zone1StartRemainingSeconds = zone1StartSeconds % 60
         zone2StartMinutes = zone2StartSeconds / 60
         val zone2StartRemainingSeconds = zone2StartSeconds % 60
-        zone3StartMinutes = zone3StartSeconds / 60
-        val zone3StartRemainingSeconds = zone3StartSeconds % 60
-        zone4StartMinutes = zone4StartSeconds / 60
-        val zone4StartRemainingSeconds = zone4StartSeconds % 60
+        zone3Part1StartMinutes = zone3Part1StartSeconds / 60
+        val zone3StartRemainingSeconds = zone3Part1StartSeconds % 60
+        zone4Part1StartMinutes = zone4Part1StartSeconds / 60
+        val zone4StartRemainingSeconds = zone4Part1StartSeconds % 60
+        zone3Part2StartMinutes = zone3Part2StartSeconds / 60
+        val zone3Part2StartRemainingSeconds = zone3Part2StartSeconds % 60
+        zone4Part2StartMinutes = zone4Part2StartSeconds / 60
+        val zone4Part2StartRemainingSeconds = zone4Part2StartSeconds % 60
 
-        zone0StartSeconds = zone0StartRemainingSeconds
         zone1StartSeconds = zone1StartRemainingSeconds
         zone2StartSeconds = zone2StartRemainingSeconds
-        zone3StartSeconds = zone3StartRemainingSeconds
-        zone4StartSeconds = zone4StartRemainingSeconds
+        zone3Part1StartSeconds = zone3StartRemainingSeconds
+        zone4Part1StartSeconds = zone4StartRemainingSeconds
+        zone3Part2StartSeconds = zone3Part2StartRemainingSeconds
+        zone4Part2StartSeconds = zone4Part2StartRemainingSeconds
+
+    } */
+
+
+    fun calculateZonesTime(
+    ) {
+        zone1StartMinutes = 0
+        zone1StartSeconds = 0
+
+        zone2StartMinutes = 3
+        zone2StartSeconds = 0
+
+        zone3Part1StartMinutes = 9
+        zone3Part1StartSeconds = 0
+
+        zone4Part1StartMinutes = 13
+        zone4Part1StartSeconds = 0
+
+        zone3Part2StartMinutes = 14
+        zone3Part2StartSeconds = 30
+
+        zone4Part2StartMinutes = 18
+        zone4Part2StartSeconds = 30
 
     }
+
+
 
 
     fun calculateZoneTimeSeekBar(percentageZone:Int) : String {

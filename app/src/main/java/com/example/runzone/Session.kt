@@ -10,7 +10,6 @@ class Session(
     var maxHR: Float = 0F,
     var age: Int = 0,
     var missionType: String,
-    var zone0: Float,
     var zone1: Float,
     var zone2: Float,
     var zone3: Float,
