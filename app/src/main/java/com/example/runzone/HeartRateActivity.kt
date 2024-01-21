@@ -451,7 +451,16 @@ open class HeartRateActivity : AppCompatActivity() {
         // Start tracking location updates
         startLocationUpdates()
 
+        //check every 10 seconds if the user is in the zone
+        val checkZoneTimer = Timer()
+        checkZoneTimer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                checkZone()
+            }
+        }, 10000, 10000)
+
         stopButton.setOnClickListener {
+            checkZoneTimer.cancel()
             stopMission()
         }
 
@@ -820,8 +829,6 @@ open class HeartRateActivity : AppCompatActivity() {
                                 currentHr = sample.hr
                             }
 
-                            checkZone()
-
 
                         }
                     },
@@ -1103,105 +1110,162 @@ open class HeartRateActivity : AppCompatActivity() {
             0.0
         }
 
+        Log.d("checkZone", "running")
+
         val hrIntensityText = findViewById<TextView>(R.id.hrIntensityTextView)
         hrIntensityText.text = "${heartRateIntensity.toInt()} % \n INTENSITY"
 
+        if (!otherMissionAudiosAreOn()) {
+            Log.d("checkZone", "otherMissionAudiosAreOn ${otherMissionAudiosAreOn()}")
+            if (zoneNumber == 1) {
+                if (heartRateIntensity.toFloat() in 50.0..60.0 && !inZone) {
+                    inZone = true
+                    startTimer()
+                    Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
+                    }
+                } else if (heartRateIntensity.toFloat() !in 50.0..60.0 && inZone) {
+                    inZone = false
+                    stopTimer()
+                    Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
+                    }
+                    Log.d("checkZone", "playWarning")
+                    playWarning(heartRateIntensity.toInt())
+                } else if (heartRateIntensity.toFloat() !in 50.0..60.0) {
+                    Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
+                    }
+                    Log.d("checkZone", "playWarning")
+                    playWarning(heartRateIntensity.toInt())
+                }
+            }
 
-        if (zoneNumber == 1) {
-            if (heartRateIntensity.toFloat() in 50.0..60.0 && !inZone) {
-                inZone = true
-                startTimer()
-                Toast.makeText(this,"Right Zone Again !",Toast.LENGTH_SHORT).show()
-            } else if (heartRateIntensity.toFloat() !in 50.0..60.0 && inZone)
-            {
-                inZone = false
-                stopTimer()
-                Toast.makeText(this,"Wrong Zone !",Toast.LENGTH_SHORT).show()
-                playWarning(heartRateIntensity.toInt())
+            if (zoneNumber == 2) {
+                if (heartRateIntensity.toFloat() in 60.0..70.0 && !inZone) {
+                    inZone = true
+                    startTimer()
+                    Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
+                    }
+                } else if (heartRateIntensity.toFloat() !in 60.0..70.0 && inZone) {
+                    inZone = false
+                    stopTimer()
+                    Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
+                    }
+                    playWarning(heartRateIntensity.toInt())
+                } else if (heartRateIntensity.toFloat() !in 60.0..70.0) {
+                    Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
+                    }
+                    playWarning(heartRateIntensity.toInt())
+                }
+            }
+
+            if (zoneNumber == 3) {
+                if (heartRateIntensity.toFloat() in 70.0..80.0 && !inZone) {
+                    inZone = true
+                    startTimer()
+                    Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
+                    }
+                } else if (heartRateIntensity.toFloat() !in 70.0..80.0 && inZone) {
+                    inZone = false
+                    stopTimer()
+                    Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
+                    }
+                    playWarning(heartRateIntensity.toInt())
+                } else if (heartRateIntensity.toFloat() !in 70.0..80.0) {
+                    Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
+                    }
+                    playWarning(heartRateIntensity.toInt())
+                }
+            }
+
+            if (zoneNumber == 4) {
+                if (heartRateIntensity.toFloat() in 80.0..90.0 && !inZone) {
+                    inZone = true
+                    startTimer()
+                    Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
+                    }
+                } else if (heartRateIntensity.toFloat() !in 80.0..90.0 && inZone) {
+                    inZone = false
+                    stopTimer()
+                    Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
+                    }
+                    playWarning(heartRateIntensity.toInt())
+                } else if (heartRateIntensity.toFloat() !in 80.0..90.0) {
+                    Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
+                    }
+                    playWarning(heartRateIntensity.toInt())
+                }
             }
         }
-
-        if (zoneNumber == 2) {
-            if (heartRateIntensity.toFloat() in 60.0..70.0 && !inZone) {
-                inZone = true
-                startTimer()
-                Toast.makeText(this,"Right Zone Again !",Toast.LENGTH_SHORT).show()
-            } else if (heartRateIntensity.toFloat() !in 60.0..70.0 && inZone)
-            {
-                inZone = false
-                stopTimer()
-                Toast.makeText(this,"Wrong Zone !",Toast.LENGTH_SHORT).show()
-                playWarning(heartRateIntensity.toInt())
-            }
-        }
-
-        if (zoneNumber == 3) {
-            if (heartRateIntensity.toFloat() in 70.0..80.0 && !inZone) {
-                inZone = true
-                startTimer()
-                Toast.makeText(this,"Right Zone Again !",Toast.LENGTH_SHORT).show()
-            } else if (heartRateIntensity.toFloat() !in 70.0..80.0 && inZone)
-            {
-                inZone = false
-                stopTimer()
-                Toast.makeText(this,"Wrong Zone !",Toast.LENGTH_SHORT).show()
-                playWarning(heartRateIntensity.toInt())
-            }
-        }
-
-        if (zoneNumber == 4) {
-            if (heartRateIntensity.toFloat() in 80.0..90.0 && !inZone) {
-                inZone = true
-                startTimer()
-                Toast.makeText(this,"Right Zone Again !",Toast.LENGTH_SHORT).show()
-            } else if (heartRateIntensity.toFloat() !in 80.0..90.0 && inZone)
-            {
-                inZone = false
-                stopTimer()
-                Toast.makeText(this,"Wrong Zone !",Toast.LENGTH_SHORT).show()
-                playWarning(heartRateIntensity.toInt())
-            }
-        }
-
     }
 
     open fun playWarning (hrIntensity: Int) {
-        if (!otherMissionAudiosAreOn()) {
-            if (zoneNumber == 1 && hrIntensity > 60) {
-                Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
-                warningSlowDown.start()
+
+            if (zoneNumber == 1) {
+                if (hrIntensity > 60) {
+                    Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                    }
+                    warningSlowDown.start()
+                } else if (hrIntensity < 50) {
+                    Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                    }
+                    warningSpeedUp.start()
+                }
             }
             if (zoneNumber == 2) {
                 if (hrIntensity > 70) {
+                    Handler(Looper.getMainLooper()).post {
                     Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                    }
                     warningSlowDown.start()
                 } else if (hrIntensity < 60) {
+                    Handler(Looper.getMainLooper()).post {
                     Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                    }
                     warningSpeedUp.start()
                 }
             }
             if (zoneNumber == 3) {
                 if (hrIntensity > 80) {
+                    Handler(Looper.getMainLooper()).post {
                     Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                    }
                     warningSlowDown.start()
                 } else if (hrIntensity < 70) {
+                    Handler(Looper.getMainLooper()).post {
                     Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                    }
                     warningSpeedUp.start()
                 }
             }
 
             if (zoneNumber == 4) {
                 if (hrIntensity > 90) {
+                    Handler(Looper.getMainLooper()).post {
                     Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                    }
                     warningSlowDown.start()
                 } else if (hrIntensity < 80) {
+                    Handler(Looper.getMainLooper()).post {
                     Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                    }
                     warningSpeedUp.start()
                 }
             }
 
         }
-    }
 
     fun updateZone (minutes : Int, secs : Int) {
         val targetZoneText = findViewById<TextView>(R.id.targetZoneTextView)
@@ -1248,7 +1312,10 @@ open class HeartRateActivity : AppCompatActivity() {
      fun otherMissionAudiosAreOn () : Boolean {
          if(zone1Audio.isPlaying || zone2Audio.isPlaying || zone3Part1Audio.isPlaying ||
 
-         zone4Part1Audio.isPlaying || zone3Part2Audio.isPlaying || zone4Part2Audio.isPlaying  || endAudio.isPlaying || pausedAudio.isPlaying ) {
+         zone4Part1Audio.isPlaying || zone3Part2Audio.isPlaying || zone4Part2Audio.isPlaying  || endAudio.isPlaying || pausedAudio.isPlaying || warningSlowDown.isPlaying || warningSpeedUp.isPlaying) {
+             Handler(Looper.getMainLooper()).post {
+                 Toast.makeText(this, "Can not play warning! Other audio is running!", Toast.LENGTH_SHORT).show()
+             }
              return true
          }
         return false

@@ -4,29 +4,46 @@
     <shared>
       <config />
     </shared>
+    <layouts>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/home_list_items.xml">
+        <config>
+          <theme>@style/Theme.RunZone</theme>
+        </config>
+      </layout>
+    </layouts>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="16cb462d-a6fb-449b-9297-e38fda910a73" name="Changes" comment="Chart created for the Heart rate">
+    <list default="true" id="16cb462d-a6fb-449b-9297-e38fda910a73" name="Changes" comment="Audio changed for &quot;Run Zone&quot;">
+      <change beforePath="$PROJECT_DIR$/.gradle/8.0/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.0/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.0/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.0/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/EscapeFromDystopia.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/EscapeFromDystopia.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/HeartRateActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/HeartRateActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_mission.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_mission.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[R58R70L5Q9D]" />
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[adb-R58R70L5Q9D-hOxFOn._adb-tls-connect._tcp]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -138,20 +155,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;PROJECT_TRUSTED_KEY&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
-    &quot;com.intellij.openapi.externalSystem.service.settings.ExternalSystemGroupConfigurable&quot;: &quot;ALL&quot;,
-    &quot;last_directory_selection&quot;: &quot;C:/Users/mohamed.abosora/Downloads/Bachelorarbeit/run-zone/app/src/main/res/drawable&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/mohamed.abosora/Downloads/Folder-Google-Fit-Sample/fit-samples/BasicRecordingApiKotlin&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "PROJECT_TRUSTED_KEY": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "android-custom-viewC:/Users/mohamed.abosora/.gradle/caches/modules-2/files-2.1/androidx.appcompat/appcompat/1.6.1/ace9a78b961165396147e8691faa18c1b0e48e20/appcompat-1.6.1-sources.jar!/androidx/appcompat/widget/AppCompatImageView.java_SELECTED": "AppCompatImageView",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "com.google.services.firebase.aqiPopupShown": "true",
+    "com.intellij.openapi.externalSystem.service.settings.ExternalSystemGroupConfigurable": "ALL",
+    "last_directory_selection": "C:/Users/mohamed.abosora/Downloads/Bachelorarbeit/run-zone/app/src/main/res/values",
+    "last_opened_file_path": "C:/Users/mohamed.abosora/Downloads/Folder-Google-Fit-Sample/fit-samples/BasicRecordingApiKotlin",
+    "settings.editor.selected.configurable": "experimental"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateKotlinClassDialog.RecentsKey">
       <recent name="com.example.runzone.model" />
@@ -184,6 +203,8 @@
         <option name="WORKING_DIR" value="" />
         <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
         <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
       </Auto>
       <Hybrid>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
@@ -191,14 +212,21 @@
         <option name="WORKING_DIR" value="" />
         <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
         <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
       </Hybrid>
-      <Java />
+      <Java>
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Java>
       <Native>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
         <option name="SHOW_STATIC_VARS" value="true" />
         <option name="WORKING_DIR" value="" />
         <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
         <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
       </Native>
       <Profilers>
         <option name="ADVANCED_PROFILING_ENABLED" value="false" />
@@ -235,6 +263,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
     <configuration name="run-zone [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -256,6 +285,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
     <configuration name="run-zone [signingReport]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -277,6 +307,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
     <configuration name="run-zone:app [signingReport]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -298,6 +329,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
     <configuration name="run-zone:app [updateLintBaseline]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -319,12 +351,13 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.run-zone [build]" />
         <item itemvalue="Gradle.run-zone [clean]" />
+        <item itemvalue="Gradle.run-zone [build]" />
         <item itemvalue="Gradle.run-zone [signingReport]" />
         <item itemvalue="Gradle.run-zone:app [updateLintBaseline]" />
         <item itemvalue="Gradle.run-zone:app [signingReport]" />
@@ -339,62 +372,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1686167163981</updated>
-    </task>
-    <task id="LOCAL-00001" summary="Use Token to access google fit api">
-      <created>1686732147910</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1686732147910</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Can read data from GoogleFitApi">
-      <created>1687097982049</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1687097982049</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Can access GoogleFit Api the normal way - Authentication works !!">
-      <created>1687282624485</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1687282624485</updated>
-    </task>
-    <task id="LOCAL-00004" summary="read HeartRate and StepsCount">
-      <created>1687286560623</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1687286560623</updated>
-    </task>
-    <task id="LOCAL-00005" summary="added speed">
-      <created>1687292130532</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1687292130532</updated>
-    </task>
-    <task id="LOCAL-00006" summary="added distance">
-      <created>1687292456203</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1687292456203</updated>
-    </task>
-    <task id="LOCAL-00007" summary="start button for the mission">
-      <created>1687707026532</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1687707026532</updated>
-    </task>
-    <task id="LOCAL-00008" summary="better grid">
-      <created>1687709570106</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1687709570106</updated>
     </task>
     <task id="LOCAL-00009" summary="line between timer and the rest">
       <created>1687709747052</created>
@@ -508,7 +485,238 @@
       <option name="project" value="LOCAL" />
       <updated>1692638962609</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Bar chart is working !!!">
+      <created>1692724681444</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1692724681444</updated>
+    </task>
+    <task id="LOCAL-00026" summary="MAX-HR adjusted">
+      <created>1692726243521</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1692726243521</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Blink Sections">
+      <created>1692734690219</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1692734690219</updated>
+    </task>
+    <task id="LOCAL-00028" summary="play-pause-stop">
+      <created>1692818496564</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1692818496564</updated>
+    </task>
+    <task id="LOCAL-00029" summary="store sessions data in firebase database">
+      <created>1692823648911</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1692823648911</updated>
+    </task>
+    <task id="LOCAL-00030" summary="sessionsFragment">
+      <created>1693246135687</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1693246135687</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Mission-Type changed">
+      <created>1693246273143</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1693246273143</updated>
+    </task>
+    <task id="LOCAL-00032" summary="BlinkSections updated !">
+      <created>1693251843783</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1693251843783</updated>
+    </task>
+    <task id="LOCAL-00033" summary="checkZone">
+      <created>1693265795547</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1693265795547</updated>
+    </task>
+    <task id="LOCAL-00034" summary="updateZone">
+      <created>1693331670557</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1693331670557</updated>
+    </task>
+    <task id="LOCAL-00035" summary="playing Audio in Zones">
+      <created>1693345483728</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1693345483728</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Let the user customize the zones time">
+      <created>1693684724721</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1693684724721</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Dialogbox updated">
+      <created>1693685292566</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1693685292566</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Dialog-box rules adjusted">
+      <created>1693686429026</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1693686429026</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Default values for the seekbar zones">
+      <created>1693746357406</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1693746357406</updated>
+    </task>
+    <task id="LOCAL-00040" summary="values of the seekbar are multiplies of 5">
+      <created>1693747805284</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1693747805284</updated>
+    </task>
+    <task id="LOCAL-00041" summary="Minutes and seconds in seekbar">
+      <created>1693758491888</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1693758491888</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Problem fixed in dialog-box">
+      <created>1693774335245</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1693774335245</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Percentage-problem partially fixed">
+      <created>1695472889425</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1695472889425</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Percentage-problem fixed">
+      <created>1695474778182</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1695474778182</updated>
+    </task>
+    <task id="LOCAL-00045" summary="StopButton stops audio">
+      <created>1695478950635</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1695478950635</updated>
+    </task>
+    <task id="LOCAL-00046" summary="Problem in startingTimeZones fixed!">
+      <created>1695504731307</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1695504731307</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Pause Audio works!">
+      <created>1695510314266</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1695510314266</updated>
+    </task>
+    <task id="LOCAL-00048" summary="stopMission">
+      <created>1695510650745</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1695510650745</updated>
+    </task>
+    <task id="LOCAL-00049" summary="Zone-Numbers updated">
+      <created>1696099100459</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1696099100459</updated>
+    </task>
+    <task id="LOCAL-00050" summary="Distance Covered added and total session time updated">
+      <created>1696162533673</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1696162533673</updated>
+    </task>
+    <task id="LOCAL-00051" summary="Escape Dystopia Audio changed">
+      <created>1696172730084</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1696172730084</updated>
+    </task>
+    <task id="LOCAL-00052" summary="Runzone Audio">
+      <created>1696179925245</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1696179925245</updated>
+    </task>
+    <task id="LOCAL-00053" summary="stopMission-if condition">
+      <created>1696194351398</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1696194351398</updated>
+    </task>
+    <task id="LOCAL-00054" summary="Seconds to minutes in the sessions">
+      <created>1696335293457</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1696335293458</updated>
+    </task>
+    <task id="LOCAL-00055" summary="Distribution updated for the zones and zone 5 deleted">
+      <created>1697566590697</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1697566590698</updated>
+    </task>
+    <task id="LOCAL-00056" summary="Audio changed for &quot;Escape from dystopia&quot;">
+      <created>1698782225530</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1698782225530</updated>
+    </task>
+    <task id="LOCAL-00057" summary="Audio changed for &quot;Run Zone&quot;">
+      <created>1698785041868</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1698785041868</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -533,30 +741,42 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Use Token to access google fit api" />
-    <MESSAGE value="Can read data from GoogleFitApi" />
-    <MESSAGE value="Can access GoogleFit Api the normal way - Authentication works !!" />
-    <MESSAGE value="read HearRate and StepsCount" />
-    <MESSAGE value="read HeartRate and StepsCount" />
-    <MESSAGE value="added speed" />
-    <MESSAGE value="added distance" />
-    <MESSAGE value="start button for the mission" />
-    <MESSAGE value="better grid" />
-    <MESSAGE value="line between timer and the rest" />
-    <MESSAGE value="Round Up Values" />
-    <MESSAGE value="Profile Tab deleted" />
-    <MESSAGE value="Second mission added" />
-    <MESSAGE value="Added audio" />
-    <MESSAGE value="Child classes for every Mission" />
-    <MESSAGE value="Child classes for every Mission 2" />
-    <MESSAGE value="background of layout changed" />
-    <MESSAGE value="last change before improving layout" />
-    <MESSAGE value="layout grid changed" />
-    <MESSAGE value="layout angepasst" />
-    <MESSAGE value="layout nochmal angepasst" />
-    <MESSAGE value="layout nochmal angepasst 2" />
-    <MESSAGE value="Background Images" />
-    <MESSAGE value="Polar H10 Api connected" />
-    <option name="LAST_COMMIT_MESSAGE" value="Polar H10 Api connected" />
+    <MESSAGE value="checkZone" />
+    <MESSAGE value="updateZone" />
+    <MESSAGE value="playing Audio in Zones" />
+    <MESSAGE value="Let the user customize the zones time" />
+    <MESSAGE value="Dialogbox updated" />
+    <MESSAGE value="Dialog-box rules adjusted" />
+    <MESSAGE value="Default values for the seekbar zones" />
+    <MESSAGE value="values of the seekbar are multiplies of 5" />
+    <MESSAGE value="Minutes and seconds in seekbar" />
+    <MESSAGE value="Problem fixed in dialog-box" />
+    <MESSAGE value="Percentage-problem partially fixed" />
+    <MESSAGE value="Percentage-problem fixed" />
+    <MESSAGE value="StopButton stops audio" />
+    <MESSAGE value="Problem in startingTimeZones fixed!" />
+    <MESSAGE value="Pause Audio works!" />
+    <MESSAGE value="stopMission" />
+    <MESSAGE value="Zone-Numbers updated" />
+    <MESSAGE value="Distance Covered added and total session time updated" />
+    <MESSAGE value="Escape Dystopia Audio changed" />
+    <MESSAGE value="Runzone Audio" />
+    <MESSAGE value="stopMission-if condition" />
+    <MESSAGE value="Seconds to minutes in the sessions" />
+    <MESSAGE value="Distribution updated for the zones and zone 5 deleted" />
+    <MESSAGE value="Audio changed for &quot;Escape from dystopia&quot;" />
+    <MESSAGE value="Audio changed for &quot;Run Zone&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Audio changed for &quot;Run Zone&quot;" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.core/core/1.10.1/1dfbeafef6d1a3fcb7d75df4925c4122c04b9790/core-1.10.1-sources.jar!/androidx/core/app/ActivityCompat.java</url>
+          <line>520</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
