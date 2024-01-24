@@ -421,8 +421,6 @@ open class HeartRateActivity : AppCompatActivity() {
 
         startTimer()
 
-
-
         zone1Audio.start()
 
 
@@ -1221,7 +1219,7 @@ open class HeartRateActivity : AppCompatActivity() {
                     Handler(Looper.getMainLooper()).post {
                     Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
                     }
-                    warningSpeedUp.start()
+                    playAudio(warningSpeedUp, R.raw.narratorspeedup)
                 }
             }
             if (zoneNumber == 2) {
@@ -1266,6 +1264,9 @@ open class HeartRateActivity : AppCompatActivity() {
             }
 
         }
+
+    open fun playAudio (mediaPlayer : MediaPlayer, resId : Int) {
+    }
 
     fun updateZone (minutes : Int, secs : Int) {
         val targetZoneText = findViewById<TextView>(R.id.targetZoneTextView)

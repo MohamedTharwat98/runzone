@@ -1,13 +1,12 @@
 package com.example.runzone
 
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
+
 
 class EscapeFromDystopia : HeartRateActivity (){
     @RequiresApi(Build.VERSION_CODES.O)
@@ -16,14 +15,6 @@ class EscapeFromDystopia : HeartRateActivity (){
 
         warningSlowDown = MediaPlayer.create(this, R.raw.narratorslowdown)
         warningSpeedUp = MediaPlayer.create(this,R.raw.narratorspeedup)
-        warningSpeedUp.setOnCompletionListener(MediaPlayer.OnCompletionListener {
-            it.reset()
-            Log.d("checkZone", "resetting warningSpeedUp")
-        })
-        warningSpeedUp.setOnErrorListener { mp, what, extra ->
-            Log.e("checkZone", "MediaPlayer error: $what, $extra")
-            false // return false to indicate that the error is not handled
-        }
         zone1Audio = MediaPlayer.create(this, R.raw.escapefromdystopiazone1)
         zone2Audio = MediaPlayer.create(this, R.raw.escapefromdystopiazone2)
         zone3Part1Audio = MediaPlayer.create(this, R.raw.escapefromdystopiazone3part1)
@@ -67,5 +58,28 @@ class EscapeFromDystopia : HeartRateActivity (){
     override fun stopTimer() {
         isRunning = false
         handler.removeCallbacks(customTimerRunnable)
+    }
+
+    override fun playAudio( mediaPlayer: MediaPlayer, resId: Int) {
+        // Stop and reset the MediaPlayer before playing again
+        mediaPlayer.stop()
+        mediaPlayer.reset()
+
+        // Set the data source (assuming it's the same every time)
+        mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${resId}"))
+
+        //warningSpeedUp = MediaPlayer.create(this,R.raw.narratorspeedup)
+
+        // Prepare and start the MediaPlayer
+        mediaPlayer.prepareAsync()
+
+        mediaPlayer.setOnErrorListener { mp, what, extra ->
+            Log.e("checkZone", "MediaPlayer error: $what, $extra")
+            false // return false to indicate that the error is not handled
+        }
+        mediaPlayer.setOnPreparedListener(MediaPlayer.OnPreparedListener {
+            Log.d("checkZone", "warningSpeedUp is prepared")
+            mediaPlayer.start()
+        })
     }
 }
