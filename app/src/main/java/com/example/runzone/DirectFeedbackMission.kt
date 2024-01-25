@@ -1,8 +1,10 @@
 package com.example.runzone
 
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.RequiresApi
 
 class DirectFeedbackMission : HeartRateActivity (){
@@ -55,6 +57,42 @@ class DirectFeedbackMission : HeartRateActivity (){
     override fun stopTimer() {
         isRunning = false
         handler.removeCallbacks(customTimerRunnable)
+    }
+
+    override fun playAudio( mediaPlayer: MediaPlayer, resId: Int) {
+        //A map with keys of all the audio files
+        val resIdMap = mapOf(
+            1 to R.raw.runzonezone1,
+            2 to R.raw.runzonezone2,
+            31 to R.raw.runzonezone3part1,
+            32 to R.raw.runzonezone3part2,
+            41 to R.raw.runzonezone4part1,
+            42 to R.raw.runzonezone4part2,
+            5 to R.raw.runzoneend,
+            10 to R.raw.runzoneslowdown,
+            11 to R.raw.runezonespeedup
+        )
+
+        // Stop and reset the MediaPlayer before playing again
+        mediaPlayer.stop()
+        mediaPlayer.reset()
+
+        // Set the data source (assuming it's the same every time)
+        mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${resIdMap[resId]}"))
+
+        //warningSpeedUp = MediaPlayer.create(this,R.raw.narratorspeedup)
+
+        // Prepare and start the MediaPlayer
+        mediaPlayer.prepareAsync()
+
+        mediaPlayer.setOnErrorListener { mp, what, extra ->
+            Log.e("checkZone", "MediaPlayer error: $what, $extra")
+            false // return false to indicate that the error is not handled
+        }
+        mediaPlayer.setOnPreparedListener(MediaPlayer.OnPreparedListener {
+            Log.d("checkZone", "warningSpeedUp is prepared")
+            mediaPlayer.start()
+        })
     }
 
 }

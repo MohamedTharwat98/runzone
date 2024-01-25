@@ -46,10 +46,6 @@ class EscapeFromDystopia : HeartRateActivity (){
         }
     }
 
-
-
-
-
     override fun startTimer() {
         isRunning = true
         handler.postDelayed(customTimerRunnable, 1000)
@@ -61,12 +57,25 @@ class EscapeFromDystopia : HeartRateActivity (){
     }
 
     override fun playAudio( mediaPlayer: MediaPlayer, resId: Int) {
+        //A map with keys of all the audio files
+        val resIdMap = mapOf(
+            1 to R.raw.escapefromdystopiazone1,
+            2 to R.raw.escapefromdystopiazone2,
+            31 to R.raw.escapefromdystopiazone3part1,
+            32 to R.raw.escapefromdystopiazone3part2,
+            41 to R.raw.escapefromdystopiazone4part1,
+            42 to R.raw.escapefromdystopiazone4part2,
+            5 to R.raw.escapefromdystopiaend,
+            10 to R.raw.narratorslowdown,
+            11 to R.raw.narratorspeedup
+        )
+
         // Stop and reset the MediaPlayer before playing again
         mediaPlayer.stop()
         mediaPlayer.reset()
 
         // Set the data source (assuming it's the same every time)
-        mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${resId}"))
+        mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${resIdMap[resId]}"))
 
         //warningSpeedUp = MediaPlayer.create(this,R.raw.narratorspeedup)
 
@@ -82,4 +91,5 @@ class EscapeFromDystopia : HeartRateActivity (){
             mediaPlayer.start()
         })
     }
+
 }

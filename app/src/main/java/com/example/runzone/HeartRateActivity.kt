@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -66,6 +67,7 @@ open class HeartRateActivity : AppCompatActivity() {
     var isRunning: Boolean = false
     lateinit var handler: Handler
 
+
     val timerTextView: TextView by lazy {
         findViewById<TextView>(R.id.timerTextView)
     }
@@ -78,10 +80,10 @@ open class HeartRateActivity : AppCompatActivity() {
         findViewById<Button>(R.id.stopButton)
     }
 
-     var maxHR = 0
+    var maxHR = 0
 
 
-     var missionType = ""
+    var missionType = ""
 
     private var hrDisposable: Disposable? = null
 
@@ -93,46 +95,47 @@ open class HeartRateActivity : AppCompatActivity() {
 
     var inZone = false
 
-    lateinit var warningSlowDown : MediaPlayer
+    lateinit var warningSlowDown: MediaPlayer
 
-    lateinit var warningSpeedUp : MediaPlayer
+    lateinit var warningSpeedUp: MediaPlayer
 
-    lateinit var zone1Audio : MediaPlayer
+    lateinit var zone1Audio: MediaPlayer
 
-    lateinit var zone2Audio : MediaPlayer
+    lateinit var zone2Audio: MediaPlayer
 
-    lateinit var zone3Part1Audio : MediaPlayer
+    lateinit var zone3Part1Audio: MediaPlayer
 
-    lateinit var zone3Part2Audio : MediaPlayer
+    lateinit var zone3Part2Audio: MediaPlayer
 
-    lateinit var zone4Part1Audio : MediaPlayer
+    lateinit var zone4Part1Audio: MediaPlayer
 
-    lateinit var zone4Part2Audio : MediaPlayer
+    lateinit var zone4Part2Audio: MediaPlayer
 
-    lateinit var endAudio : MediaPlayer
+    lateinit var endAudio: MediaPlayer
 
-    lateinit var pausedAudio : MediaPlayer
+    lateinit var pausedAudio: MediaPlayer
 
     private lateinit var heartRateChart: BarChart
     private lateinit var dataSet: BarDataSet
     private val entries = ArrayList<BarEntry>()
 
-    private val blinkHandlers = mutableMapOf<View, Handler>() // Store handlers for blinking animations
+    private val blinkHandlers =
+        mutableMapOf<View, Handler>() // Store handlers for blinking animations
 
 
-    var zone1StartMinutes : Int = 0
-    var zone2StartMinutes : Int = 0
-    var zone3Part1StartMinutes : Int = 0
-    var zone3Part2StartMinutes : Int = 0
-    var zone4Part1StartMinutes : Int = 0
-    var zone4Part2StartMinutes : Int = 0
+    var zone1StartMinutes: Int = 0
+    var zone2StartMinutes: Int = 0
+    var zone3Part1StartMinutes: Int = 0
+    var zone3Part2StartMinutes: Int = 0
+    var zone4Part1StartMinutes: Int = 0
+    var zone4Part2StartMinutes: Int = 0
 
-    var zone1StartSeconds : Int = 0
-    var zone2StartSeconds : Int = 0
-    var zone3Part1StartSeconds : Int = 0
-    var zone3Part2StartSeconds : Int = 0
-    var zone4Part1StartSeconds : Int = 0
-    var zone4Part2StartSeconds : Int = 0
+    var zone1StartSeconds: Int = 0
+    var zone2StartSeconds: Int = 0
+    var zone3Part1StartSeconds: Int = 0
+    var zone3Part2StartSeconds: Int = 0
+    var zone4Part1StartSeconds: Int = 0
+    var zone4Part2StartSeconds: Int = 0
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var distanceTextView: TextView
@@ -147,15 +150,18 @@ open class HeartRateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
 
-        api = PolarBleApiDefaultImpl.defaultImplementation(this,
-            setOf(PolarBleApi.PolarBleSdkFeature.FEATURE_HR,
+        api = PolarBleApiDefaultImpl.defaultImplementation(
+            this,
+            setOf(
+                PolarBleApi.PolarBleSdkFeature.FEATURE_HR,
                 PolarBleApi.PolarBleSdkFeature.FEATURE_POLAR_SDK_MODE,
                 PolarBleApi.PolarBleSdkFeature.FEATURE_BATTERY_INFO,
                 PolarBleApi.PolarBleSdkFeature.FEATURE_POLAR_H10_EXERCISE_RECORDING,
                 PolarBleApi.PolarBleSdkFeature.FEATURE_POLAR_OFFLINE_RECORDING,
                 PolarBleApi.PolarBleSdkFeature.FEATURE_POLAR_ONLINE_STREAMING,
                 PolarBleApi.PolarBleSdkFeature.FEATURE_POLAR_DEVICE_TIME_SETUP,
-                PolarBleApi.PolarBleSdkFeature.FEATURE_DEVICE_INFO)
+                PolarBleApi.PolarBleSdkFeature.FEATURE_DEVICE_INFO
+            )
         )
 
         showAgeInputDialog();
@@ -171,7 +177,10 @@ open class HeartRateActivity : AppCompatActivity() {
         val alertDialogBuilder = AlertDialog.Builder(this)
             .setView(popupView)
             .setTitle("Pyramidal Heart Rate Zone Training")
-            .setPositiveButton("Start Mission", null) // Set the positive button, but don't provide a click listener here
+            .setPositiveButton(
+                "Start Mission",
+                null
+            ) // Set the positive button, but don't provide a click listener here
             .setNegativeButton("Cancel", null)
 
 
@@ -195,8 +204,6 @@ open class HeartRateActivity : AppCompatActivity() {
         alertDialog.show()
 
     }
-
-
 
 
     /*
@@ -266,7 +273,7 @@ open class HeartRateActivity : AppCompatActivity() {
     }*/
 
 
-    fun seekBarOnClick (popupView: View) {
+    fun seekBarOnClick(popupView: View) {
         val seekBarZone0 = popupView.findViewById<SeekBar>(R.id.seekBarZone0)
         val seekBarZone1 = popupView.findViewById<SeekBar>(R.id.seekBarZone1)
         val seekBarZone2 = popupView.findViewById<SeekBar>(R.id.seekBarZone2)
@@ -305,7 +312,7 @@ open class HeartRateActivity : AppCompatActivity() {
                 val time = calculateZoneTimeSeekBar(mappedValue)
                 val zone1Text = popupView.findViewById<TextView>(R.id.zone1TextView)
                 zone1Text.text = "Zone 2 : \n $time"
-                percentageZone1Bar.text =  "$mappedValue%"
+                percentageZone1Bar.text = "$mappedValue%"
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -318,7 +325,7 @@ open class HeartRateActivity : AppCompatActivity() {
                 val time = calculateZoneTimeSeekBar(mappedValue)
                 val zone2Text = popupView.findViewById<TextView>(R.id.zone2TextView)
                 zone2Text.text = "Zone 3 : \n $time"
-                percentageZone2Bar.text =  "$mappedValue%"
+                percentageZone2Bar.text = "$mappedValue%"
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -331,7 +338,7 @@ open class HeartRateActivity : AppCompatActivity() {
                 val time = calculateZoneTimeSeekBar(mappedValue)
                 val zone3Text = popupView.findViewById<TextView>(R.id.zone3TextView)
                 zone3Text.text = "Zone 4 : \n $time"
-                percentageZone3Bar.text =  "$mappedValue%"
+                percentageZone3Bar.text = "$mappedValue%"
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -344,7 +351,7 @@ open class HeartRateActivity : AppCompatActivity() {
                 val time = calculateZoneTimeSeekBar(mappedValue)
                 val zone4Text = popupView.findViewById<TextView>(R.id.zone4TextView)
                 zone4Text.text = "Zone 5 : \n $time"
-                percentageZone4Bar.text =  "$mappedValue%"
+                percentageZone4Bar.text = "$mappedValue%"
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -401,15 +408,14 @@ open class HeartRateActivity : AppCompatActivity() {
     }
 
 
-
-
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun startMission () {
+    private fun startMission() {
         setContentView(R.layout.activity_mission)
 
         missionType = intent.getStringExtra("missionType").toString()
 
         handler = Handler(Looper.getMainLooper())
+
 
         isRunning = true
 
@@ -421,7 +427,7 @@ open class HeartRateActivity : AppCompatActivity() {
 
         startTimer()
 
-        zone1Audio.start()
+        playAudio(zone1Audio, 1)
 
 
         // This method sets up our custom logger, which will print all log messages to the device
@@ -455,7 +461,7 @@ open class HeartRateActivity : AppCompatActivity() {
             override fun run() {
                 checkZone()
             }
-        }, 10000, 10000)
+        }, 15000, 15000)
 
         stopButton.setOnClickListener {
             checkZoneTimer.cancel()
@@ -519,7 +525,8 @@ open class HeartRateActivity : AppCompatActivity() {
                     if (distance >= MIN_DISTANCE_THRESHOLD && inZone && isRunning) {
                         totalDistance += distance
                         val distanceInKilometers = totalDistance / 1000.0 // Convert to kilometers
-                        distanceTextView.text = String.format("%.2f km \n DISTANCE COVERED", distanceInKilometers)
+                        distanceTextView.text =
+                            String.format("%.2f km \n DISTANCE COVERED", distanceInKilometers)
                     }
                 }
                 lastLocation = location
@@ -533,7 +540,7 @@ open class HeartRateActivity : AppCompatActivity() {
     }
 
 
-    fun stopMission () {
+    fun stopMission() {
         if (!missionStoped) {
             val distanceInKilometers = totalDistance / 1000.0 // Convert to kilometers
             val decimalFormat = DecimalFormat("#.###")
@@ -581,13 +588,13 @@ open class HeartRateActivity : AppCompatActivity() {
                     }
             }
             finish()
-            missionStoped=true
+            missionStoped = true
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
     }
 
-    fun setCompletionListenerAudio () {
+    fun setCompletionListenerAudio() {
         setCompletionListener(warningSlowDown)
         setCompletionListener(warningSpeedUp)
         setCompletionListener(zone1Audio)
@@ -600,23 +607,23 @@ open class HeartRateActivity : AppCompatActivity() {
         setCompletionListener(pausedAudio)
     }
 
-    fun setCompletionListener (mediaPlayer: MediaPlayer){
+    fun setCompletionListener(mediaPlayer: MediaPlayer) {
         // Set a completion listener to detect when playback is finished
         mediaPlayer.setOnCompletionListener { mp ->
             // This callback will be called when the MediaPlayer has finished playing
             // You can perform actions here, such as updating UI or handling the completion event
             // You can also release the MediaPlayer if you're done with it
             mp.stop()
-            if (mediaPlayer==pausedAudio) {
-                pausedAudio= MediaPlayer()
+            if (mediaPlayer == pausedAudio) {
+                pausedAudio = MediaPlayer()
             }
-            if (mediaPlayer==endAudio){
+            if (mediaPlayer == endAudio) {
                 stopMission()
             }
         }
     }
 
-    fun checkAudio () {
+    fun checkAudio() {
         if (!isRunning) { //pause
             if (warningSlowDown.isPlaying) {
                 warningSlowDown.pause()
@@ -626,38 +633,37 @@ open class HeartRateActivity : AppCompatActivity() {
                 pausedAudio = warningSpeedUp
             } else if (zone1Audio.isPlaying) {
                 zone1Audio.pause()
-                pausedAudio=zone1Audio
+                pausedAudio = zone1Audio
             } else if (zone2Audio.isPlaying) {
                 zone2Audio.pause()
-                pausedAudio=zone2Audio
+                pausedAudio = zone2Audio
             } else if (zone3Part1Audio.isPlaying) {
                 zone3Part1Audio.pause()
-                pausedAudio=zone3Part1Audio
+                pausedAudio = zone3Part1Audio
             } else if (zone4Part1Audio.isPlaying) {
                 zone4Part1Audio.pause()
-                pausedAudio=zone4Part1Audio
+                pausedAudio = zone4Part1Audio
             } else if (zone3Part2Audio.isPlaying) {
                 zone3Part2Audio.pause()
-                pausedAudio=zone3Part2Audio
+                pausedAudio = zone3Part2Audio
             } else if (zone4Part2Audio.isPlaying) {
                 zone4Part2Audio.pause()
-                pausedAudio=zone4Part2Audio
-            }
-            else if (endAudio.isPlaying) {
+                pausedAudio = zone4Part2Audio
+            } else if (endAudio.isPlaying) {
                 endAudio.pause()
-                pausedAudio=endAudio
+                pausedAudio = endAudio
             }
         } else { //continue
-                pausedAudio.start()
+            pausedAudio.start()
         }
     }
 
-     open fun startTimer() {
+    open fun startTimer() {
         isRunning = true
         handler.postDelayed(timerRunnable, 1000)
     }
 
-     open fun stopTimer() {
+    open fun stopTimer() {
         isRunning = false
         handler.removeCallbacks(timerRunnable)
     }
@@ -695,23 +701,38 @@ open class HeartRateActivity : AppCompatActivity() {
             pausedAudio.release()
         }
     }
+
     private val timerRunnable = Runnable { }
 
 
-
-    private fun requestPermissionForPolarSensor () {
+    private fun requestPermissionForPolarSensor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                requestPermissions(arrayOf(Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT), PERMISSION_REQUEST_CODE)
+                requestPermissions(
+                    arrayOf(
+                        Manifest.permission.BLUETOOTH_SCAN,
+                        Manifest.permission.BLUETOOTH_CONNECT
+                    ), PERMISSION_REQUEST_CODE
+                )
             } else {
-                requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
+                requestPermissions(
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    PERMISSION_REQUEST_CODE
+                )
             }
         } else {
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_REQUEST_CODE)
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                PERMISSION_REQUEST_CODE
+            )
         }
 
         // callback is invoked after granted or denied permissions
-        fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<String>,
+            grantResults: IntArray
+        ) {
         }
 
     }
@@ -723,12 +744,11 @@ open class HeartRateActivity : AppCompatActivity() {
     }
 
 
-    private fun enableFeaturesToPolarSensor () {
+    private fun enableFeaturesToPolarSensor() {
         // NOTICE in this code snippet all the features are enabled.
         // You may enable only the features you are interested
 
         api.setApiCallback(object : PolarBleApiCallback() {
-
 
 
             override fun blePowerStateChanged(powered: Boolean) {
@@ -747,12 +767,16 @@ open class HeartRateActivity : AppCompatActivity() {
                 Log.d("MyApp", "DISCONNECTED: ${polarDeviceInfo.deviceId}")
             }
 
-            override fun bleSdkFeatureReady(identifier: String, feature: PolarBleApi.PolarBleSdkFeature) {
+            override fun bleSdkFeatureReady(
+                identifier: String,
+                feature: PolarBleApi.PolarBleSdkFeature
+            ) {
                 Log.d(TAG, "Polar BLE SDK feature $feature is ready")
                 when (feature) {
                     PolarBleApi.PolarBleSdkFeature.FEATURE_POLAR_ONLINE_STREAMING -> {
                         streamHR()
                     }
+
                     else -> {}
                 }
             }
@@ -765,7 +789,10 @@ open class HeartRateActivity : AppCompatActivity() {
                 Log.d("MyApp", "BATTERY LEVEL: $level")
             }
 
-            override fun hrNotificationReceived(identifier: String, data: PolarHrData.PolarHrSample) {
+            override fun hrNotificationReceived(
+                identifier: String,
+                data: PolarHrData.PolarHrSample
+            ) {
                 //deprecated
             }
 
@@ -773,7 +800,10 @@ open class HeartRateActivity : AppCompatActivity() {
                 //deprecated
             }
 
-            override fun streamingFeaturesReady(identifier: String, features: Set<PolarBleApi.PolarDeviceDataType>) {
+            override fun streamingFeaturesReady(
+                identifier: String,
+                features: Set<PolarBleApi.PolarDeviceDataType>
+            ) {
                 //deprecated
             }
 
@@ -784,23 +814,22 @@ open class HeartRateActivity : AppCompatActivity() {
     }
 
 
-
-    private fun connectToPolarSensor () {
+    private fun connectToPolarSensor() {
         try {
 
             api.connectToDevice("AD4A0229")
         } catch (a: PolarInvalidArgument) {
-            Toast.makeText(this,"connectToPolarSensor failed !",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "connectToPolarSensor failed !", Toast.LENGTH_SHORT).show()
             a.printStackTrace()
         }
     }
 
-    private fun connectToNearbyPolarSensor () {
-            api.autoConnectToDevice(-50, null, null).subscribe()
+    private fun connectToNearbyPolarSensor() {
+        api.autoConnectToDevice(-50, null, null).subscribe()
     }
 
-    private fun searchForPolarSensor () {
-            api.searchForDevice()
+    private fun searchForPolarSensor() {
+        api.searchForDevice()
     }
 
     fun streamHR() {
@@ -819,7 +848,7 @@ open class HeartRateActivity : AppCompatActivity() {
                                 //Toast.makeText(this,"rrText : ${rrText}",Toast.LENGTH_SHORT).show()
                             }
 
-                            if(isRunning && inZone) {
+                            if (isRunning && inZone) {
                                 val heartRateText = findViewById<TextView>(R.id.heartRateTextView)
                                 heartRateText.text = "${sample.hr} bpm \n HEART RATE"
                                 currentHr = sample.hr
@@ -859,160 +888,170 @@ open class HeartRateActivity : AppCompatActivity() {
     }
 
 
+    private fun processChart() {
+        heartRateChart = findViewById(R.id.heartRateChart)
 
-   private fun processChart() {
-       heartRateChart = findViewById(R.id.heartRateChart)
+        heartRateChart.getDescription().setEnabled(false)
+        heartRateChart.setDrawGridBackground(true)
+        heartRateChart.setPinchZoom(true)
+        heartRateChart.setDrawBarShadow(true)
+        heartRateChart.setDrawValueAboveBar(false)
+        heartRateChart.setHighlightFullBarEnabled(false)
+        heartRateChart.getAxisLeft().setEnabled(false)
+        heartRateChart.getAxisRight().setEnabled(false)
+        heartRateChart.getXAxis().setEnabled(false)
+        //Get rid of negative Y Axis
+        heartRateChart.axisLeft.axisMinimum = 0f
 
-       heartRateChart.getDescription().setEnabled(false)
-       heartRateChart.setDrawGridBackground(true)
-       heartRateChart.setPinchZoom(true)
-       heartRateChart.setDrawBarShadow(true)
-       heartRateChart.setDrawValueAboveBar(false)
-       heartRateChart.setHighlightFullBarEnabled(false)
-       heartRateChart.getAxisLeft().setEnabled(false)
-       heartRateChart.getAxisRight().setEnabled(false)
-       heartRateChart.getXAxis().setEnabled(false)
-       //Get rid of negative Y Axis
-       heartRateChart.axisLeft.axisMinimum = 0f
-
-       // Initialize the entries list with default values for each bar
-       for (i in 0 until 5) { // Assuming you have 5 bars
-           entries.add(BarEntry(i.toFloat(), 0f)) // You can set the initial value as needed
-       }
-
-
-       dataSet = BarDataSet(entries, "Heart Rate")
-       dataSet.setDrawValues(false)
-
-       // Set custom colors for each bar
-       val colors = intArrayOf(
-           Color.GRAY,  // First bar (gray)
-           Color.BLUE,  // Second bar (blue)
-           Color.GREEN,  // Third bar (green)
-           Color.YELLOW,  // Fourth bar (yellow)
-           Color.RED // Fifth bar (red)
-
-       )
-       dataSet.setColors(*colors)
+        // Initialize the entries list with default values for each bar
+        for (i in 0 until 5) { // Assuming you have 5 bars
+            entries.add(BarEntry(i.toFloat(), 0f)) // You can set the initial value as needed
+        }
 
 
-       val barData = BarData(dataSet)
-       barData.setBarWidth(0.9f)
-       heartRateChart.data = barData
+        dataSet = BarDataSet(entries, "Heart Rate")
+        dataSet.setDrawValues(false)
+
+        // Set custom colors for each bar
+        val colors = intArrayOf(
+            Color.GRAY,  // First bar (gray)
+            Color.BLUE,  // Second bar (blue)
+            Color.GREEN,  // Third bar (green)
+            Color.YELLOW,  // Fourth bar (yellow)
+            Color.RED // Fifth bar (red)
+
+        )
+        dataSet.setColors(*colors)
 
 
-       // Set a label for the X-axis
-       val xAxis = heartRateChart.xAxis
-       xAxis.valueFormatter = IndexAxisValueFormatter(arrayOf("Label1", "Label2", "Label3", "Label4", "Label5")) // Replace with your labels
-
-       // Set a label for the Y-axis
-       val yAxis = heartRateChart.axisLeft
-       yAxis.axisMinimum = 0f
-       yAxis.axisMaximum = 700f // Adjust maximum value as needed
-       yAxis.setDrawLabels(true) // Ensure labels are drawn on the Y-axis
-       yAxis.valueFormatter = object : ValueFormatter() {
-           override fun getFormattedValue(value: Float): String {
-               return "${value.toInt()} %" // Customize formatting as needed
-           }
-       }
+        val barData = BarData(dataSet)
+        barData.setBarWidth(0.9f)
+        heartRateChart.data = barData
 
 
-       // Start a timer to update the chart every second
-       val timer = Timer()
-       timer.scheduleAtFixedRate(object : TimerTask() {
-           override fun run() {
-               // Add a new data point to the chart
-               runOnUiThread {
-                   if(isRunning && inZone) {
-                       val heartRateIntensity = if (currentHr >= 0) {
-                           (currentHr.toFloat() / maxHR.toFloat()) * 100
-                       } else {
-                           0.0
-                       }
+        // Set a label for the X-axis
+        val xAxis = heartRateChart.xAxis
+        xAxis.valueFormatter = IndexAxisValueFormatter(
+            arrayOf(
+                "Label1",
+                "Label2",
+                "Label3",
+                "Label4",
+                "Label5"
+            )
+        ) // Replace with your labels
 
-                       val barIndex: Float
-                       val newBarEntry: BarEntry
-                       if (heartRateIntensity.toFloat() in 50.0..60.0) {
-                           // Update the first bar's value (index 0)
-                           barData.getDataSetByIndex(0).apply {
-                               barIndex = 0F
-                               val currentBarValue = entries[barIndex.toInt()].y
-                               val updatedBarValue = currentBarValue + 1
-                               newBarEntry = BarEntry(barIndex, updatedBarValue)
-                               entries[barIndex.toInt()] = newBarEntry
-                           }
-                       } else if (heartRateIntensity.toFloat() in 60.0..70.0) {
-                           barData.getDataSetByIndex(1).apply {
-                               barIndex = 1F
-                               val currentBarValue = entries[barIndex.toInt()].y
-                               val updatedBarValue = currentBarValue + 1
-                               newBarEntry = BarEntry(barIndex, updatedBarValue)
-                               entries[barIndex.toInt()] = newBarEntry
-                           }
-                       } else  if (heartRateIntensity.toFloat() in 70.0..80.0) {
-                           barData.getDataSetByIndex(2).apply {
-                               barIndex = 2F
-                               val currentBarValue = entries[barIndex.toInt()].y
-                               val updatedBarValue = currentBarValue + 1
-                               newBarEntry = BarEntry(barIndex, updatedBarValue)
-                               entries[barIndex.toInt()] = newBarEntry
-                           }
-                       } else  if (heartRateIntensity.toFloat() in 80.0..90.0) {
-                           barData.getDataSetByIndex(3).apply {
-                               barIndex = 3F
-                               val currentBarValue = entries[barIndex.toInt()].y
-                               val updatedBarValue = currentBarValue + 1
-                               newBarEntry = BarEntry(barIndex, updatedBarValue)
-                               entries[barIndex.toInt()] = newBarEntry
-                           }
-                       } else  if (heartRateIntensity.toFloat() in 90.0..100.0) {
-                           barData.getDataSetByIndex(4).apply {
-                               barIndex = 4F
-                               val currentBarValue = entries[barIndex.toInt()].y
-                               val updatedBarValue = currentBarValue + 1
-                               newBarEntry = BarEntry(barIndex, updatedBarValue)
-                               entries[barIndex.toInt()] = newBarEntry
-                           }
-                       }
+        // Set a label for the Y-axis
+        val yAxis = heartRateChart.axisLeft
+        yAxis.axisMinimum = 0f
+        yAxis.axisMaximum = 700f // Adjust maximum value as needed
+        yAxis.setDrawLabels(true) // Ensure labels are drawn on the Y-axis
+        yAxis.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return "${value.toInt()} %" // Customize formatting as needed
+            }
+        }
 
-                       // Get heart rate data from your source
-                       dataSet.notifyDataSetChanged()
-                       heartRateChart.notifyDataSetChanged()
-                       heartRateChart.invalidate() // Refresh the chart
-                   }
 
-               }
-           }
-       }, 0, 1000) // Update every second
-   }
+        // Start a timer to update the chart every second
+        val timer = Timer()
+        timer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                // Add a new data point to the chart
+                runOnUiThread {
+                    if (isRunning && inZone) {
+                        val heartRateIntensity = if (currentHr >= 0) {
+                            (currentHr.toFloat() / maxHR.toFloat()) * 100
+                        } else {
+                            0.0
+                        }
 
-    fun blinkSections (sectionNumber : Int) {
-        val section0 : View = findViewById(R.id.section0)
-        val section1 : View = findViewById(R.id.section1)
-        val section2 : View = findViewById(R.id.section2)
-        val section3 : View = findViewById(R.id.section3)
-        val section4 : View = findViewById(R.id.section4)
+                        val barIndex: Float
+                        val newBarEntry: BarEntry
+                        if (heartRateIntensity.toFloat() in 50.0..60.0) {
+                            // Update the first bar's value (index 0)
+                            barData.getDataSetByIndex(0).apply {
+                                barIndex = 0F
+                                val currentBarValue = entries[barIndex.toInt()].y
+                                val updatedBarValue = currentBarValue + 1
+                                newBarEntry = BarEntry(barIndex, updatedBarValue)
+                                entries[barIndex.toInt()] = newBarEntry
+                            }
+                        } else if (heartRateIntensity.toFloat() in 60.0..70.0) {
+                            barData.getDataSetByIndex(1).apply {
+                                barIndex = 1F
+                                val currentBarValue = entries[barIndex.toInt()].y
+                                val updatedBarValue = currentBarValue + 1
+                                newBarEntry = BarEntry(barIndex, updatedBarValue)
+                                entries[barIndex.toInt()] = newBarEntry
+                            }
+                        } else if (heartRateIntensity.toFloat() in 70.0..80.0) {
+                            barData.getDataSetByIndex(2).apply {
+                                barIndex = 2F
+                                val currentBarValue = entries[barIndex.toInt()].y
+                                val updatedBarValue = currentBarValue + 1
+                                newBarEntry = BarEntry(barIndex, updatedBarValue)
+                                entries[barIndex.toInt()] = newBarEntry
+                            }
+                        } else if (heartRateIntensity.toFloat() in 80.0..90.0) {
+                            barData.getDataSetByIndex(3).apply {
+                                barIndex = 3F
+                                val currentBarValue = entries[barIndex.toInt()].y
+                                val updatedBarValue = currentBarValue + 1
+                                newBarEntry = BarEntry(barIndex, updatedBarValue)
+                                entries[barIndex.toInt()] = newBarEntry
+                            }
+                        } else if (heartRateIntensity.toFloat() in 90.0..100.0) {
+                            barData.getDataSetByIndex(4).apply {
+                                barIndex = 4F
+                                val currentBarValue = entries[barIndex.toInt()].y
+                                val updatedBarValue = currentBarValue + 1
+                                newBarEntry = BarEntry(barIndex, updatedBarValue)
+                                entries[barIndex.toInt()] = newBarEntry
+                            }
+                        }
+
+                        // Get heart rate data from your source
+                        dataSet.notifyDataSetChanged()
+                        heartRateChart.notifyDataSetChanged()
+                        heartRateChart.invalidate() // Refresh the chart
+                    }
+
+                }
+            }
+        }, 0, 1000) // Update every second
+    }
+
+    fun blinkSections(sectionNumber: Int) {
+        val section0: View = findViewById(R.id.section0)
+        val section1: View = findViewById(R.id.section1)
+        val section2: View = findViewById(R.id.section2)
+        val section3: View = findViewById(R.id.section3)
+        val section4: View = findViewById(R.id.section4)
         // Stop blinking for the previous section
         if (sectionNumber > 0) {
-            stopBlinking(when (sectionNumber - 1) {
-                0 -> section0
-                1 -> section1
-                2 -> section2
-                3 -> section3
-                else -> section4
-            })
+            stopBlinking(
+                when (sectionNumber - 1) {
+                    0 -> section0
+                    1 -> section1
+                    2 -> section2
+                    3 -> section3
+                    else -> section4
+                }
+            )
         }
-        when (sectionNumber){
-           0 -> {
-               //Shadowed sections
-               section1.setBackgroundColor(Color.parseColor("#30889900"))
-               section2.setBackgroundColor(Color.parseColor("#30889900"))
-               section3.setBackgroundColor(Color.parseColor("#30889900"))
-               section4.setBackgroundColor(Color.parseColor("#30889900"))
+        when (sectionNumber) {
+            0 -> {
+                //Shadowed sections
+                section1.setBackgroundColor(Color.parseColor("#30889900"))
+                section2.setBackgroundColor(Color.parseColor("#30889900"))
+                section3.setBackgroundColor(Color.parseColor("#30889900"))
+                section4.setBackgroundColor(Color.parseColor("#30889900"))
 
 
-               blinkSection(section0)
-           }
+                blinkSection(section0)
+            }
+
             1 -> {
                 //Light sections
                 section0.setBackgroundColor(Color.parseColor("#80FFFF00"))
@@ -1023,6 +1062,7 @@ open class HeartRateActivity : AppCompatActivity() {
 
                 blinkSection(section1)
             }
+
             2 -> {
                 //Light sections
                 section0.setBackgroundColor(Color.parseColor("#80FFFF00"))
@@ -1036,6 +1076,7 @@ open class HeartRateActivity : AppCompatActivity() {
 
                 blinkSection(section2)
             }
+
             3 -> {
                 //Light sections
                 section0.setBackgroundColor(Color.parseColor("#80FFFF00"))
@@ -1049,6 +1090,7 @@ open class HeartRateActivity : AppCompatActivity() {
 
                 blinkSection(section3)
             }
+
             4 -> {
                 //Light sections
                 section0.setBackgroundColor(Color.parseColor("#80FFFF00"))
@@ -1100,7 +1142,7 @@ open class HeartRateActivity : AppCompatActivity() {
     }
 
 
-    fun checkZone () {
+    fun checkZone() {
 
         val heartRateIntensity = if (currentHr >= 0) {
             (currentHr.toFloat() / maxHR.toFloat()) * 100
@@ -1120,21 +1162,22 @@ open class HeartRateActivity : AppCompatActivity() {
                     inZone = true
                     startTimer()
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
                     }
                 } else if (heartRateIntensity.toFloat() !in 50.0..60.0 && inZone) {
                     inZone = false
                     stopTimer()
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
                     }
                     Log.d("checkZone", "playWarning")
                     playWarning(heartRateIntensity.toInt())
                 } else if (heartRateIntensity.toFloat() !in 50.0..60.0) {
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
                     }
                     Log.d("checkZone", "playWarning")
+                    stopTimer()
                     playWarning(heartRateIntensity.toInt())
                 }
             }
@@ -1144,19 +1187,20 @@ open class HeartRateActivity : AppCompatActivity() {
                     inZone = true
                     startTimer()
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
                     }
                 } else if (heartRateIntensity.toFloat() !in 60.0..70.0 && inZone) {
                     inZone = false
                     stopTimer()
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
                     }
                     playWarning(heartRateIntensity.toInt())
                 } else if (heartRateIntensity.toFloat() !in 60.0..70.0) {
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
                     }
+                    stopTimer()
                     playWarning(heartRateIntensity.toInt())
                 }
             }
@@ -1166,19 +1210,20 @@ open class HeartRateActivity : AppCompatActivity() {
                     inZone = true
                     startTimer()
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
                     }
                 } else if (heartRateIntensity.toFloat() !in 70.0..80.0 && inZone) {
                     inZone = false
                     stopTimer()
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
                     }
                     playWarning(heartRateIntensity.toInt())
                 } else if (heartRateIntensity.toFloat() !in 70.0..80.0) {
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
                     }
+                    stopTimer()
                     playWarning(heartRateIntensity.toInt())
                 }
             }
@@ -1188,137 +1233,143 @@ open class HeartRateActivity : AppCompatActivity() {
                     inZone = true
                     startTimer()
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
                     }
                 } else if (heartRateIntensity.toFloat() !in 80.0..90.0 && inZone) {
                     inZone = false
                     stopTimer()
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
                     }
                     playWarning(heartRateIntensity.toInt())
                 } else if (heartRateIntensity.toFloat() !in 80.0..90.0) {
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
                     }
+                    stopTimer()
                     playWarning(heartRateIntensity.toInt())
                 }
             }
         }
     }
 
-    open fun playWarning (hrIntensity: Int) {
-
+    open fun playWarning(hrIntensity: Int) {
+        if (startButton.isChecked) {
             if (zoneNumber == 1) {
                 if (hrIntensity > 60) {
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
                     }
-                    warningSlowDown.start()
+                    playAudio(warningSlowDown, 10)
                 } else if (hrIntensity < 50) {
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
                     }
-                    playAudio(warningSpeedUp, R.raw.narratorspeedup)
+                    playAudio(warningSpeedUp, 11)
                 }
             }
             if (zoneNumber == 2) {
                 if (hrIntensity > 70) {
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
                     }
-                    warningSlowDown.start()
+                    playAudio(warningSlowDown, 10)
                 } else if (hrIntensity < 60) {
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
                     }
-                    warningSpeedUp.start()
+                    playAudio(warningSpeedUp, 11)
                 }
             }
             if (zoneNumber == 3) {
                 if (hrIntensity > 80) {
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
                     }
-                    warningSlowDown.start()
+                    playAudio(warningSlowDown, 10)
                 } else if (hrIntensity < 70) {
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
                     }
-                    warningSpeedUp.start()
+                    playAudio(warningSpeedUp, 11)
                 }
             }
 
             if (zoneNumber == 4) {
                 if (hrIntensity > 90) {
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
                     }
-                    warningSlowDown.start()
+                    playAudio(warningSlowDown, 10)
                 } else if (hrIntensity < 80) {
                     Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Playing warning !", Toast.LENGTH_SHORT).show()
                     }
-                    warningSpeedUp.start()
+                    playAudio(warningSpeedUp, 11)
                 }
             }
-
         }
 
-    open fun playAudio (mediaPlayer : MediaPlayer, resId : Int) {
     }
 
-    fun updateZone (minutes : Int, secs : Int) {
+    open fun playAudio(mediaPlayer: MediaPlayer, resId: Int) {}
+
+    fun updateZone(minutes: Int, secs: Int) {
         val targetZoneText = findViewById<TextView>(R.id.targetZoneTextView)
 
         if (minutes == zone2StartMinutes && secs == zone2StartSeconds) {
             zoneNumber = 2
             targetZoneText.text = "CURRENT TARGET ZONE: 2 \n 60% < INTENSITY < 70%  "
             blinkSections(1)
-            zone2Audio.start()
+            playAudio(zone2Audio, 2)
         }
         if (minutes == zone3Part1StartMinutes && secs == zone3Part1StartSeconds) {
             zoneNumber = 3
             targetZoneText.text = "CURRENT TARGET ZONE: 3 \n 70% < INTENSITY < 80%  "
             blinkSections(2)
-            zone3Part1Audio.start()
+            playAudio(zone3Part1Audio, 31)
         }
 
         if (minutes == zone4Part1StartMinutes && secs == zone4Part1StartSeconds) {
             zoneNumber = 4
             targetZoneText.text = "CURRENT TARGET ZONE: 4 \n 80% < INTENSITY < 90%  "
             blinkSections(3)
-            zone4Part1Audio.start()
+            playAudio(zone4Part1Audio, 41)
         }
 
         if (minutes == zone3Part2StartMinutes && secs == zone3Part2StartSeconds) {
             zoneNumber = 3
             targetZoneText.text = "CURRENT TARGET ZONE: 3 \n 70% < INTENSITY < 80%  "
             blinkSections(2)
-            zone3Part2Audio.start()
+            playAudio(zone3Part2Audio, 32)
         }
 
         if (minutes == zone4Part2StartMinutes && secs == zone4Part2StartSeconds) {
             zoneNumber = 4
             targetZoneText.text = "CURRENT TARGET ZONE: 4 \n 80% < INTENSITY < 90%  "
             blinkSections(3)
-            zone4Part2Audio.start()
+            playAudio(zone4Part2Audio, 42)
         }
-        if (minutes == 20 ) {
-            endAudio.start()
+        if (minutes == 20) {
+            playAudio(endAudio, 5)
         }
 
     }
 
-     fun otherMissionAudiosAreOn () : Boolean {
-         if(zone1Audio.isPlaying || zone2Audio.isPlaying || zone3Part1Audio.isPlaying ||
+    fun otherMissionAudiosAreOn(): Boolean {
+        if (zone1Audio.isPlaying || zone2Audio.isPlaying || zone3Part1Audio.isPlaying ||
 
-         zone4Part1Audio.isPlaying || zone3Part2Audio.isPlaying || zone4Part2Audio.isPlaying  || endAudio.isPlaying || pausedAudio.isPlaying || warningSlowDown.isPlaying || warningSpeedUp.isPlaying) {
-             Handler(Looper.getMainLooper()).post {
-                 Toast.makeText(this, "Can not play warning! Other audio is running!", Toast.LENGTH_SHORT).show()
-             }
-             return true
-         }
+            zone4Part1Audio.isPlaying || zone3Part2Audio.isPlaying || zone4Part2Audio.isPlaying || endAudio.isPlaying || pausedAudio.isPlaying || warningSlowDown.isPlaying || warningSpeedUp.isPlaying
+        ) {
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(
+                    this,
+                    "Can not play warning! Other audio is running!",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            return true
+        }
         return false
     }
 
@@ -1389,9 +1440,7 @@ open class HeartRateActivity : AppCompatActivity() {
     }
 
 
-
-
-    fun calculateZoneTimeSeekBar(percentageZone:Int) : String {
+    fun calculateZoneTimeSeekBar(percentageZone: Int): String {
         // Total session time in minutes
         val totalSessionTime = 20
 

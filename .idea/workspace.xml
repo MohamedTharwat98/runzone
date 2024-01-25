@@ -16,17 +16,15 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="16cb462d-a6fb-449b-9297-e38fda910a73" name="Changes" comment="Trying to fix audio-problems">
-      <change afterPath="$PROJECT_DIR$/.idea/appInsightsSettings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/migrations.xml" afterDir="false" />
+    <list default="true" id="16cb462d-a6fb-449b-9297-e38fda910a73" name="Changes" comment="playAudio()">
       <change beforePath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.0/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/DirectFeedbackMission.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/DirectFeedbackMission.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/EscapeFromDystopia.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/EscapeFromDystopia.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/HeartRateActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/HeartRateActivity.kt" afterDir="false" />
     </list>
@@ -713,7 +711,7 @@
       <option name="project" value="LOCAL" />
       <updated>1698785041868</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -738,7 +736,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="updateZone" />
     <MESSAGE value="playing Audio in Zones" />
     <MESSAGE value="Let the user customize the zones time" />
     <MESSAGE value="Dialogbox updated" />
@@ -763,7 +760,8 @@
     <MESSAGE value="Audio changed for &quot;Escape from dystopia&quot;" />
     <MESSAGE value="Audio changed for &quot;Run Zone&quot;" />
     <MESSAGE value="Trying to fix audio-problems" />
-    <option name="LAST_COMMIT_MESSAGE" value="Trying to fix audio-problems" />
+    <MESSAGE value="playAudio()" />
+    <option name="LAST_COMMIT_MESSAGE" value="playAudio()" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
