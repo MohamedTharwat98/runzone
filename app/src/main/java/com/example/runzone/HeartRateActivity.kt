@@ -461,7 +461,7 @@ open class HeartRateActivity : AppCompatActivity() {
             override fun run() {
                 checkZone()
             }
-        }, 15000, 15000)
+        }, 10000, 10000)
 
         stopButton.setOnClickListener {
             checkZoneTimer.cancel()
