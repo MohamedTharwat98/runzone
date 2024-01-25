@@ -14,7 +14,7 @@
         android:layout_height="94dp"
         android:layout_gravity="center"
         android:text="@string/log_out"
-        android:textColor="@color/yellow" />
+        android:textColor="@color/white" />
 
 
 </FrameLayout>

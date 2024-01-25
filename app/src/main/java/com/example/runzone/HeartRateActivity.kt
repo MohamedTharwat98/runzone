@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -49,6 +50,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import java.text.DecimalFormat
 import java.util.Date
+import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
@@ -56,7 +58,7 @@ import kotlin.math.*
 
 const val TAG = "HeartRateActivity"
 
-open class HeartRateActivity : AppCompatActivity() {
+open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     lateinit var api: PolarBleApi
 
@@ -66,6 +68,7 @@ open class HeartRateActivity : AppCompatActivity() {
     var seconds: Int = 0
     var isRunning: Boolean = false
     lateinit var handler: Handler
+    private lateinit var textToSpeech: TextToSpeech
 
 
     val timerTextView: TextView by lazy {
@@ -423,6 +426,8 @@ open class HeartRateActivity : AppCompatActivity() {
 
         startButton.isChecked = true
 
+        textToSpeech = TextToSpeech(this, this)
+
         setCompletionListenerAudio()
 
         startTimer()
@@ -463,7 +468,18 @@ open class HeartRateActivity : AppCompatActivity() {
             }
         }, 10000, 10000)
 
+        //check every 30 seconds and gives the user feedback
+        val percentageFeedbackTimer = Timer()
+        percentageFeedbackTimer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                speak()
+            }
+        }, 30000, 30000)
+
+
+
         stopButton.setOnClickListener {
+            percentageFeedbackTimer.cancel()
             checkZoneTimer.cancel()
             stopMission()
         }
@@ -526,7 +542,7 @@ open class HeartRateActivity : AppCompatActivity() {
                         totalDistance += distance
                         val distanceInKilometers = totalDistance / 1000.0 // Convert to kilometers
                         distanceTextView.text =
-                            String.format("%.2f km \n DISTANCE COVERED", distanceInKilometers)
+                            String.format("%.2f km \n DISTANCE", distanceInKilometers)
                     }
                 }
                 lastLocation = location
@@ -739,8 +755,12 @@ open class HeartRateActivity : AppCompatActivity() {
 
 
     public override fun onDestroy() {
-        super.onDestroy()
         api.shutDown()
+        if (textToSpeech.isSpeaking) {
+            textToSpeech.stop()
+        }
+        textToSpeech.shutdown()
+        super.onDestroy()
     }
 
 
@@ -1359,7 +1379,7 @@ open class HeartRateActivity : AppCompatActivity() {
     fun otherMissionAudiosAreOn(): Boolean {
         if (zone1Audio.isPlaying || zone2Audio.isPlaying || zone3Part1Audio.isPlaying ||
 
-            zone4Part1Audio.isPlaying || zone3Part2Audio.isPlaying || zone4Part2Audio.isPlaying || endAudio.isPlaying || pausedAudio.isPlaying || warningSlowDown.isPlaying || warningSpeedUp.isPlaying
+            zone4Part1Audio.isPlaying || zone3Part2Audio.isPlaying || zone4Part2Audio.isPlaying || endAudio.isPlaying || pausedAudio.isPlaying || warningSlowDown.isPlaying || warningSpeedUp.isPlaying || textToSpeech.isSpeaking
         ) {
             Handler(Looper.getMainLooper()).post {
                 Toast.makeText(
@@ -1456,6 +1476,47 @@ open class HeartRateActivity : AppCompatActivity() {
             return "$timeZoneMinutes Min, $timeZoneSeconds Sec"
         }
 
+    }
+
+
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            val result = textToSpeech.setLanguage(Locale.US)
+
+            if (result == TextToSpeech.LANG_MISSING_DATA ||
+                result == TextToSpeech.LANG_NOT_SUPPORTED
+            ) {
+                // Handle the language not supported or missing data
+                Log.e("TTS", "Language is not supported")
+            }
+        } else {
+            // Handle TTS initialization failure
+            Log.e("TTS", "Initialization failed")
+        }
+    }
+
+    private fun speak() {
+        if (!otherMissionAudiosAreOn() && isRunning && inZone) {
+            val timerText = timerTextView.text.toString()
+            //extract only the "00:00:00" part from the given string
+            val time = timerText.substring(1, 9)
+            //convert the time string to time and calculate the percentage of that time in the total time which is 20 minutes
+            val timeInSeconds = timeToSeconds(time)
+            val percentage = (timeInSeconds / 1200.0) * 100
+            //round the percentage to before the decimal point
+            val percentageRounded = percentage.roundToInt()
+            val text = "You are in zone $zoneNumber. You have completed $percentageRounded percent of the mission. Keep going!"
+            textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)
+        }
+    }
+
+    private fun timeToSeconds(time: String): Int {
+        Log.d("time", time)
+        val timeArray = time.split(":")
+        val hours = timeArray[0].toInt()
+        val minutes = timeArray[1].toInt()
+        val seconds = timeArray[2].toInt()
+        return hours * 3600 + minutes * 60 + seconds
     }
 
 

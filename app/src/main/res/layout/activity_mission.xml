@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".HeartRateActivity"
     android:id="@+id/activity_mission"
-    android:background="@color/white"
+    android:background="@color/black"
     >
 
     <TextView
@@ -20,7 +20,7 @@
         android:gravity="center"
         android:text="   \n HEART RATE"
         android:background="@color/black"
-        android:textColor="@color/yellow"
+        android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold" />
 
@@ -33,7 +33,7 @@
         android:background="@color/black"
         android:gravity="center"
         android:text="   \n MAX-HR"
-        android:textColor="@color/yellow"
+        android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold" />
 
@@ -52,7 +52,7 @@
         android:background="@color/black"
         android:gravity="center"
         android:text="    \n INTENSITY"
-        android:textColor="@color/yellow"
+        android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold" />
 
@@ -74,7 +74,7 @@
         android:background="@color/black"
         android:gravity="center"
         android:text="CURRENT TARGET ZONE: \n "
-        android:textColor="@color/yellow"
+        android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold" />
 
@@ -87,8 +87,8 @@
         android:layout_toEndOf="@+id/targetZoneTextView"
         android:background="@color/black"
         android:gravity="center"
-        android:text="DISTANCE COVERED "
-        android:textColor="@color/yellow"
+        android:text="DISTANCE"
+        android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold" />
 
@@ -100,7 +100,7 @@
         android:layout_marginTop="0dp"
         android:text=" 00:00:00 \n TIME"
         android:background="@color/black"
-        android:textColor="@color/yellow"
+        android:textColor="@color/white"
         android:gravity="center"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -178,9 +178,9 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:id="@+id/startButton"
-            android:background="@color/black"
+            android:background="@color/purple_200"
             android:checked="false"
-            android:textColor="@color/yellow"
+            android:textColor="@color/white"
             android:textOff="Play"
             android:textOn="Pause"
             android:layout_gravity="start"
@@ -192,9 +192,9 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:id="@+id/stopButton"
-            android:background="@color/black"
             android:text="stop"
-            android:textColor="@color/yellow"
+            android:background="@color/purple_200"
+            android:textColor="@color/white"
             android:layout_gravity="end"
             android:layout_marginStart="4dp"
         />

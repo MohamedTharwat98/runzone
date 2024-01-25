@@ -5,7 +5,47 @@
       <config />
     </shared>
     <layouts>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_mission.xml">
+        <config>
+          <theme>@style/Theme.RunZone</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_sign_up_sign_in.xml">
+        <config>
+          <theme>@style/Theme.RunZone</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/age_box.xml">
+        <config>
+          <theme>@style/Theme.RunZone</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_home.xml">
+        <config>
+          <theme>@style/Theme.RunZone</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_sessions_list.xml">
+        <config>
+          <theme>@style/Theme.RunZone</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_settings.xml">
+        <config>
+          <theme>@style/Theme.RunZone</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/home_list_items.xml">
+        <config>
+          <theme>@style/Theme.RunZone</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/list_item_session.xml">
+        <config>
+          <theme>@style/Theme.RunZone</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/new_age_box.xml">
         <config>
           <theme>@style/Theme.RunZone</theme>
         </config>
@@ -16,8 +56,25 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="16cb462d-a6fb-449b-9297-e38fda910a73" name="Changes" comment="playAudio() for all audios">
+    <list default="true" id="16cb462d-a6fb-449b-9297-e38fda910a73" name="Changes" comment="Warning Timer back to 10 secs">
+      <change beforePath="$PROJECT_DIR$/.gradle/8.0/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.0/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.0/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/checksums/sha1-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.0/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/DirectFeedbackMission.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/DirectFeedbackMission.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/EscapeFromDystopia.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/EscapeFromDystopia.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/HeartRateActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/HeartRateActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_mission.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_mission.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_settings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -702,7 +759,7 @@
       <option name="project" value="LOCAL" />
       <updated>1698785041868</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -727,7 +784,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Let the user customize the zones time" />
     <MESSAGE value="Dialogbox updated" />
     <MESSAGE value="Dialog-box rules adjusted" />
     <MESSAGE value="Default values for the seekbar zones" />
@@ -752,7 +808,8 @@
     <MESSAGE value="Trying to fix audio-problems" />
     <MESSAGE value="playAudio()" />
     <MESSAGE value="playAudio() for all audios" />
-    <option name="LAST_COMMIT_MESSAGE" value="playAudio() for all audios" />
+    <MESSAGE value="Warning Timer back to 10 secs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Warning Timer back to 10 secs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

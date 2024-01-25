@@ -39,7 +39,7 @@ class DirectFeedbackMission : HeartRateActivity (){
             val secs = seconds % 60
 
             timerTextView.text = String.format("%02d:%02d:%02d", hours, minutes, secs)
-            timerTextView.text = " ${timerTextView.text} \n Time"
+            timerTextView.text = " ${timerTextView.text} \n TIME"
             handler.postDelayed(this, 1000)
 
             updateZone(minutes,secs)
