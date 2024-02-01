@@ -22,7 +22,7 @@ class EscapeFromDystopia : HeartRateActivity (){
         zone3Part2Audio = MediaPlayer.create(this, R.raw.escapefromdystopiazone3part2)
         zone4Part2Audio = MediaPlayer.create(this, R.raw.escapefromdystopiazone4part2)
         endAudio = MediaPlayer.create(this, R.raw.escapefromdystopiaend)
-        bgAudio = MediaPlayer.create(this, R.raw.backgroundaudio)
+        bgAudio = MediaPlayer.create(this, R.raw.backgroundaudiosewers)
         pausedAudio= MediaPlayer()
 
     }
@@ -60,7 +60,7 @@ class EscapeFromDystopia : HeartRateActivity (){
     override fun playAudio( mediaPlayer: MediaPlayer, resId: Int) {
         //A map with keys of all the audio files
         val resIdMap = mapOf(
-            0 to R.raw.backgroundaudio,
+            0 to R.raw.backgroundaudiosewers,
             1 to R.raw.escapefromdystopiazone1,
             2 to R.raw.escapefromdystopiazone2,
             31 to R.raw.escapefromdystopiazone3part1,

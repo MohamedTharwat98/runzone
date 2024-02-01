@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -18,7 +17,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ToggleButton
@@ -1192,7 +1190,7 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
             blinkSections(3)
             playAudio(zone4Part2Audio, 42)
         }
-        if (minutes == 20) {
+        if (calculateTimerPercentage() >= 100) {
             playAudio(endAudio, 5)
         }
 
@@ -1319,18 +1317,22 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
 
     private fun speak() {
         if (!otherMissionAudiosAreOn() && isRunning && inZone) {
-            val timerText = timerTextView.text.toString()
-            //extract only the "00:00:00" part from the given string
-            val time = timerText.substring(1, 9)
-            //convert the time string to time and calculate the percentage of that time in the total time which is 20 minutes
-            val timeInSeconds = timeToSeconds(time)
-            val percentage = (timeInSeconds / 1200.0) * 100
-            //round the percentage to before the decimal point
-            val percentageRounded = percentage.roundToInt()
+
             val text =
-                "You are in zone $zoneNumber. You have completed $percentageRounded percent of the mission. Keep going!"
+                "You are in zone $zoneNumber. You have completed ${calculateTimerPercentage()} percent of the mission. Keep going!"
             textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)
         }
+    }
+
+    private fun calculateTimerPercentage(): Int {
+        val timerText = timerTextView.text.toString()
+        //extract only the "00:00:00" part from the given string
+        val time = timerText.substring(1, 9)
+        //convert the time string to time and calculate the percentage of that time in the total time which is 20 minutes
+        val timeInSeconds = timeToSeconds(time)
+        val percentage = (timeInSeconds / 1200.0) * 100
+        //round the percentage to before the decimal point
+        return percentage.roundToInt()
     }
 
     private fun timeToSeconds(time: String): Int {
