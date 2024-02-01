@@ -536,6 +536,10 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
             pausedAudio.stop()
             pausedAudio.release()
         }
+        if (bgAudio.isPlaying) {
+            bgAudio.stop()
+            bgAudio.release()
+        }
     }
 
     private val timerRunnable = Runnable { }
@@ -1190,8 +1194,10 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
             blinkSections(3)
             playAudio(zone4Part2Audio, 42)
         }
-        if (calculateTimerPercentage() >= 100) {
-            playAudio(endAudio, 5)
+        if (calculateTimerPercentage() == 100) {
+            if (!endAudio.isPlaying) {
+                playAudio(endAudio, 5)
+            }
         }
 
     }
