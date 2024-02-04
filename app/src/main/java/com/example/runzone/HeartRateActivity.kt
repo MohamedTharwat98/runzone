@@ -1092,49 +1092,6 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
     }
 
 
-    /*
-    fun calculateZonesTime(
-        percentageZone1: Int,
-        percentageZone2: Int,
-        percentageZone3: Int,
-        percentageZone4: Int
-    ) {
-        // Total session time in seconds
-        val totalSessionTimeSeconds = 20 * 60 // 20 minutes converted to seconds
-
-
-        // Calculate start times for each zone in seconds
-        zone1StartSeconds = 0
-        zone2StartSeconds = (percentageZone1 * totalSessionTimeSeconds / 100)
-        zone3Part1StartSeconds = zone2StartSeconds + (percentageZone2 * totalSessionTimeSeconds / 100)
-        zone4Part1StartSeconds = zone3Part1StartSeconds + ((percentageZone3/2) * totalSessionTimeSeconds / 100)
-        zone3Part2StartSeconds = zone4Part1StartSeconds + ((percentageZone4/2) * totalSessionTimeSeconds / 100)
-        zone4Part2StartSeconds = zone3Part2StartSeconds + ((percentageZone3/2) * totalSessionTimeSeconds / 100)
-
-        // Convert start times to minutes and remaining seconds
-        zone1StartMinutes = zone1StartSeconds / 60
-        val zone1StartRemainingSeconds = zone1StartSeconds % 60
-        zone2StartMinutes = zone2StartSeconds / 60
-        val zone2StartRemainingSeconds = zone2StartSeconds % 60
-        zone3Part1StartMinutes = zone3Part1StartSeconds / 60
-        val zone3StartRemainingSeconds = zone3Part1StartSeconds % 60
-        zone4Part1StartMinutes = zone4Part1StartSeconds / 60
-        val zone4StartRemainingSeconds = zone4Part1StartSeconds % 60
-        zone3Part2StartMinutes = zone3Part2StartSeconds / 60
-        val zone3Part2StartRemainingSeconds = zone3Part2StartSeconds % 60
-        zone4Part2StartMinutes = zone4Part2StartSeconds / 60
-        val zone4Part2StartRemainingSeconds = zone4Part2StartSeconds % 60
-
-        zone1StartSeconds = zone1StartRemainingSeconds
-        zone2StartSeconds = zone2StartRemainingSeconds
-        zone3Part1StartSeconds = zone3StartRemainingSeconds
-        zone4Part1StartSeconds = zone4StartRemainingSeconds
-        zone3Part2StartSeconds = zone3Part2StartRemainingSeconds
-        zone4Part2StartSeconds = zone4Part2StartRemainingSeconds
-
-    } */
-
-
     fun calculateZonesTime(
     ) {
         zone1StartMinutes = 0
@@ -1157,24 +1114,6 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
 
     }
 
-
-    fun calculateZoneTimeSeekBar(percentageZone: Int): String {
-        // Total session time in minutes
-        val totalSessionTime = 20
-
-        // Calculate the time for each zone
-        val timeZoneMinutes = ((percentageZone / 100.0) * totalSessionTime).toInt()
-
-        // Calculate the remaining seconds for each zone
-        val timeZoneSeconds = ((percentageZone / 100.0) * totalSessionTime * 60).toInt() % 60
-
-        if (timeZoneSeconds == 0) {
-            return "$timeZoneMinutes Min"
-        } else {
-            return "$timeZoneMinutes Min, $timeZoneSeconds Sec"
-        }
-
-    }
 
 
     override fun onInit(status: Int) {
