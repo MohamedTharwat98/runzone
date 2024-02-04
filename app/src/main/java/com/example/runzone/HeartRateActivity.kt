@@ -124,9 +124,6 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
     private lateinit var dataSet: BarDataSet
     private val entries = ArrayList<BarEntry>()
 
-    private val blinkHandlers =
-        mutableMapOf<View, Handler>() // Store handlers for blinking animations
-
 
     var zone1StartMinutes: Int = 0
     var zone2StartMinutes: Int = 0
@@ -258,8 +255,6 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
         maxHeartRateText.text = "${maxHR} bpm \nMAX-HR"
 
         processChart()
-
-        blinkSections(0)
 
         val targetZoneText = findViewById<TextView>(R.id.targetZoneTextView)
         targetZoneText.text = "CURRENT TARGET ZONE: 1 \n 50% < INTENSITY < 60% "
@@ -866,124 +861,6 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
         }, 0, 1000) // Update every second
     }
 
-    fun blinkSections(sectionNumber: Int) {
-        val section0: View = findViewById(R.id.section0)
-        val section1: View = findViewById(R.id.section1)
-        val section2: View = findViewById(R.id.section2)
-        val section3: View = findViewById(R.id.section3)
-        val section4: View = findViewById(R.id.section4)
-        // Stop blinking for the previous section
-        if (sectionNumber > 0) {
-            stopBlinking(
-                when (sectionNumber - 1) {
-                    0 -> section0
-                    1 -> section1
-                    2 -> section2
-                    3 -> section3
-                    else -> section4
-                }
-            )
-        }
-        when (sectionNumber) {
-            0 -> {
-                //Shadowed sections
-                section1.setBackgroundColor(Color.parseColor("#30889900"))
-                section2.setBackgroundColor(Color.parseColor("#30889900"))
-                section3.setBackgroundColor(Color.parseColor("#30889900"))
-                section4.setBackgroundColor(Color.parseColor("#30889900"))
-
-
-                blinkSection(section0)
-            }
-
-            1 -> {
-                //Light sections
-                section0.setBackgroundColor(Color.parseColor("#80FFFF00"))
-                //Shadowed sections
-                section2.setBackgroundColor(Color.parseColor("#30889900"))
-                section3.setBackgroundColor(Color.parseColor("#30889900"))
-                section4.setBackgroundColor(Color.parseColor("#30889900"))
-
-                blinkSection(section1)
-            }
-
-            2 -> {
-                //Light sections
-                section0.setBackgroundColor(Color.parseColor("#80FFFF00"))
-                section1.setBackgroundColor(Color.parseColor("#80FFFF00"))
-                //Shadowed sections
-                section3.setBackgroundColor(Color.parseColor("#30889900"))
-                section4.setBackgroundColor(Color.parseColor("#30889900"))
-
-
-
-
-                blinkSection(section2)
-            }
-
-            3 -> {
-                //Light sections
-                section0.setBackgroundColor(Color.parseColor("#80FFFF00"))
-                section1.setBackgroundColor(Color.parseColor("#80FFFF00"))
-                section2.setBackgroundColor(Color.parseColor("#80FFFF00"))
-                //Shadowed sections
-                section4.setBackgroundColor(Color.parseColor("#30889900"))
-
-
-
-
-                blinkSection(section3)
-            }
-
-            4 -> {
-                //Light sections
-                section0.setBackgroundColor(Color.parseColor("#80FFFF00"))
-                section1.setBackgroundColor(Color.parseColor("#80FFFF00"))
-                section2.setBackgroundColor(Color.parseColor("#80FFFF00"))
-                section3.setBackgroundColor(Color.parseColor("#80FFFF00"))
-
-
-                blinkSection(section4)
-            }
-
-        }
-
-
-    }
-
-
-    fun blinkSection(section: View) {
-        if (blinkHandlers.containsKey(section)) {
-            return // Animation is already blinking
-        }
-
-        val handler = Handler()
-        blinkHandlers[section] = handler
-
-        val runnable = object : Runnable {
-            override fun run() {
-                section.animate()
-                    .alpha(0f)
-                    .setDuration(1000)
-                    .withEndAction {
-                        section.alpha = 1f
-                        handler.postDelayed(this, 1000) // Restart the animation
-                    }
-                    .start()
-            }
-        }
-
-        handler.post(runnable)
-    }
-
-    // Call this function to stop the blinking animation for a section
-    fun stopBlinking(section: View) {
-        val handler = blinkHandlers[section]
-        handler?.removeCallbacksAndMessages(null)
-        blinkHandlers.remove(section)
-        section.animate().cancel() // Cancel the ongoing animation
-        section.alpha = 1f // Restore the alpha value
-    }
 
 
     fun checkZone() {
@@ -1164,34 +1041,29 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
         if (minutes == zone2StartMinutes && secs == zone2StartSeconds) {
             zoneNumber = 2
             targetZoneText.text = "CURRENT TARGET ZONE: 2 \n 60% < INTENSITY < 70%  "
-            blinkSections(1)
             playAudio(zone2Audio, 2)
         }
         if (minutes == zone3Part1StartMinutes && secs == zone3Part1StartSeconds) {
             zoneNumber = 3
             targetZoneText.text = "CURRENT TARGET ZONE: 3 \n 70% < INTENSITY < 80%  "
-            blinkSections(2)
             playAudio(zone3Part1Audio, 31)
         }
 
         if (minutes == zone4Part1StartMinutes && secs == zone4Part1StartSeconds) {
             zoneNumber = 4
             targetZoneText.text = "CURRENT TARGET ZONE: 4 \n 80% < INTENSITY < 90%  "
-            blinkSections(3)
             playAudio(zone4Part1Audio, 41)
         }
 
         if (minutes == zone3Part2StartMinutes && secs == zone3Part2StartSeconds) {
             zoneNumber = 3
             targetZoneText.text = "CURRENT TARGET ZONE: 3 \n 70% < INTENSITY < 80%  "
-            blinkSections(2)
             playAudio(zone3Part2Audio, 32)
         }
 
         if (minutes == zone4Part2StartMinutes && secs == zone4Part2StartSeconds) {
             zoneNumber = 4
             targetZoneText.text = "CURRENT TARGET ZONE: 4 \n 80% < INTENSITY < 90%  "
-            blinkSections(3)
             playAudio(zone4Part2Audio, 42)
         }
         if (calculateTimerPercentage() == 100) {
