@@ -95,4 +95,8 @@ class DirectFeedbackMission : HeartRateActivity (){
         })
     }
 
+    override fun killActivity() {
+        finish()
+    }
+
 }

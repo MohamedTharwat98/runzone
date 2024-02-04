@@ -103,4 +103,8 @@ class EscapeFromDystopia : HeartRateActivity (){
 
     }
 
+    override fun killActivity() {
+        finish()
+    }
+
 }

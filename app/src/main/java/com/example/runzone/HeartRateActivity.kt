@@ -418,11 +418,15 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
                         ).show()
                     }
             }
-            finish()
             missionStoped = true
+            killActivity()
+            finish()
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    open fun killActivity() {
     }
 
     fun setCompletionListenerAudio() {
@@ -531,10 +535,7 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
             pausedAudio.stop()
             pausedAudio.release()
         }
-        if (bgAudio.isPlaying) {
-            bgAudio.stop()
-            bgAudio.release()
-        }
+
     }
 
     private val timerRunnable = Runnable { }
