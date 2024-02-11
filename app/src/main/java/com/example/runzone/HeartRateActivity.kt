@@ -146,6 +146,8 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
     private var totalDistance: Float = 0.0f
     private var missionStoped: Boolean = false
 
+    var warningCounter: Int = 0
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -886,6 +888,7 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
                     Handler(Looper.getMainLooper()).post {
                         Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
                     }
+                    warningCounter = 0
                 } else if (heartRateIntensity.toFloat() !in 50.0..60.0 && inZone) {
                     inZone = false
                     stopTimer()
@@ -894,13 +897,20 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
                     }
                     Log.d("checkZone", "playWarning")
                     playWarning(heartRateIntensity.toInt())
+                    warningCounter = 1
                 } else if (heartRateIntensity.toFloat() !in 50.0..60.0) {
                     Handler(Looper.getMainLooper()).post {
                         Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
                     }
                     Log.d("checkZone", "playWarning")
                     stopTimer()
-                    playWarning(heartRateIntensity.toInt())
+                    if (warningCounter == 0) {
+                        playWarning(heartRateIntensity.toInt())
+                    }
+                    warningCounter++
+                    if (warningCounter == 3) {
+                        warningCounter = 0
+                    }
                 }
             }
 
@@ -911,6 +921,7 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
                     Handler(Looper.getMainLooper()).post {
                         Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
                     }
+                    warningCounter = 0
                 } else if (heartRateIntensity.toFloat() !in 60.0..70.0 && inZone) {
                     inZone = false
                     stopTimer()
@@ -918,12 +929,19 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
                         Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
                     }
                     playWarning(heartRateIntensity.toInt())
+                    warningCounter = 1
                 } else if (heartRateIntensity.toFloat() !in 60.0..70.0) {
                     Handler(Looper.getMainLooper()).post {
                         Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
                     }
                     stopTimer()
-                    playWarning(heartRateIntensity.toInt())
+                    if (warningCounter == 0) {
+                        playWarning(heartRateIntensity.toInt())
+                    }
+                    warningCounter++
+                    if (warningCounter == 3) {
+                        warningCounter = 0
+                    }
                 }
             }
 
@@ -934,6 +952,7 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
                     Handler(Looper.getMainLooper()).post {
                         Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
                     }
+                    warningCounter = 0
                 } else if (heartRateIntensity.toFloat() !in 70.0..80.0 && inZone) {
                     inZone = false
                     stopTimer()
@@ -941,12 +960,19 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
                         Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
                     }
                     playWarning(heartRateIntensity.toInt())
+                    warningCounter = 1
                 } else if (heartRateIntensity.toFloat() !in 70.0..80.0) {
                     Handler(Looper.getMainLooper()).post {
                         Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
                     }
                     stopTimer()
-                    playWarning(heartRateIntensity.toInt())
+                    if (warningCounter == 0) {
+                        playWarning(heartRateIntensity.toInt())
+                    }
+                    warningCounter++
+                    if (warningCounter == 3) {
+                        warningCounter = 0
+                    }
                 }
             }
 
@@ -957,6 +983,7 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
                     Handler(Looper.getMainLooper()).post {
                         Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
                     }
+                    warningCounter = 0
                 } else if (heartRateIntensity.toFloat() !in 80.0..90.0 && inZone) {
                     inZone = false
                     stopTimer()
@@ -964,12 +991,19 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
                         Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
                     }
                     playWarning(heartRateIntensity.toInt())
+                    warningCounter = 1
                 } else if (heartRateIntensity.toFloat() !in 80.0..90.0) {
                     Handler(Looper.getMainLooper()).post {
                         Toast.makeText(this, "Wrong Zone !", Toast.LENGTH_SHORT).show()
                     }
                     stopTimer()
-                    playWarning(heartRateIntensity.toInt())
+                    if (warningCounter == 0) {
+                        playWarning(heartRateIntensity.toInt())
+                    }
+                    warningCounter++
+                    if (warningCounter == 3) {
+                        warningCounter = 0
+                    }
                 }
             }
         }
@@ -1135,11 +1169,47 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
 
     private fun speak() {
         if (!otherMissionAudiosAreOn() && isRunning && inZone) {
-
-            val text =
-                "You are in zone $zoneNumber. You have completed ${calculateTimerPercentage()} percent of the mission. Keep going!"
-            textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)
+            if (canPlay()) {
+                val text =
+                    "You are in zone $zoneNumber. You have completed ${calculateTimerPercentage()} percent of the mission. Keep going!"
+                textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)
+            }
         }
+    }
+
+    private fun canPlay(): Boolean {
+        val threeMinutesInSeconds = 3 * 60 // 3 minutes in seconds
+        val nineMinutesInSeconds = 9 * 60 // 9 minutes in seconds
+        val thirteenMinutesInSeconds = 13 * 60 // 13 minutes in seconds
+        val fourteenMinutesInSecondsAndThirtySeconds = 14 * 60 +30 // 14 minutes and 30 seconds in seconds
+        val eighteenMinutesInSecondsAndThirtySeconds = 18 * 60 + 30 // 18 minutes and 30 seconds in seconds
+        val twentyMinutesInSeconds = 20 * 60 // 20 minutes in seconds
+
+        if (seconds >= threeMinutesInSeconds - 10 && seconds <= threeMinutesInSeconds + 10) {
+            return false
+        }
+        if (seconds >= nineMinutesInSeconds - 10 && seconds <= nineMinutesInSeconds + 10) {
+            return false
+        }
+
+        if (seconds >= thirteenMinutesInSeconds - 10 && seconds <= thirteenMinutesInSeconds + 10) {
+            return false
+        }
+
+        if (seconds >= fourteenMinutesInSecondsAndThirtySeconds - 10 && seconds <= fourteenMinutesInSecondsAndThirtySeconds + 10) {
+            return false
+        }
+
+        if (seconds >= eighteenMinutesInSecondsAndThirtySeconds - 10 && seconds <= eighteenMinutesInSecondsAndThirtySeconds + 10) {
+            return false
+        }
+
+        if (seconds >= twentyMinutesInSeconds - 10 && seconds <= twentyMinutesInSeconds + 10) {
+            return false
+        }
+
+        return true
+
     }
 
     private fun calculateTimerPercentage(): Int {
