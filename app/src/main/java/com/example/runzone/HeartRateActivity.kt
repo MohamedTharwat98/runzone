@@ -1103,6 +1103,10 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
         }
         if (calculateTimerPercentage() == 100) {
             if (!endAudio.isPlaying) {
+                if (needBgAudio) {
+                    bgAudio.stop()
+                    bgAudio.release()
+                }
                 playAudio(endAudio, 5)
             }
         }
