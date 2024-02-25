@@ -15,6 +15,7 @@ class EscapeFromDystopia : HeartRateActivity (){
 
         warningSlowDown = MediaPlayer.create(this, R.raw.narratorslowdown)
         warningSpeedUp = MediaPlayer.create(this,R.raw.narratorspeedup)
+        rightzoneFeedback = MediaPlayer.create(this, R.raw.escapefromdystopiarightzone)
         zone1Audio = MediaPlayer.create(this, R.raw.escapefromdystopiazone1)
         zone2Audio = MediaPlayer.create(this, R.raw.escapefromdystopiazone2)
         zone3Part1Audio = MediaPlayer.create(this, R.raw.escapefromdystopiazone3part1)
@@ -69,7 +70,8 @@ class EscapeFromDystopia : HeartRateActivity (){
             42 to R.raw.escapefromdystopiazone4part2,
             5 to R.raw.escapefromdystopiaend,
             10 to R.raw.narratorslowdown,
-            11 to R.raw.narratorspeedup
+            11 to R.raw.narratorspeedup,
+            12 to R.raw.escapefromdystopiarightzone
         )
 
         // Stop and reset the MediaPlayer before playing again

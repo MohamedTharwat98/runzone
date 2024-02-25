@@ -16,6 +16,8 @@ class DirectFeedbackMission : HeartRateActivity (){
         warningSlowDown = MediaPlayer.create(this, R.raw.runzoneslowdown)
         warningSpeedUp = MediaPlayer.create(this,R.raw.runezonespeedup)
 
+        rightzoneFeedback = MediaPlayer.create(this, R.raw.runzonerightzone)
+
         zone1Audio = MediaPlayer.create(this, R.raw.runzonezone1)
         zone2Audio = MediaPlayer.create(this, R.raw.runzonezone2)
         zone3Part1Audio = MediaPlayer.create(this, R.raw.runzonezone3part1)
@@ -70,7 +72,8 @@ class DirectFeedbackMission : HeartRateActivity (){
             42 to R.raw.runzonezone4part2,
             5 to R.raw.runzoneend,
             10 to R.raw.runzoneslowdown,
-            11 to R.raw.runezonespeedup
+            11 to R.raw.runezonespeedup,
+            12 to R.raw.runzonerightzone
         )
 
         // Stop and reset the MediaPlayer before playing again

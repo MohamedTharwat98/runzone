@@ -2,10 +2,29 @@
 <project version="4">
   <component name="AndroidLayouts">
     <shared>
-      <config />
+      <config>
+        <device id="_android_virtual_device_id_Small_Phone_API_31" />
+        <device id="_device_class_phone" />
+        <device id="automotive_1080p_landscape" />
+        <device id="automotive_1024p_landscape" />
+        <device id="wearos_large_round" />
+        <device id="wearos_rect" />
+        <device id="wearos_small_round" />
+      </config>
     </shared>
     <layouts>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+        <config>
+          <theme>@style/Theme.RunZone</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_mission.xml">
+        <config>
+          <night>night</night>
+          <theme>@style/Theme.RunZone</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_mission_s7.xml">
         <config>
           <theme>@style/Theme.RunZone</theme>
         </config>
@@ -56,21 +75,19 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="16cb462d-a6fb-449b-9297-e38fda910a73" name="Changes" comment="Background Audio">
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/raw/backgroundaudiosewers.mp3" afterDir="false" />
+    <list default="true" id="16cb462d-a6fb-449b-9297-e38fda910a73" name="Changes" comment="You must speed Up">
+      <change beforePath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.0/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/DirectFeedbackMission.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/DirectFeedbackMission.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/EscapeFromDystopia.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/EscapeFromDystopia.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/HeartRateActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/runzone/HeartRateActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/raw/backgroundaudio.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/raw/escapefromdystopiaend.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/raw/escapefromdystopiaend.mp3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/raw/escapefromdystopiazone1.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/raw/escapefromdystopiazone1.mp3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/raw/escapefromdystopiazone2.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/raw/escapefromdystopiazone2.mp3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/raw/escapefromdystopiazone3part1.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/raw/escapefromdystopiazone3part1.mp3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/raw/escapefromdystopiazone3part2.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/raw/escapefromdystopiazone3part2.mp3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/raw/escapefromdystopiazone4part1.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/raw/escapefromdystopiazone4part1.mp3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/raw/escapefromdystopiazone4part2.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/raw/escapefromdystopiazone4part2.mp3" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -195,31 +212,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "PROJECT_TRUSTED_KEY": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "android-custom-viewC:/Users/mohamed.abosora/.gradle/caches/modules-2/files-2.1/androidx.appcompat/appcompat/1.6.1/ace9a78b961165396147e8691faa18c1b0e48e20/appcompat-1.6.1-sources.jar!/androidx/appcompat/widget/AppCompatImageView.java_SELECTED": "AppCompatImageView",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "com.google.services.firebase.aqiPopupShown": "true",
-    "com.intellij.openapi.externalSystem.service.settings.ExternalSystemGroupConfigurable": "ALL",
-    "last_directory_selection": "C:/Users/mohamed.abosora/Downloads/Bachelorarbeit/run-zone/app/src/main/res/values",
-    "last_opened_file_path": "C:/Users/mohamed.abosora/Downloads/Folder-Google-Fit-Sample/fit-samples/BasicRecordingApiKotlin",
-    "settings.editor.selected.configurable": "experimental"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;PROJECT_TRUSTED_KEY&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;android-custom-viewC:/Users/mohamed.abosora/.gradle/caches/modules-2/files-2.1/androidx.appcompat/appcompat/1.6.1/ace9a78b961165396147e8691faa18c1b0e48e20/appcompat-1.6.1-sources.jar!/androidx/appcompat/widget/AppCompatImageView.java_SELECTED&quot;: &quot;AppCompatImageView&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
+    &quot;com.intellij.openapi.externalSystem.service.settings.ExternalSystemGroupConfigurable&quot;: &quot;ALL&quot;,
+    &quot;last_directory_selection&quot;: &quot;C:/Users/mohamed.abosora/Downloads/Bachelorarbeit/run-zone/app/src/main/res/values&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/mohamed.abosora/Downloads/Bachelorarbeit/run-zone/app/src/main/res/layout&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;experimental&quot;
   },
-  "keyToStringList": {
-    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
-      "HTML"
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;JSON&quot;,
+      &quot;HTML&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\mohamed.abosora\Downloads\Bachelorarbeit\run-zone\app\src\main\res\layout" />
+    </key>
     <key name="CreateKotlinClassDialog.RecentsKey">
       <recent name="com.example.runzone.model" />
     </key>
@@ -764,7 +785,7 @@
       <option name="project" value="LOCAL" />
       <updated>1698785041868</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <option name="localTasksCounter" value="75" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -790,17 +811,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Default values for the seekbar zones" />
-    <MESSAGE value="values of the seekbar are multiplies of 5" />
-    <MESSAGE value="Minutes and seconds in seekbar" />
-    <MESSAGE value="Problem fixed in dialog-box" />
-    <MESSAGE value="Percentage-problem partially fixed" />
-    <MESSAGE value="Percentage-problem fixed" />
-    <MESSAGE value="StopButton stops audio" />
-    <MESSAGE value="Problem in startingTimeZones fixed!" />
-    <MESSAGE value="Pause Audio works!" />
-    <MESSAGE value="stopMission" />
-    <MESSAGE value="Zone-Numbers updated" />
     <MESSAGE value="Distance Covered added and total session time updated" />
     <MESSAGE value="Escape Dystopia Audio changed" />
     <MESSAGE value="Runzone Audio" />
@@ -815,7 +825,18 @@
     <MESSAGE value="Warning Timer back to 10 secs" />
     <MESSAGE value="Feedback audio every 30 secs" />
     <MESSAGE value="Background Audio" />
-    <option name="LAST_COMMIT_MESSAGE" value="Background Audio" />
+    <MESSAGE value="Audio Changed for escape from dystopia. Background music deleted from the story audios." />
+    <MESSAGE value="endAudio condition fixed" />
+    <MESSAGE value="Audio for runzone changed" />
+    <MESSAGE value="Delete blinker functions" />
+    <MESSAGE value="Delete unused function" />
+    <MESSAGE value="killActivity()" />
+    <MESSAGE value="Warning Audios made shorter" />
+    <MESSAGE value="Count down for warning" />
+    <MESSAGE value="Stop the background music when the mission ends" />
+    <MESSAGE value="Layout for Galaxy S7" />
+    <MESSAGE value="You must speed Up" />
+    <option name="LAST_COMMIT_MESSAGE" value="You must speed Up" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

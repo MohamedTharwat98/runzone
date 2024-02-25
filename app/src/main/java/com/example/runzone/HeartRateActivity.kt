@@ -10,11 +10,9 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -56,7 +54,7 @@ import kotlin.math.*
 
 const val TAG = "HeartRateActivity"
 
-open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
+open class HeartRateActivity : AppCompatActivity(){
 
     lateinit var api: PolarBleApi
 
@@ -66,7 +64,6 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
     var seconds: Int = 0
     var isRunning: Boolean = false
     lateinit var handler: Handler
-    private lateinit var textToSpeech: TextToSpeech
 
 
     val timerTextView: TextView by lazy {
@@ -99,6 +96,8 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
     lateinit var warningSlowDown: MediaPlayer
 
     lateinit var warningSpeedUp: MediaPlayer
+
+    lateinit var rightzoneFeedback: MediaPlayer
 
     lateinit var zone1Audio: MediaPlayer
 
@@ -231,8 +230,6 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
 
         startButton.isChecked = true
 
-        textToSpeech = TextToSpeech(this, this)
-
         setCompletionListenerAudio()
 
         startTimer()
@@ -276,17 +273,17 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
         }, 10000, 10000)
 
         //check every 30 seconds and gives the user feedback
-        val percentageFeedbackTimer = Timer()
+        /*val percentageFeedbackTimer = Timer()
         percentageFeedbackTimer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
                 speak()
             }
-        }, 30000, 30000)
+        }, 30000, 30000)*/
 
 
 
         stopButton.setOnClickListener {
-            percentageFeedbackTimer.cancel()
+            //percentageFeedbackTimer.cancel()
             checkZoneTimer.cancel()
             if (needBgAudio) {
                 bgAudio.stop()
@@ -434,6 +431,7 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
     fun setCompletionListenerAudio() {
         setCompletionListener(warningSlowDown)
         setCompletionListener(warningSpeedUp)
+        setCompletionListener(rightzoneFeedback)
         setCompletionListener(zone1Audio)
         setCompletionListener(zone2Audio)
         setCompletionListener(zone3Part1Audio)
@@ -468,7 +466,11 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
             } else if (warningSpeedUp.isPlaying) {
                 warningSpeedUp.pause()
                 pausedAudio = warningSpeedUp
-            } else if (zone1Audio.isPlaying) {
+            } else if ( rightzoneFeedback.isPlaying) {
+                rightzoneFeedback.pause()
+                pausedAudio = rightzoneFeedback
+            }
+                else if (zone1Audio.isPlaying) {
                 zone1Audio.pause()
                 pausedAudio = zone1Audio
             } else if (zone2Audio.isPlaying) {
@@ -512,7 +514,11 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
         } else if (warningSpeedUp.isPlaying) {
             warningSpeedUp.stop()
             warningSpeedUp.release()
-        } else if (zone1Audio.isPlaying) {
+        } else if (rightzoneFeedback.isPlaying) {
+            rightzoneFeedback.stop()
+            rightzoneFeedback.release()
+        }
+        else if (zone1Audio.isPlaying) {
             zone1Audio.stop()
             zone1Audio.release()
         } else if (zone2Audio.isPlaying) {
@@ -578,10 +584,6 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
 
     public override fun onDestroy() {
         api.shutDown()
-        if (textToSpeech.isSpeaking) {
-            textToSpeech.stop()
-        }
-        textToSpeech.shutdown()
         super.onDestroy()
     }
 
@@ -889,6 +891,9 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
                         Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
                     }
                     warningCounter = 0
+                    if (startButton.isChecked) {
+                        rightZoneFeedback()
+                    }
                 } else if (heartRateIntensity.toFloat() !in 50.0..60.0 && inZone) {
                     inZone = false
                     stopTimer()
@@ -908,7 +913,7 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
                         playWarning(heartRateIntensity.toInt())
                     }
                     warningCounter++
-                    if (warningCounter == 3) {
+                    if (warningCounter == 2) {
                         warningCounter = 0
                     }
                 }
@@ -922,6 +927,9 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
                         Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
                     }
                     warningCounter = 0
+                    if (startButton.isChecked) {
+                        rightZoneFeedback()
+                    }
                 } else if (heartRateIntensity.toFloat() !in 60.0..70.0 && inZone) {
                     inZone = false
                     stopTimer()
@@ -939,7 +947,7 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
                         playWarning(heartRateIntensity.toInt())
                     }
                     warningCounter++
-                    if (warningCounter == 3) {
+                    if (warningCounter == 2) {
                         warningCounter = 0
                     }
                 }
@@ -953,6 +961,9 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
                         Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
                     }
                     warningCounter = 0
+                    if (startButton.isChecked) {
+                        rightZoneFeedback()
+                    }
                 } else if (heartRateIntensity.toFloat() !in 70.0..80.0 && inZone) {
                     inZone = false
                     stopTimer()
@@ -970,7 +981,7 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
                         playWarning(heartRateIntensity.toInt())
                     }
                     warningCounter++
-                    if (warningCounter == 3) {
+                    if (warningCounter == 2) {
                         warningCounter = 0
                     }
                 }
@@ -984,6 +995,9 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
                         Toast.makeText(this, "Right Zone Again !", Toast.LENGTH_SHORT).show()
                     }
                     warningCounter = 0
+                    if (startButton.isChecked) {
+                        rightZoneFeedback()
+                    }
                 } else if (heartRateIntensity.toFloat() !in 80.0..90.0 && inZone) {
                     inZone = false
                     stopTimer()
@@ -1001,7 +1015,7 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
                         playWarning(heartRateIntensity.toInt())
                     }
                     warningCounter++
-                    if (warningCounter == 3) {
+                    if (warningCounter == 2) {
                         warningCounter = 0
                     }
                 }
@@ -1116,7 +1130,7 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
     fun otherMissionAudiosAreOn(): Boolean {
         if (zone1Audio.isPlaying || zone2Audio.isPlaying || zone3Part1Audio.isPlaying ||
 
-            zone4Part1Audio.isPlaying || zone3Part2Audio.isPlaying || zone4Part2Audio.isPlaying || endAudio.isPlaying || pausedAudio.isPlaying || warningSlowDown.isPlaying || warningSpeedUp.isPlaying || textToSpeech.isSpeaking
+            zone4Part1Audio.isPlaying || zone3Part2Audio.isPlaying || zone4Part2Audio.isPlaying || endAudio.isPlaying || pausedAudio.isPlaying || warningSlowDown.isPlaying || warningSpeedUp.isPlaying || rightzoneFeedback.isPlaying
         ) {
             Handler(Looper.getMainLooper()).post {
                 Toast.makeText(
@@ -1153,30 +1167,10 @@ open class HeartRateActivity : AppCompatActivity(), TextToSpeech.OnInitListener 
 
     }
 
-
-
-    override fun onInit(status: Int) {
-        if (status == TextToSpeech.SUCCESS) {
-            val result = textToSpeech.setLanguage(Locale.US)
-
-            if (result == TextToSpeech.LANG_MISSING_DATA ||
-                result == TextToSpeech.LANG_NOT_SUPPORTED
-            ) {
-                // Handle the language not supported or missing data
-                Log.e("TTS", "Language is not supported")
-            }
-        } else {
-            // Handle TTS initialization failure
-            Log.e("TTS", "Initialization failed")
-        }
-    }
-
-    private fun speak() {
+    private fun rightZoneFeedback() {
         if (!otherMissionAudiosAreOn() && isRunning && inZone) {
             if (canPlay()) {
-                val text =
-                    "You are in zone $zoneNumber. You have completed ${calculateTimerPercentage()} percent of the mission. Keep going!"
-                textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)
+                playAudio(rightzoneFeedback, 12)
             }
         }
     }
