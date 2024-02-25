@@ -108,44 +108,15 @@
     <LinearLayout
         android:id="@+id/horizontalBar"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="1dp"
         android:layout_below="@id/timerTextView"
         android:orientation="horizontal"
         android:layout_marginTop="8dp"
         android:divider="@drawable/divider"
         android:showDividers="middle"
         >
-
         <View
-            android:id="@+id/section0"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#80FFFF00" />
-
-        <View
-            android:id="@+id/section1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#80FFFF00" />
-
-        <View
-            android:id="@+id/section2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#80FFFF00" />
-
-        <View
-            android:id="@+id/section3"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#80FFFF00" />
-
-        <View
-            android:id="@+id/section4"
+            android:id="@+id/section"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
