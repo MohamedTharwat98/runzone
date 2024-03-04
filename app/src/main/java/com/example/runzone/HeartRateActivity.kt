@@ -50,6 +50,7 @@ import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 import kotlin.math.*
 
 const val TAG = "HeartRateActivity"
@@ -146,6 +147,9 @@ open class HeartRateActivity : AppCompatActivity(){
     private var missionStoped: Boolean = false
 
     var warningCounter: Int = 0
+
+    var totalMissionTimeMillis = 1000L
+    var isMissionTimerPaused = false
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -272,19 +276,24 @@ open class HeartRateActivity : AppCompatActivity(){
             }
         }, 10000, 10000)
 
-        //check every 30 seconds and gives the user feedback
-        /*val percentageFeedbackTimer = Timer()
-        percentageFeedbackTimer.scheduleAtFixedRate(object : TimerTask() {
-            override fun run() {
-                speak()
-            }
-        }, 30000, 30000)*/
 
+
+
+        // Set up a timer to update the total mission time every second
+        val missionTimer = Timer()
+        missionTimer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                if (!isMissionTimerPaused) {
+                    totalMissionTimeMillis += 1000
+                }
+            }
+        }, 1000, 1000)
 
 
         stopButton.setOnClickListener {
             //percentageFeedbackTimer.cancel()
             checkZoneTimer.cancel()
+            isMissionTimerPaused = true
             if (needBgAudio) {
                 bgAudio.stop()
                 bgAudio.release()
@@ -296,6 +305,7 @@ open class HeartRateActivity : AppCompatActivity(){
         startButton.setOnClickListener {
             if (!isRunning) {
                 startTimer()
+                isMissionTimerPaused = false
                 startButton.isChecked = true
                 checkAudio()
                 if (needBgAudio) {
@@ -303,6 +313,7 @@ open class HeartRateActivity : AppCompatActivity(){
                 }
             } else {
                 stopTimer()
+                isMissionTimerPaused = true
                 startButton.isChecked = false
                 checkAudio()
                 if (needBgAudio) {
@@ -392,11 +403,22 @@ open class HeartRateActivity : AppCompatActivity(){
             session.zone2 = entries.get(1).y
             session.zone3 = entries.get(2).y
             session.zone4 = entries.get(3).y
-            val hours = seconds / 3600
-            val minutes = (seconds % 3600) / 60
-            val secs = seconds % 60
-            val timer = String.format("%02d:%02d:%02d", hours, minutes, secs)
-            session.duration = timer
+            //val hours = seconds / 3600
+            //val minutes = (seconds % 3600) / 60
+            //val secs = seconds % 60
+            //val timer = String.format("%02d:%02d:%02d", hours, minutes, secs)
+            //session.duration = timer
+            // Calculate total mission time in hours, minutes, and seconds
+            val hours = TimeUnit.MILLISECONDS.toHours(totalMissionTimeMillis)
+            val minutes = TimeUnit.MILLISECONDS.toMinutes(totalMissionTimeMillis) % 60
+            val seconds = TimeUnit.MILLISECONDS.toSeconds(totalMissionTimeMillis) % 60
+
+            // Format the total mission time as a string
+            val missionDuration = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds)
+
+            // Save the total mission time
+            session.duration = missionDuration
+
 
             val databaseRef: DatabaseReference =
                 FirebaseDatabase.getInstance("https://plucky-balm-389709-default-rtdb.europe-west1.firebasedatabase.app/")
@@ -417,6 +439,7 @@ open class HeartRateActivity : AppCompatActivity(){
                         ).show()
                     }
             }
+            isMissionTimerPaused=true
             missionStoped = true
             killActivity()
             finish()
@@ -424,6 +447,8 @@ open class HeartRateActivity : AppCompatActivity(){
             startActivity(intent)
         }
     }
+
+
 
     open fun killActivity() {
     }
