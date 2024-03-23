@@ -183,7 +183,7 @@ open class HeartRateActivity : AppCompatActivity(){
 
         val alertDialogBuilder = AlertDialog.Builder(this)
             .setView(popupView)
-            .setTitle("Pyramidal Heart Rate Zone Training")
+            .setTitle("Run Zone")
             .setPositiveButton(
                 "Start Mission",
                 null
