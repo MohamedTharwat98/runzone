@@ -139,11 +139,7 @@ open class HeartRateActivity : AppCompatActivity(){
     var zone4Part1StartSeconds: Int = 0
     var zone4Part2StartSeconds: Int = 0
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var distanceTextView: TextView
 
-    private var lastLocation: Location? = null
-    private var totalDistance: Float = 0.0f
     private var missionStoped: Boolean = false
 
     var warningCounter: Int = 0
@@ -262,11 +258,7 @@ open class HeartRateActivity : AppCompatActivity(){
         val targetZoneText = findViewById<TextView>(R.id.targetZoneTextView)
         targetZoneText.text = "CURRENT TARGET ZONE: 1 \n 50% < INTENSITY < 60% "
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        distanceTextView = findViewById(R.id.distanceTextView)
 
-        // Start tracking location updates
-        startLocationUpdates()
 
         //check every 10 seconds if the user is in the zone
         val checkZoneTimer = Timer()
@@ -332,50 +324,6 @@ open class HeartRateActivity : AppCompatActivity(){
     }
 
 
-    private fun startLocationUpdates() {
-        val locationRequest = LocationRequest.create()
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.interval = 1000 // Update every 1 second
-
-        // Check and request location permissions if not granted
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
-        }
-
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            null
-        )
-    }
-
-    private val MIN_DISTANCE_THRESHOLD = 5 // Adjust as needed
-
-    private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult) {
-            super.onLocationResult(locationResult)
-            for (location in locationResult.locations) {
-                if (lastLocation != null) {
-                    val distance = lastLocation!!.distanceTo(location)
-                    if (distance >= MIN_DISTANCE_THRESHOLD && inZone && isRunning) {
-                        totalDistance += distance
-                        val distanceInKilometers = totalDistance / 1000.0 // Convert to kilometers
-                        distanceTextView.text =
-                            String.format("%.2f km \n DISTANCE", distanceInKilometers)
-                    }
-                }
-                lastLocation = location
-            }
-        }
-    }
-
-
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 123
     }
@@ -383,14 +331,11 @@ open class HeartRateActivity : AppCompatActivity(){
 
     fun stopMission() {
         if (!missionStoped) {
-            val distanceInKilometers = totalDistance / 1000.0 // Convert to kilometers
-            val decimalFormat = DecimalFormat("#.###")
-            val roundedNumber = decimalFormat.format(distanceInKilometers).toDouble()
+            DecimalFormat("#.###")
             val session = Session(
                 duration = "",
                 date = Date().toString(),
                 maxHR = maxHR.toFloat(),
-                distance = "$roundedNumber km ",
                 missionType = missionType,
                 age = runnersAge,
                 zone1 = 0F,
@@ -399,10 +344,10 @@ open class HeartRateActivity : AppCompatActivity(){
                 zone4 = 0F
             )
             stopAllMedia()
-            session.zone1 = entries.get(0).y
-            session.zone2 = entries.get(1).y
-            session.zone3 = entries.get(2).y
-            session.zone4 = entries.get(3).y
+            session.zone1 = (entries.get(0).y) / 60
+            session.zone2 = (entries.get(1).y) / 60
+            session.zone3 = (entries.get(2).y) / 60
+            session.zone4 = (entries.get(3).y) / 60
             //val hours = seconds / 3600
             //val minutes = (seconds % 3600) / 60
             //val secs = seconds % 60

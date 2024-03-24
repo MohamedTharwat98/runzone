@@ -67,7 +67,7 @@
 
     <TextView
         android:id="@+id/targetZoneTextView"
-        android:layout_width="205dp"
+        android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="198dp"
@@ -78,19 +78,7 @@
         android:textSize="15sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/distanceTextView"
-        android:layout_width="205dp"
-        android:layout_height="100dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="198dp"
-        android:layout_toEndOf="@+id/targetZoneTextView"
-        android:background="@color/black"
-        android:gravity="center"
-        android:text="DISTANCE"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        android:textStyle="bold" />
+
 
     <TextView
         android:id="@+id/timerTextView"

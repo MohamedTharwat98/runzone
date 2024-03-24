@@ -55,7 +55,6 @@ class SessionsListFragment : Fragment() {
                     val session = Session(
                         duration ?: "",
                         date ?: "",
-                        distanceCovered?:"",
                         maxHR,
                         age,
                         missionType ?: "",
@@ -105,7 +104,6 @@ class SessionsListFragment : Fragment() {
             // Set data for each property
             durationTextView.text = "Duration : "+ session?.duration
             dateTextView.text = "Date : "+ session?.date
-            distanceTextView.text = "Distance covered : "+ session?.distance
              maxHRTextView.text= "Max Heart Rate : " + session?.maxHR.toString()
              ageTextView.text= "Age : " + session?.age.toString()
              missionTypeTextView.text = "Mission Type : " + session?.missionType.toString()
