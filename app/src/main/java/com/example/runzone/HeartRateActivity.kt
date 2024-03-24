@@ -344,10 +344,10 @@ open class HeartRateActivity : AppCompatActivity(){
                 zone4 = 0F
             )
             stopAllMedia()
-            session.zone1 = (entries.get(0).y) / 60
-            session.zone2 = (entries.get(1).y) / 60
-            session.zone3 = (entries.get(2).y) / 60
-            session.zone4 = (entries.get(3).y) / 60
+            session.zone1 = entries.get(0).y
+            session.zone2 = entries.get(1).y
+            session.zone3 = entries.get(2).y
+            session.zone4 = entries.get(3).y
             //val hours = seconds / 3600
             //val minutes = (seconds % 3600) / 60
             //val secs = seconds % 60
