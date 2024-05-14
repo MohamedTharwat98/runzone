@@ -147,6 +147,9 @@ open class HeartRateActivity : AppCompatActivity(){
     var totalMissionTimeMillis = 1000L
     var isMissionTimerPaused = false
 
+    /**
+     * Called when the activity is starting.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -172,6 +175,9 @@ open class HeartRateActivity : AppCompatActivity(){
 
     }
 
+    /**
+     * Shows an input dialog to get the user's age and calculate the maximum heart rate.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun showAgeInputDialog() {
         val popupView = layoutInflater.inflate(R.layout.new_age_box, null)
@@ -209,6 +215,9 @@ open class HeartRateActivity : AppCompatActivity(){
     }
 
 
+    /**
+     * starts the mission, sets up the UI elements and listeners, and starts the timer.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun startMission() {
         setContentView(R.layout.activity_mission)
@@ -329,6 +338,9 @@ open class HeartRateActivity : AppCompatActivity(){
     }
 
 
+    /**
+     * Calculates the time in minutes and seconds for each zone based on the user's maximum heart rate and stores the values in variables.
+     */
     fun stopMission() {
         if (!missionStoped) {
             DecimalFormat("#.###")
@@ -398,6 +410,9 @@ open class HeartRateActivity : AppCompatActivity(){
     open fun killActivity() {
     }
 
+    /**
+     * sets the completion listener for all the audio files.
+     */
     fun setCompletionListenerAudio() {
         setCompletionListener(warningSlowDown)
         setCompletionListener(warningSpeedUp)
@@ -412,6 +427,9 @@ open class HeartRateActivity : AppCompatActivity(){
         setCompletionListener(pausedAudio)
     }
 
+    /**
+     * sets the completion listener for the given media player.
+     */
     fun setCompletionListener(mediaPlayer: MediaPlayer) {
         // Set a completion listener to detect when playback is finished
         mediaPlayer.setOnCompletionListener { mp ->
@@ -428,6 +446,9 @@ open class HeartRateActivity : AppCompatActivity(){
         }
     }
 
+    /**
+     * plays or stops the warning audio file based on the user's heart rate.
+     */
     fun checkAudio() {
         if (!isRunning) { //pause
             if (warningSlowDown.isPlaying) {
@@ -477,6 +498,9 @@ open class HeartRateActivity : AppCompatActivity(){
         handler.removeCallbacks(timerRunnable)
     }
 
+    /**
+     * stops all the audio files.
+     */
     private fun stopAllMedia() {
         if (warningSlowDown.isPlaying) {
             warningSlowDown.stop()
@@ -519,6 +543,9 @@ open class HeartRateActivity : AppCompatActivity(){
     private val timerRunnable = Runnable { }
 
 
+    /**
+     * requests permission to access the user's location, bluetooth, and bluetooth scan.
+     */
     private fun requestPermissionForPolarSensor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -646,6 +673,9 @@ open class HeartRateActivity : AppCompatActivity(){
         api.searchForDevice()
     }
 
+    /**
+     * Streams the heart rate data from the Polar sensor.
+     */
     fun streamHR() {
         val isDisposed = hrDisposable?.isDisposed ?: true
         if (isDisposed) {
@@ -702,6 +732,9 @@ open class HeartRateActivity : AppCompatActivity(){
     }
 
 
+    /**
+     * processes the chart and updates the chart every second.
+     */
     private fun processChart() {
         heartRateChart = findViewById(R.id.heartRateChart)
 
@@ -837,7 +870,9 @@ open class HeartRateActivity : AppCompatActivity(){
     }
 
 
-
+    /**
+     * checks if the user is in the right zone and plays the right zone audio file.
+     */
     fun checkZone() {
 
         val heartRateIntensity = if (currentHr >= 0) {
@@ -993,6 +1028,9 @@ open class HeartRateActivity : AppCompatActivity(){
         }
     }
 
+    /**
+     * plays warning and feedback audio files based on the user's heart rate.
+     */
     open fun playWarning(hrIntensity: Int) {
         if (startButton.isChecked) {
             if (zoneNumber == 1) {
@@ -1054,6 +1092,9 @@ open class HeartRateActivity : AppCompatActivity(){
 
     open fun playAudio(mediaPlayer: MediaPlayer, resId: Int) {}
 
+    /**
+     * updates the target zone based on the current time.
+     */
     fun updateZone(minutes: Int, secs: Int) {
         val targetZoneText = findViewById<TextView>(R.id.targetZoneTextView)
 
@@ -1137,6 +1178,9 @@ open class HeartRateActivity : AppCompatActivity(){
 
     }
 
+    /**
+     * plays the right zone feedback audio file.
+     */
     private fun rightZoneFeedback() {
         if (!otherMissionAudiosAreOn() && isRunning && inZone) {
             if (canPlay()) {
@@ -1145,6 +1189,9 @@ open class HeartRateActivity : AppCompatActivity(){
         }
     }
 
+    /**
+     * checks if the audio file can be played based on the current time.
+     */
     private fun canPlay(): Boolean {
         val threeMinutesInSeconds = 3 * 60 // 3 minutes in seconds
         val nineMinutesInSeconds = 9 * 60 // 9 minutes in seconds
@@ -1180,6 +1227,9 @@ open class HeartRateActivity : AppCompatActivity(){
 
     }
 
+    /**
+     * calculates the percentage of the current time in the total time.
+     */
     private fun calculateTimerPercentage(): Int {
         val timerText = timerTextView.text.toString()
         //extract only the "00:00:00" part from the given string
@@ -1191,6 +1241,9 @@ open class HeartRateActivity : AppCompatActivity(){
         return percentage.roundToInt()
     }
 
+    /**
+     * converts the given time string to seconds.
+     */
     private fun timeToSeconds(time: String): Int {
         Log.d("time", time)
         val timeArray = time.split(":")
