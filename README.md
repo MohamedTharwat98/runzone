@@ -7,8 +7,6 @@
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Overview
 The Run Zone application offers users two distinct running missions:
